@@ -27,7 +27,7 @@
 //   D. Request Surface
 //   E. Replay / Reconstruction
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { makeTestSignal } from "../fixtures/test_signal.js";
 import { DoorOneOrchestrator } from "../runtime/DoorOneOrchestrator.js";
@@ -45,6 +45,10 @@ import { projectBoth } from "./adapters/tandemAdapter.js";
 import {
     replaySummaryLine,
 } from "./replayModel.js";
+import {
+    annotateShellRecord,
+    buildActiveShellState,
+} from "./shellStateRouter.js";
 
 // ─── Policies (mirrors run_door_one_workbench.js) ─────────────────────────────
 const POLICIES = {
@@ -1034,16 +1038,20 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
     const [runCount, setRunCount] = useState(0);
     const [requestLog, setRequestLog] = useState([]);
     const [replayLog, setReplayLog] = useState([]);
+    const [activeSourceFamilyLabel, setActiveSourceFamilyLabel] = useState("unspecified");
     const [pendingFile, setPendingFile] = useState(null);
     const [adapterStatus, setAdapterStatus] = useState(null);  // { ok, payload?, reasons?, meta }
     const sessionRef = useRef(null);
 
     const handleRun = useCallback(() => {
         const isFile = SOURCE_FAMILIES.find(f => f.id === selectedFamily)?.isFileFamily;
+        const selectedSourceFamilyLabel = SOURCE_FAMILIES.find(f => f.id === selectedFamily)?.label ?? selectedFamily;
         const id = `shell.run.${Date.now()}`;
         setRunStatus("running");
         setRunError(null);
         setRunId(id);
+        setRunResult(null);
+        setWorkbench(null);
 
         setTimeout(() => {
             try {
@@ -1073,6 +1081,7 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                 const wb = buildWorkbench(result, sessionRef.current);
                 setRunResult(result);
                 setWorkbench(wb);
+                setActiveSourceFamilyLabel(selectedSourceFamilyLabel);
                 console.log("DME runResult", result);
                 console.log("DME workbench", wb);
                 setRunStatus("complete");
@@ -1080,6 +1089,8 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
             } catch (err) {
                 setRunError(err.message);
                 setRunStatus("error");
+                setRunResult(null);
+                setWorkbench(null);
                 console.error("Shell run error:", err);
             }
         }, 0);
@@ -1106,21 +1117,36 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
     // Single handler for both request types — receives a prepared request object
     // from RequestRegion. Adds it to the visible log. No canon is minted.
     const handleRequest = useCallback((req) => {
-        setRequestLog(l => [req, ...l]);
-    }, []);
+        setRequestLog((l) => [annotateShellRecord(req, {
+            runId,
+            runResult,
+            sourceFamilyLabel: activeSourceFamilyLabel,
+        }), ...l]);
+    }, [runId, runResult, activeSourceFamilyLabel]);
 
     const handleReplay = useCallback((req) => {
-        setReplayLog(l => [req, ...l]);
-    }, []);
+        setReplayLog((l) => [annotateShellRecord(req, {
+            runId,
+            runResult,
+            sourceFamilyLabel: activeSourceFamilyLabel,
+        }), ...l]);
+    }, [runId, runResult, activeSourceFamilyLabel]);
 
-    // Derive readable label from the selected family id
-    const sourceFamilyLabel = SOURCE_FAMILIES.find(f => f.id === selectedFamily)?.label ?? selectedFamily;
+    const activeShellState = useMemo(() => buildActiveShellState({
+        runId,
+        runResult,
+        workbench,
+        requestLog,
+        replayLog,
+        sourceFamilyLabel: activeSourceFamilyLabel,
+        runStatus,
+        runError,
+    }), [runId, runResult, workbench, requestLog, replayLog, activeSourceFamilyLabel, runStatus, runError]);
+    const sourceFamilyLabel = activeShellState.sourceFamilyLabel;
 
     // Tandem projection — shared read-side model for HUD and demo
-    // Computed inline from current shell state; no runtime recomputation
-    const tandemProjection = projectBoth({
-        runResult, workbench, requestLog, replayLog, sourceFamilyLabel, runStatus,
-    });
+    // Computed inline from the active shell context; no runtime recomputation
+    const tandemProjection = projectBoth(activeShellState);
 
     // App-level state export — read-side only.
     // Calls onStateChange when key state changes so parent app can thread
@@ -1128,9 +1154,9 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
     // The shell remains the state owner; this is a read-side callback only.
     useEffect(() => {
         if (typeof onStateChange === "function") {
-            onStateChange({ workbench, runResult, requestLog, replayLog, sourceFamilyLabel, runStatus });
+            onStateChange(activeShellState);
         }
-    }, [workbench, runResult, requestLog, replayLog, sourceFamilyLabel, runStatus, onStateChange]);
+    }, [activeShellState, onStateChange]);
 
     return (
         <div style={{ minHeight: "100vh", background: C.bg, fontFamily: C.sans }}>
@@ -1183,7 +1209,7 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                     />
                     <ResultsRegion workbench={workbench} runResult={runResult} />
                     <RequestRegion
-                        hasResult={!!workbench}
+                        hasResult={activeShellState.hasActiveResult}
                         workbench={workbench}
                         runResult={runResult}
                         sourceFamilyLabel={sourceFamilyLabel}
@@ -1192,15 +1218,15 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                 </div>
 
                 {/* Request log */}
-                {requestLog.length > 0 && (
+                {activeShellState.requestLog.length > 0 && (
                     <div style={{ margin: "16px 0", padding: "12px 16px", background: C.surface, borderRadius: 6, border: `1px solid ${C.rule}` }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                             <Label>request log</Label>
                             <span style={{ fontFamily: C.mono, fontSize: 10, color: C.amberDim }}>
-                                {requestLog.length} prepared · below canon · not automatic
+                                {activeShellState.requestLog.length} active-context prepared · {activeShellState.requestHistoryCount} total in session · below canon · not automatic
                             </span>
                         </div>
-                        {requestLog.map((r, i) => (
+                        {activeShellState.requestLog.map((r, i) => (
                             <div key={i} style={{
                                 fontFamily: C.mono, fontSize: 11, color: C.textDim,
                                 marginBottom: 4, padding: "4px 8px",
@@ -1216,10 +1242,10 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                 {/* Region E: Replay / Reconstruction */}
                 <div style={{ borderTop: `1px solid ${C.rule}` }}>
                     <ReplayRegion
-                        hasResult={!!workbench}
+                        hasResult={activeShellState.hasActiveResult}
                         workbench={workbench}
                         runResult={runResult}
-                        requestLog={requestLog}
+                        requestLog={activeShellState.requestLog}
                         sourceFamilyLabel={sourceFamilyLabel}
                         onReplay={handleReplay}
                         ui={{ C, Label }}
@@ -1227,15 +1253,15 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                 </div>
 
                 {/* Replay log */}
-                {replayLog.length > 0 && (
+                {activeShellState.replayLog.length > 0 && (
                     <div style={{ margin: "12px 0", padding: "12px 16px", background: C.surface, borderRadius: 6, border: `1px solid ${C.rule}` }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
                             <Label>replay log</Label>
                             <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>
-                                {replayLog.length} prepared · Tier 0 · lens-bound · not authority
+                                {activeShellState.replayLog.length} active-context prepared · {activeShellState.replayHistoryCount} total in session · lens-bound · not authority
                             </span>
                         </div>
-                        {replayLog.map((r, i) => (
+                        {activeShellState.replayLog.map((r, i) => (
                             <div key={i} style={{
                                 fontFamily: C.mono, fontSize: 11, color: C.textDim,
                                 marginBottom: 3, padding: "3px 8px",
