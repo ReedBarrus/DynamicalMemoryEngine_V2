@@ -34,6 +34,10 @@ import { DoorOneOrchestrator } from "../runtime/DoorOneOrchestrator.js";
 import { CrossRunSession } from "../runtime/CrossRunSession.js";
 import { DoorOneWorkbench } from "../runtime/DoorOneWorkbench.js";
 import { runAdapter, detectAdapter } from "./adapters/ingestAdapters.js";
+import {
+    RECORDED_SOURCE_FIXTURES,
+    loadRecordedSourcePayload,
+} from "./recordedSourceFixtures.js";
 import ReplayRegion from "./ReplayRegion.jsx";
 import {
     buildConsultationRequest,
@@ -160,6 +164,14 @@ const SOURCE_FAMILIES = [
         description: "WAV file ingest through existing real-source adapter. daw_mic_sine_400hz and daw_mic_input families.",
         wired: false,
         badge: "planned — WAV adapter needed",
+    },
+    {
+        id: "recorded_source_lane",
+        label: "Recorded Source Lane (2 WAV fixtures)",
+        description: "Two bounded recorded WAV fixtures routed through the same lawful ingest contract used by the shell.",
+        wired: true,
+        badge: "wired",
+        isRecordedFixtureFamily: true,
     },
     {
         id: "file_import",
@@ -446,10 +458,12 @@ function DropZone({ pendingFile, adapterStatus, detectedType, onFileSelect }) {
 
 // ─── Region A: Control / Orchestration ───────────────────────────────────────
 function ControlRegion({ selectedFamily, onSelectFamily, preset, onSelectPreset,
+    recordedFixturePreset, onSelectRecordedFixturePreset,
     onRun, onFileSelect, pendingFile, adapterStatus, runStatus }) {
     const family = SOURCE_FAMILIES.find(f => f.id === selectedFamily);
     const isWired = family?.wired ?? false;
     const isFile = family?.isFileFamily ?? false;
+    const isRecordedFixtureFamily = family?.isRecordedFixtureFamily ?? false;
     const running = runStatus === "running";
 
     // For file family: run is ready only when we have a validated payload
@@ -495,7 +509,13 @@ function ControlRegion({ selectedFamily, onSelectFamily, preset, onSelectPreset,
                 {/* Input selector */}
                 <div>
                     <Label style={{ marginBottom: 6 }}>
-                        {isFile ? "file / object input" : isWired ? "signal preset" : "object / input"}
+                        {isFile
+                            ? "file / object input"
+                            : isRecordedFixtureFamily
+                                ? "recorded source fixture"
+                                : isWired
+                                    ? "signal preset"
+                                    : "object / input"}
                     </Label>
                     {isFile ? (
                         <DropZone
@@ -504,6 +524,20 @@ function ControlRegion({ selectedFamily, onSelectFamily, preset, onSelectPreset,
                             detectedType={detectedType}
                             onFileSelect={onFileSelect}
                         />
+                    ) : isRecordedFixtureFamily ? (
+                        <select
+                            value={recordedFixturePreset}
+                            onChange={e => onSelectRecordedFixturePreset(Number(e.target.value))}
+                            style={{
+                                width: "100%", padding: "8px 10px", borderRadius: 6,
+                                border: `1px solid ${C.ruleLight}`, background: C.surfaceHigh,
+                                color: C.text, fontFamily: C.mono, fontSize: 12, outline: "none",
+                            }}
+                        >
+                            {RECORDED_SOURCE_FIXTURES.map((fixture, i) => (
+                                <option key={fixture.id} value={i}>{fixture.shortLabel}</option>
+                            ))}
+                        </select>
                     ) : isWired ? (
                         <select
                             value={preset}
@@ -550,7 +584,9 @@ function ControlRegion({ selectedFamily, onSelectFamily, preset, onSelectPreset,
             {/* Declared path note */}
             {isWired && !isFile && (
                 <div style={{ marginTop: 10, fontFamily: C.mono, fontSize: 10, color: C.textDim }}>
-                    path: makeTestSignal → DoorOneOrchestrator → CrossRunSession → DoorOneWorkbench
+                    path: {isRecordedFixtureFamily
+                        ? "recorded WAV fixture -> fixture loader -> DoorOneOrchestrator -> CrossRunSession -> DoorOneWorkbench"
+                        : "makeTestSignal -> DoorOneOrchestrator -> CrossRunSession -> DoorOneWorkbench"}
                 </div>
             )}
             {isFile && adapterStatus?.ok && (
@@ -1030,6 +1066,7 @@ function TandemStrip({ hud, demo }) {
 export default function MetaLayerObjectExecutionShell({ onStateChange = null } = {}) {
     const [selectedFamily, setSelectedFamily] = useState("synthetic_signal");
     const [presetIdx, setPresetIdx] = useState(0);
+    const [recordedFixturePresetIdx, setRecordedFixturePresetIdx] = useState(0);
     const [runStatus, setRunStatus] = useState("idle");
     const [runError, setRunError] = useState(null);
     const [runResult, setRunResult] = useState(null);
@@ -1044,8 +1081,13 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
     const sessionRef = useRef(null);
 
     const handleRun = useCallback(() => {
-        const isFile = SOURCE_FAMILIES.find(f => f.id === selectedFamily)?.isFileFamily;
-        const selectedSourceFamilyLabel = SOURCE_FAMILIES.find(f => f.id === selectedFamily)?.label ?? selectedFamily;
+        const selectedFamilyRecord = SOURCE_FAMILIES.find(f => f.id === selectedFamily);
+        const isFile = selectedFamilyRecord?.isFileFamily;
+        const isRecordedFixtureFamily = selectedFamilyRecord?.isRecordedFixtureFamily;
+        const selectedRecordedFixture = RECORDED_SOURCE_FIXTURES[recordedFixturePresetIdx] ?? null;
+        const selectedSourceFamilyLabel = isRecordedFixtureFamily
+            ? (selectedRecordedFixture?.sourceFamilyLabel ?? "Recorded Source (WAV fixture)")
+            : (selectedFamilyRecord?.label ?? selectedFamily);
         const id = `shell.run.${Date.now()}`;
         setRunStatus("running");
         setRunError(null);
@@ -1053,7 +1095,7 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
         setRunResult(null);
         setWorkbench(null);
 
-        setTimeout(() => {
+        setTimeout(async () => {
             try {
                 let result;
                 if (isFile) {
@@ -1062,6 +1104,14 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                         throw new Error("No valid adapter payload available — load a file first");
                     }
                     result = runImportedPipeline(adapterStatus.payload, id);
+                } else if (isRecordedFixtureFamily) {
+                    if (!selectedRecordedFixture) {
+                        throw new Error("No recorded source fixture selected");
+                    }
+                    const recordedPayload = await loadRecordedSourcePayload(selectedRecordedFixture, {
+                        stream_id: `recorded.stream.${selectedRecordedFixture.id}.${id}`,
+                    });
+                    result = runImportedPipeline(recordedPayload, id);
                 } else {
                     const preset = SIGNAL_PRESETS[presetIdx];
                     result = runSyntheticPipeline({
@@ -1094,7 +1144,7 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                 console.error("Shell run error:", err);
             }
         }, 0);
-    }, [presetIdx, selectedFamily, adapterStatus]);
+    }, [presetIdx, recordedFixturePresetIdx, selectedFamily, adapterStatus]);
 
     // File selection: run adapter immediately, store result for later run trigger
     const handleFileSelect = useCallback(async (file) => {
@@ -1195,6 +1245,8 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                         onSelectFamily={handleFamilySelect}
                         preset={presetIdx}
                         onSelectPreset={setPresetIdx}
+                        recordedFixturePreset={recordedFixturePresetIdx}
+                        onSelectRecordedFixturePreset={setRecordedFixturePresetIdx}
                         onRun={handleRun}
                         onFileSelect={handleFileSelect}
                         pendingFile={pendingFile}

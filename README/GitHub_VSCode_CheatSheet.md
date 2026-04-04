@@ -101,8 +101,8 @@
 
     Very useful when you accidentally add too much.
 
-    Minimal working loop
-
+# Minimal working loop
+##############################################################################################
         This is the main loop:
 
             Start work
@@ -119,8 +119,9 @@
             After PR merge
             git checkout main
             git pull origin main
-
+##############################################################################################
     That’s basically the spine.
+
 
 A few super useful mental models
 
