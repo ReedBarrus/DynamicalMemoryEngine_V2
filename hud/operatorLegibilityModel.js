@@ -22,6 +22,19 @@ function summarizeSupportBasis(supportBasis, fallback = "bounded support only") 
 function sourceProfileNote(runResult) {
     const meta = runResult?.artifacts?.a1?.meta ?? {};
     const parts = [];
+    if (meta.source_mode === "recorded_source") {
+        parts.push("recorded source");
+        if (meta.original_filename) parts.push(`file ${meta.original_filename}`);
+        if (meta.recorded_family) parts.push(`family ${meta.recorded_family}`);
+        if (meta.nominal_sample_rate_hz !== undefined && meta.nominal_sample_rate_hz !== null) {
+            parts.push(`nominal ${meta.nominal_sample_rate_hz}Hz`);
+        }
+        if (meta.original_sample_rate_hz !== undefined && meta.original_sample_rate_hz !== null) {
+            parts.push(`original ${meta.original_sample_rate_hz}Hz`);
+        }
+        if (meta.decode) parts.push(`decode ${meta.decode}`);
+        return parts.join(" | ");
+    }
     if (meta.seed !== undefined && meta.seed !== null) parts.push(`seed ${meta.seed}`);
     if (meta.noiseStd !== undefined && meta.noiseStd !== null) parts.push(`noise std ${meta.noiseStd}`);
     if (meta.durationSec !== undefined && meta.durationSec !== null) parts.push(`duration ${meta.durationSec}s`);
