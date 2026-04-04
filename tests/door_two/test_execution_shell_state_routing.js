@@ -75,13 +75,14 @@ section("B. buildActiveShellState filters logs to the active run");
     });
 
     eq(state.activeRunLabel, "shell.run.001", "B1: activeRunLabel derived from runResult");
-    eq(state.requestLog.length, 1, "B2: request log filtered to active run");
-    eq(state.requestLog[0].request_id, "CREQ-new", "B3: active request preserved");
-    eq(state.replayLog.length, 1, "B4: replay log filtered to active run");
-    eq(state.replayLog[0].replay_request_id, "RPLY-new", "B5: active replay preserved");
-    eq(state.requestHistoryCount, 2, "B6: request history count preserved separately");
-    eq(state.replayHistoryCount, 2, "B7: replay history count preserved separately");
-    eq(state.hasActiveResult, true, "B8: hasActiveResult true when runResult.ok and workbench present");
+    eq(state.activeRequest.request_id, "CREQ-new", "B2: activeRequest derives from active-context request log head");
+    eq(state.requestLog.length, 1, "B3: request log filtered to active run");
+    eq(state.requestLog[0].request_id, "CREQ-new", "B4: active request preserved");
+    eq(state.replayLog.length, 1, "B5: replay log filtered to active run");
+    eq(state.replayLog[0].replay_request_id, "RPLY-new", "B6: active replay preserved");
+    eq(state.requestHistoryCount, 2, "B7: request history count preserved separately");
+    eq(state.replayHistoryCount, 2, "B8: replay history count preserved separately");
+    eq(state.hasActiveResult, true, "B9: hasActiveResult true when runResult.ok and workbench present");
 }
 
 section("C. running/error states do not keep stale active result");
@@ -97,8 +98,9 @@ section("C. running/error states do not keep stale active result");
     });
 
     eq(runningState.hasActiveResult, false, "C1: running without workbench does not claim active result");
-    eq(runningState.requestLog.length, 0, "C2: no active request log when no active run");
-    eq(runningState.replayLog.length, 0, "C3: no active replay log when no active run");
+    eq(runningState.activeRequest, null, "C2: no active request when no active run");
+    eq(runningState.requestLog.length, 0, "C3: no active request log when no active run");
+    eq(runningState.replayLog.length, 0, "C4: no active replay log when no active run");
 }
 
 section("D. shell/app source uses active routing path");
@@ -109,9 +111,11 @@ section("D. shell/app source uses active routing path");
     ok(shellSrc.includes("buildActiveShellState"), "D1: shell imports active shell state helper");
     ok(shellSrc.includes("annotateShellRecord"), "D2: shell annotates request/replay records with shell context");
     ok(shellSrc.includes("setRunResult(null);") && shellSrc.includes("setWorkbench(null);"), "D3: shell clears stale active result on new run start");
-    ok(shellSrc.includes("activeShellState.requestLog") && shellSrc.includes("activeShellState.replayLog"), "D4: shell renders active-context logs");
-    ok(appSrc.includes("setShellState(nextState);"), "D5: app treats shell export as authoritative replacement");
-    ok(appSrc.includes("shellState.hasActiveResult ? shellState : null"), "D6: demo pane only receives active shell result state");
+    ok(shellSrc.includes("activeShellState.activeRequest"), "D4: shell routes one active request object into the request pane");
+    ok(shellSrc.includes("downloadRequestJson(activeRequest)"), "D5: request export uses the visible active request object");
+    ok(shellSrc.includes("activeShellState.requestLog") && shellSrc.includes("activeShellState.replayLog"), "D6: shell renders active-context logs");
+    ok(appSrc.includes("setShellState(nextState);"), "D7: app treats shell export as authoritative replacement");
+    ok(appSrc.includes("shellState.hasActiveResult ? shellState : null"), "D8: demo pane only receives active shell result state");
 }
 
 section("E. source family label stays tied to active run context");

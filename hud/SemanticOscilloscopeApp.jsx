@@ -193,6 +193,7 @@ export default function SemanticOscilloscopeApp() {
         activeRunLabel: null,
         workbench: null,
         runResult: null,
+        activeRequest: null,
         requestLog: [],
         replayLog: [],
         requestHistoryCount: 0,

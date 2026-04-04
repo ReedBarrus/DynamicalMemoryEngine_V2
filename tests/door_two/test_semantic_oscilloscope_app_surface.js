@@ -66,10 +66,11 @@ if (appSrc) {
     ok(appSrc.includes("setShellState(nextState);"), "C2: app replaces mirrored shell state instead of merging stale keys");
     ok(appSrc.includes("hasActiveResult"), "C3: app mirrors active-result posture from shell state");
     ok(appSrc.includes("activeRunLabel"), "C4: app keeps active run label in mirrored state");
-    ok(appSrc.includes("requestHistoryCount"), "C5: app keeps request history count in mirrored state");
-    ok(appSrc.includes("replayHistoryCount"), "C6: app keeps replay history count in mirrored state");
-    ok(appSrc.includes("shellState.hasActiveResult ? shellState : null"), "C7: demo only receives live shell state when an active result exists");
-    ok(appSrc.includes("workbench={shellState.workbench}"), "C8: lab HUD stays workbench-native");
+    ok(appSrc.includes("activeRequest"), "C5: app mirrors active request state from the shell export");
+    ok(appSrc.includes("requestHistoryCount"), "C6: app keeps request history count in mirrored state");
+    ok(appSrc.includes("replayHistoryCount"), "C7: app keeps replay history count in mirrored state");
+    ok(appSrc.includes("shellState.hasActiveResult ? shellState : null"), "C8: demo only receives live shell state when an active result exists");
+    ok(appSrc.includes("workbench={shellState.workbench}"), "C9: lab HUD stays workbench-native");
 }
 
 section("D. Shell routing path remains explicit");
@@ -78,9 +79,11 @@ if (shellSrc) {
     ok(shellSrc.includes("annotateShellRecord"), "D2: shell annotates request and replay records");
     ok(shellSrc.includes("const activeShellState = useMemo"), "D3: active shell state memoized at shell seam");
     ok(shellSrc.includes("onStateChange(activeShellState)"), "D4: shell exports active shell state to app");
-    ok(shellSrc.includes("activeShellState.requestLog"), "D5: request pane reads active-context request state");
-    ok(shellSrc.includes("activeShellState.replayLog"), "D6: replay pane reads active-context replay state");
-    ok(shellSrc.includes("setRunResult(null);") && shellSrc.includes("setWorkbench(null);"), "D7: shell clears stale active result on rerun/error path");
+    ok(shellSrc.includes("activeRequest={activeShellState.activeRequest}"), "D5: request pane receives the active request from shell state");
+    ok(shellSrc.includes("downloadRequestJson(activeRequest)"), "D6: request export uses the same active request object shown in-pane");
+    ok(shellSrc.includes("activeShellState.requestLog"), "D7: request pane reads active-context request state");
+    ok(shellSrc.includes("activeShellState.replayLog"), "D8: replay pane reads active-context replay state");
+    ok(shellSrc.includes("setRunResult(null);") && shellSrc.includes("setWorkbench(null);"), "D9: shell clears stale active result on rerun/error path");
 }
 
 section("E. Mode separation does not relocate authority");

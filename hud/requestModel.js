@@ -40,8 +40,12 @@ function extractLineage(workbench, runResult) {
     const scope = workbench?.scope ?? {};
     const dossier = workbench?.canon_candidate?.dossier ?? {};
     const readiness = workbench?.promotion_readiness?.report ?? {};
-    const a1 = runResult?.artifacts?.a1 ?? workbench?.runtime?.artifacts?.a1 ?? {};
+    const a1 = runResult?.artifacts?.a1
+        ?? runResult?.ingest?.artifact
+        ?? workbench?.runtime?.artifacts?.a1
+        ?? {};
     const runtime = workbench?.runtime ?? {};
+    const anomalyReports = runtime?.artifacts?.anomaly_reports ?? runResult?.anomalies ?? [];
 
     return {
         run_label: runResult?.run_label ?? null,
@@ -50,7 +54,7 @@ function extractLineage(workbench, runResult) {
         segment_count: (scope?.segment_ids ?? []).length || null,
         cross_run_available: scope?.cross_run_context?.available ?? false,
         cross_run_count: scope?.cross_run_context?.run_count ?? null,
-        anomaly_count: (runtime?.artifacts?.anomaly_reports ?? []).length,
+        anomaly_count: anomalyReports.length,
         overall_readiness: readiness?.readiness_summary?.overall_readiness ?? null,
         candidate_claim_type: dossier?.candidate_claim?.claim_type ?? null,
         consensus_result: workbench?.consensus_review?.review?.result ?? null,
@@ -61,10 +65,15 @@ function extractLineage(workbench, runResult) {
 function deriveSupportBasis(workbench, runResult) {
     const basis = [];
     const runtime = workbench?.runtime ?? {};
-    if ((runtime?.artifacts?.h1s?.length ?? 0) > 0) basis.push("harmonic_state_evidence");
-    if ((runtime?.artifacts?.m1s?.length ?? 0) > 0) basis.push("merged_state_evidence");
-    if (runtime?.artifacts?.q) basis.push("query_result_evidence");
-    if ((runtime?.artifacts?.anomaly_reports ?? []).length > 0) basis.push("anomaly_event_evidence");
+    const harmonicCount = runtime?.artifacts?.h1s?.length ?? workbench?.runtime_evidence?.harmonic_state_count ?? 0;
+    const mergedCount = runtime?.artifacts?.m1s?.length ?? workbench?.runtime_evidence?.merged_state_count ?? 0;
+    const queryCount = runtime?.artifacts?.q ? 1 : (workbench?.runtime_evidence?.query_result_count ?? 0);
+    const anomalyCount = (runtime?.artifacts?.anomaly_reports ?? runResult?.anomalies ?? []).length;
+
+    if (harmonicCount > 0) basis.push("harmonic_state_evidence");
+    if (mergedCount > 0) basis.push("merged_state_evidence");
+    if (queryCount > 0) basis.push("query_result_evidence");
+    if (anomalyCount > 0) basis.push("anomaly_event_evidence");
     if (workbench?.scope?.cross_run_context?.available) basis.push("cross_run_evidence");
     if (basis.length === 0) basis.push("single_run_structural_evidence");
     return basis;
@@ -94,6 +103,9 @@ export function buildConsultationRequest({
         request_type: "consultation",
         request_status: "prepared",
         created_at: new Date().toISOString(),
+        fulfillment_status: "not_fulfilled",
+        mechanization_status: "partially_mechanized_request_preparation_only",
+        request_surface_posture: "prepared only · not fulfilled · consultation protocol not executed",
 
         // What is being requested
         requested_use: requestedUse,
@@ -168,6 +180,9 @@ export function buildActivationReviewRequest({
         request_type: "activation_review",
         request_status: "prepared",
         created_at: new Date().toISOString(),
+        fulfillment_status: "not_fulfilled",
+        mechanization_status: "partially_mechanized_request_preparation_only",
+        request_surface_posture: "prepared only · not fulfilled · review protocol not executed",
 
         // Claim
         claim_type: claimType,
