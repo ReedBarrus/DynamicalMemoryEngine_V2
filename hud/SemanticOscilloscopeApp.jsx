@@ -189,12 +189,18 @@ export default function SemanticOscilloscopeApp() {
     // App-level mirror of key shell state — populated by the shell via callback.
     // Shell remains state owner; app mirrors for read-side surfaces.
     const [shellState, setShellState] = useState({
+        runId: null,
+        activeRunLabel: null,
         workbench: null,
         runResult: null,
         requestLog: [],
         replayLog: [],
+        requestHistoryCount: 0,
+        replayHistoryCount: 0,
         sourceFamilyLabel: "unspecified",
         runStatus: "idle",
+        runError: null,
+        hasActiveResult: false,
     });
 
     // Tandem projection — derived from mirrored shell state
@@ -202,12 +208,11 @@ export default function SemanticOscilloscopeApp() {
 
     // Callback for shell to push state updates
     const handleShellStateChange = useCallback((nextState) => {
-        console.log("APP shellState update", nextState);
-        setShellState(prev => ({ ...prev, ...nextState }));
+        setShellState(nextState);
     }, []);
 
     // liveShellState for the demo pane (same shape as projectForDemo expects)
-    const liveShellStateForDemo = shellState.workbench ? shellState : null;
+    const liveShellStateForDemo = shellState.hasActiveResult ? shellState : null;
 
     return (
         <div style={{
