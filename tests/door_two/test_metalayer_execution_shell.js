@@ -72,10 +72,12 @@ if (shellSrc) {
     ok(shellSrc.includes("annotateShellRecord"), "D2: shell tags request/replay records with active context");
     ok(shellSrc.includes("const activeShellState = useMemo"), "D3: active shell state is memoized");
     ok(shellSrc.includes("setRunResult(null);") && shellSrc.includes("setWorkbench(null);"), "D4: stale active result cleared on new run start");
-    ok(shellSrc.includes("activeShellState.requestLog"), "D5: request log rendering is active-context scoped");
-    ok(shellSrc.includes("activeShellState.replayLog"), "D6: replay log rendering is active-context scoped");
-    ok(shellSrc.includes("requestHistoryCount"), "D7: shell preserves session history count separately");
-    ok(shellSrc.includes("replayHistoryCount"), "D8: shell preserves replay history count separately");
+    ok(shellSrc.includes("activeShellState.activeRequest"), "D5: request pane reads one active request object from shell state");
+    ok(shellSrc.includes("downloadRequestJson(activeRequest)"), "D6: request export uses the visible active request object");
+    ok(shellSrc.includes("activeShellState.requestLog"), "D7: request log rendering is active-context scoped");
+    ok(shellSrc.includes("activeShellState.replayLog"), "D8: replay log rendering is active-context scoped");
+    ok(shellSrc.includes("requestHistoryCount"), "D9: shell preserves session history count separately");
+    ok(shellSrc.includes("replayHistoryCount"), "D10: shell preserves replay history count separately");
 }
 
 section("E. Shell export remains read-side only");

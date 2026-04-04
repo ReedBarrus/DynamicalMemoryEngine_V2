@@ -748,13 +748,12 @@ function PlaneGrid({ rows }) {
 }
 
 // ─── Region D: Request Surface ────────────────────────────────────────────────
-function RequestRegion({ hasResult, workbench, runResult, sourceFamilyLabel, onRequest }) {
+function RequestRegion({ hasResult, workbench, runResult, sourceFamilyLabel, activeRequest, onRequest }) {
     const [activeTab, setActiveTab] = useState("consult");
     const [requestedUse, setRequestedUse] = useState("bounded review-anchor consultation under same declared lens");
     const [proposedClaim, setProposedClaim] = useState("");
     const [allowedUse, setAllowedUse] = useState("bounded review consideration only");
     const [notes, setNotes] = useState("");
-    const [lastPrepared, setLastPrepared] = useState(null);
 
     const canPrepare = hasResult;
 
@@ -771,7 +770,6 @@ function RequestRegion({ hasResult, workbench, runResult, sourceFamilyLabel, onR
                 proposedBoundedClaim: proposedClaim, allowedUse, notes,
             });
         }
-        setLastPrepared(req);
         onRequest(req);
     };
 
@@ -901,9 +899,9 @@ function RequestRegion({ hasResult, workbench, runResult, sourceFamilyLabel, onR
                         >
                             prepare request
                         </button>
-                        {lastPrepared && (
+                        {activeRequest && (
                             <button
-                                onClick={() => downloadRequestJson(lastPrepared)}
+                                onClick={() => downloadRequestJson(activeRequest)}
                                 style={{
                                     padding: "8px 14px", borderRadius: 6, cursor: "pointer",
                                     border: `1px solid ${C.ruleLight}`, background: C.surface,
@@ -916,19 +914,21 @@ function RequestRegion({ hasResult, workbench, runResult, sourceFamilyLabel, onR
                     </div>
 
                     {/* Last prepared preview */}
-                    {lastPrepared && (
+                    {activeRequest && (
                         <div style={{
                             marginTop: 14, padding: "10px 12px", borderRadius: 6,
                             border: `1px solid ${C.ruleLight}`, background: C.surfaceHigh,
                         }}>
                             <Label style={{ marginBottom: 6, color: C.green }}>
-                                ✓ request prepared · {lastPrepared.request_id}
+                                ✓ active request object · {activeRequest.request_id}
                             </Label>
                             <div style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim, display: "flex", flexDirection: "column", gap: 3 }}>
-                                <span>type: {lastPrepared.request_type} · status: {lastPrepared.request_status}</span>
-                                <span>source: {lastPrepared.source_family_label}</span>
-                                <span>run: {lastPrepared.run_label}</span>
-                                <span style={{ color: C.amberDim }}>below canon · not automatic · explicit request only</span>
+                                <span>type: {activeRequest.request_type} · status: {activeRequest.request_status}</span>
+                                <span>fulfillment: {activeRequest.fulfillment_status} · mechanism: {activeRequest.mechanization_status}</span>
+                                <span>source: {activeRequest.source_family_label}</span>
+                                <span>run: {activeRequest.run_label}</span>
+                                <span style={{ color: C.amberDim }}>{activeRequest.request_surface_posture}</span>
+                                <span style={{ color: C.amberDim }}>below canon · explicit request only · no consultation/review resolution has executed</span>
                             </div>
                         </div>
                     )}
@@ -1213,6 +1213,7 @@ export default function MetaLayerObjectExecutionShell({ onStateChange = null } =
                         workbench={workbench}
                         runResult={runResult}
                         sourceFamilyLabel={sourceFamilyLabel}
+                        activeRequest={activeShellState.activeRequest}
                         onRequest={handleRequest}
                     />
                 </div>

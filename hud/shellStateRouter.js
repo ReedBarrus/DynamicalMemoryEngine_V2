@@ -38,12 +38,14 @@ export function buildActiveShellState({
     const activeRunLabel = runResult?.run_label ?? null;
     const activeRequestLog = filterActiveLogEntries(requestLog, activeRunLabel);
     const activeReplayLog = filterActiveLogEntries(replayLog, activeRunLabel);
+    const activeRequest = activeRequestLog[0] ?? null;
 
     return {
         runId,
         activeRunLabel,
         workbench,
         runResult,
+        activeRequest,
         requestLog: activeRequestLog,
         replayLog: activeReplayLog,
         requestHistoryCount: Array.isArray(requestLog) ? requestLog.length : 0,
