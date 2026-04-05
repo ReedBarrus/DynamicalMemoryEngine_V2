@@ -281,28 +281,135 @@ stronger reconstruction claims beyond support-trace boundedness.
 
 Status: declared only / partially mechanized in surrounding infrastructure
 
-Declared:
+This seam requires an explicit distinction between:
 
-tier language
-replay retained-tier posture
-retention ladder concepts
+- retention mechanics
+- retention posture
 
-Partially present in surrounding infrastructure:
+These are related, but not identical.
 
-provenance receipts
-live output bounding
-pin/archive posture
-replay-legitimacy framing
+#### Retention mechanics
 
-Not yet fully mechanized in current app/operator loop:
+Retention mechanics are the actual structural means by which support is preserved, bounded, degraded, retrieved, replayed, reconstructed, pruned, or surfaced.
 
-coherent retained-tier retrieval and navigation
-tier-specific replay retrieval in the active app flow
-tier-bound reconstruction behavior surfaced end-to-end
-pruning surfaced coherently through product-facing flow.
+Retention mechanics answer questions such as:
 
-Important:
+- what support actually survives?
+- what receipts, traces, or retained objects exist?
+- what retrieval path exists?
+- what replay or reconstruction path exists?
+- what pruning or degradation behavior is real?
+- what tier-specific support can actually be surfaced end-to-end?
+
+Retention mechanics are therefore mechanization questions.
+
+#### Retention posture
+
+Retention posture is the declared and operator-facing language used to describe:
+
+- what retention tier an object is in
+- what that tier is allowed to claim
+- what it is not allowed to claim
+- what downgrade or insufficiency remains visible
+- and what kind of replay/reconstruction/support language is lawful at that tier
+
+Retention posture is therefore a semantic and review-honesty layer.
+
+Retention posture may be useful and necessary before full retention mechanics are complete.
+But posture must not be mistaken for mechanism.
+
+#### Current status breakdown
+
+##### Declared
+
+Currently declared:
+
+- tier language
+- replay retained-tier posture
+- retention ladder concepts
+- broad replay-legitimacy framing by retained level
+
+This means the repo can name retention distinctions.
+It does **not** mean all tier behaviors are yet fully mechanized.
+
+##### Partially present in surrounding infrastructure
+
+Currently partially present:
+
+- provenance receipts
+- live output bounding
+- pin/archive posture
+- preserved packet / bundle posture
+- bounded replay-legitimacy framing
+- some surrounding retention-support surfaces
+
+This means pieces of the retention system exist around the seam.
+It does **not** yet mean the full tiered retention ladder is mechanized end-to-end.
+
+##### Not yet fully mechanized in the current app/operator loop
+
+Not yet fully mechanized:
+
+- coherent retained-tier retrieval and navigation
+- explicit tier-specific replay retrieval in the active app flow
+- explicit tier-specific reconstruction behavior surfaced end-to-end
+- pruning surfaced coherently through product-facing flow
+- operationally clear “what this tier can still justify” behavior across the primary shell
+
+#### Governing distinction
+
+The key rule is:
+
+**Retention posture may describe what a retained object appears to preserve or what a retained tier is intended to mean. Retention mechanics determine what support actually survives and what replay, reconstruction, or identity claims can still be justified.**
+
+Corollaries:
+
+- tier language is not tier retrieval
+- replay-legitimacy framing is not replay support
+- archive posture is not archive retrieval mechanics
+- retention naming is not retained-support sufficiency
+- declared tier semantics are not mechanized tier behavior
+
+#### Practical meaning of the tiers
+
+The retention tiers should be understood as a graded support ladder, not a binary “have it / do not have it” model.
+
+The point of the ladder is to make visible:
+
+- how much structural support survives
+- what kind of replay or reconstruction remains lawful
+- where identity support weakens
+- and where downgrade posture must become explicit
+
+The tiers therefore exist to bind claim strength to surviving support.
+
+They should not be treated as:
+- decorative labels
+- authority classes
+- proof of memory-bearing status by name alone
+- or evidence that retrieval/replay/reconstruction mechanics are already complete
+
+#### What a tightened retention tier should eventually answer
+
+For each tier, the system should eventually be able to answer explicitly:
+
+1. what support survives at this tier?
+2. what can this tier still replay?
+3. what can this tier only reconstruct?
+4. what can this tier no longer justify?
+5. what downgrade posture must remain visible?
+6. what identity claims weaken at this tier?
+7. what retrieval path is actually mechanized?
+
+Until those answers are mechanized, retention tier language should remain visibly below stronger completion claims.
+
+#### Important
+
 Retention posture should not be mistaken for retention mechanics.
+
+A retained object may have lawful posture before its full retrieval, replay, reconstruction, or pruning behavior is mechanized.
+
+Likewise, a partially mechanized retrieval path does not by itself justify stronger replay, identity, or memory-bearing claims than the surviving support can honestly carry.
 
 ### 4.10 Structural query engine (beyond current-run query artifact)
 

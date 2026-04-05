@@ -756,3 +756,192 @@ Before admitting the next developmental leg, ask:
 ## 16. One-line summary
 
 **The Door One developmental outline sequences the next legs of app stabilization, reconstruction fidelity, identity/memory/compression tracking, cross-session continuity, retention hardening, and consultation-support growth so DME can move toward concrete product surfaces without collapsing epistemology, authority, coherence, or constitutionality.**
+
+---
+
+## Retention-mechanics clarification and future live-stream representation note
+
+This section clarifies two developmental distinctions that become increasingly important as Door One moves from replay/reconstruction honesty into identity/memory/compression tracking, cross-session continuity, retention-spectrum hardening, and later realtime continuity-and-change work.
+
+It is a supporting developmental clarification section.
+
+It does **not**:
+- override the Master Constitution,
+- replace the Active Law Kernel,
+- replace the Declared vs Mechanized Audit,
+- replace the Structural Identity Law,
+- or authorize immediate expansion into a full realtime streaming architecture.
+
+Its purpose is narrower:
+- clarify how retention posture and retention mechanics should be treated across the developmental line,
+- and place future live-source structural representation in a bounded, lawful later-development posture.
+
+### Why this clarification is needed
+
+As Door One grows, two recurring pressures increase:
+
+1. retention language can become clearer faster than retention mechanics
+2. operator demand for realtime structural visibility can arise before the substrate is ready for stronger continuity claims
+
+Without explicit developmental guidance, these pressures can cause:
+- semantic inflation,
+- display-led overclaim,
+- retention tiers treated as stronger retrieval or replay mechanics than actually exist,
+- and premature “memory substrate” rhetoric outrunning visible support.
+
+This section exists to keep the developmental line honest.
+
+### Retention posture vs retention mechanics across the developmental line
+
+The developmental line should preserve a distinction between:
+
+- retention posture
+- retention mechanics
+
+#### Retention posture
+
+Retention posture is the declared and operator-facing statement of:
+- what retained tier an object is in,
+- what kind of support it appears to preserve,
+- what it may still claim,
+- and what downgrade or insufficiency must remain visible.
+
+Retention posture is useful for:
+- operator honesty,
+- bounded vocabulary,
+- and non-claim discipline.
+
+#### Retention mechanics
+
+Retention mechanics are the actual structural means by which support is:
+- preserved,
+- bounded,
+- degraded,
+- retrieved,
+- replayed,
+- reconstructed,
+- pruned,
+- and surfaced through real execution paths.
+
+Retention mechanics are required for:
+- lawful replay legitimacy,
+- lawful reconstruction legitimacy,
+- retained-tier sufficiency,
+- and stronger memory-support claims.
+
+#### Developmental rule
+
+Across Legs 2–5, retention posture may become clearer before all retention mechanics are complete.
+
+That is lawful.
+
+But retention posture must not be mistaken for:
+- tier retrieval,
+- replay support,
+- reconstruction strength,
+- pruning maturity,
+- or memory-bearing proof.
+
+The development line should therefore prefer:
+
+- clarify posture early,
+- mechanize retrieval/replay/reconstruction/pruning honestly,
+- and only then strengthen stronger retained-support claims.
+
+This remains aligned with the broader rule that Door One should become more usable before more authoritative. :contentReference[oaicite:1]{index=1}
+
+### Leg alignment note
+
+This distinction should be read into the developmental line as follows:
+
+#### Leg 2 — Reconstruction fidelity and replay honesty
+Here, retained-tier posture may be declared and surfaced, but replay/reconstruction claims must remain bounded by real support-trace mechanics.
+
+#### Leg 3 — Identity / memory / compression tracking
+Here, the system should become more explicit about:
+- what survives,
+- what degrades,
+- and what retained tiers are actually supporting.
+
+But this leg still does not imply that the full retention ladder is mechanically mature.
+
+#### Leg 4 — Cross-session and cross-thread continuity
+Here, continuity support may begin to rely more on retained objects across time, but helper continuity and retained continuity must remain distinct.
+
+#### Leg 5 — Retention-spectrum hardening
+Here, retention mechanics should become operationally meaningful enough that each retained tier can answer:
+- what support survives
+- what can still be replayed
+- what can only be reconstructed
+- what can no longer be justified
+- and what downgrade posture must remain visible
+
+This is where posture and mechanics should become much more tightly coupled.
+
+### Future live-source structural representation note
+
+A later bounded development target may introduce live-source or advancing-window structural representation in the operator surface.
+
+This should be understood as:
+
+- a read-side and operator-legibility aid,
+- a continuity-and-change visibility surface,
+- and a way of making retained structural support visibly present in the reading of current signal state,
+
+not as:
+- agency,
+- autonomous judgment,
+- canon-support,
+- or symbolic authority.
+
+### Lawful placement of live-source representation
+
+Live-source structural representation belongs later than the current basic replay/reconstruction honesty work, but earlier than any stronger authority-adjacent interpretations.
+
+Its lawful purpose is to make visible:
+
+- current source state
+- current spectral / structural state
+- retained-support relation
+- continuity / drift / rupture / recurrence
+- replayable vs reconstructable posture
+- and present constraint from retained structural support
+
+Its purpose is not to simulate cognition.
+
+### Developmental placement rule
+
+Live-source structural representation should be treated as:
+
+- premature if used to leap past replay/reconstruction honesty or identity/compression tracking,
+- useful if introduced as a bounded operator-legibility aid after those foundations are sufficiently hardened,
+- and especially valuable once it can help the operator see retained structural support acting as a present constraint on live or advancing signal interpretation.
+
+This means the strongest lawful placement is:
+
+- after current Leg 3 closure pressure has materially stabilized,
+- during or after early continuity-focused work,
+- and before any stronger memory rhetoric, consultation pressure, or authority-adjacent expansion.
+
+### Practical guardrail for live-source representation
+
+A live structural display should not be accepted merely because it feels dynamic or intuitive.
+
+It should earn its place by making the following more legible:
+
+1. what object is active now
+2. what retained support is relevant now
+3. whether continuity is holding, weakening, broken, or recurring
+4. what is source-available vs retained-only
+5. what is replayable vs reconstructable
+6. what remains explicitly not claimed
+
+If the display becomes richer without making those clearer, it has not yet justified itself as a developmental step.
+
+### One-line review question
+
+**Is this developmental move strengthening real retained-support mechanics and operator-legible structural continuity, or is it allowing retention posture and dynamic display to outrun the support and execution paths that would actually justify stronger memory claims?**
+
+### One-line summary
+
+**Across the Door One developmental line, retention posture may become visible before full retention mechanics are mature, but stronger replay, reconstruction, continuity, and memory-support claims must remain tied to mechanized support; later live-source structural representation is lawful only when it improves operator visibility of present structural continuity without inflating authority or pretending that dynamic display itself is preserved memory.**
