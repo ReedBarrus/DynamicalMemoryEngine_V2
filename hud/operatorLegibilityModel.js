@@ -8,6 +8,7 @@ import {
 } from "./replayThresholdFidelityPosture.js";
 import { deriveStructuralIdentityPosture } from "./structuralIdentityPosture.js";
 import { deriveMemorySupportClassification } from "./memorySupportClassification.js";
+import { deriveCompressionRemintingAccountability } from "./compressionRemintingAccountability.js";
 
 function safeArray(value) {
     return Array.isArray(value) ? value : [];
@@ -258,7 +259,9 @@ function replayStatusChips(replay) {
     const discipline = deriveOperatorWeakStateDiscipline(replay);
     const identity = deriveStructuralIdentityPosture(replay, { objectKind: "replay" });
     const memoryClass = deriveMemorySupportClassification({ objectKind: "replay", replay });
+    const accountability = deriveCompressionRemintingAccountability({ objectKind: "replay", replay });
     const chips = [
+        accountability.chipCode,
         memoryClass.chipCode,
         tierChip(replay),
         identity.chipCode,
@@ -279,7 +282,9 @@ function reconstructionStatusChips(replay) {
     const discipline = deriveOperatorWeakStateDiscipline(replay);
     const identity = deriveStructuralIdentityPosture(replay, { objectKind: "reconstruction" });
     const memoryClass = deriveMemorySupportClassification({ objectKind: "reconstruction", replay });
+    const accountability = deriveCompressionRemintingAccountability({ objectKind: "reconstruction", replay });
     const chips = [
+        accountability.chipCode,
         memoryClass.chipCode,
         tierChip(replay),
         identity.chipCode,
@@ -299,20 +304,27 @@ function replayAuditFacts(replay) {
     const discipline = deriveOperatorWeakStateDiscipline(replay);
     const identity = deriveStructuralIdentityPosture(replay, { objectKind: "replay" });
     const memoryClass = deriveMemorySupportClassification({ objectKind: "replay", replay });
+    const accountability = deriveCompressionRemintingAccountability({ objectKind: "replay", replay });
     if (!replay) {
         return [
             ["legitimacy", "awaiting explicit replay request"],
             ["memory / support class", memoryClass.classLabel],
             ["classification basis", memoryClass.classificationBasis],
+            ["compression / reminting posture", accountability.classLabel],
+            ["accountability basis", accountability.accountabilityBasis],
             ["structural identity", identity.outcomeLabel],
             ["bounded question", identity.boundedQuestion],
             ["declared constraints", identity.declaredConstraints],
             ["support survival", identity.supportSurvival],
             ["mechanized basis", identity.mechanizedBasis],
             ["memory next posture", memoryClass.lawfulNextPosture],
+            ["accountability next posture", accountability.lawfulNextPosture],
             ["lawful next posture", identity.lawfulNextPosture],
             ["basis mode", "awaiting explicit replay request"],
             ["retained tier", "not yet declared in an active replay object"],
+            ["what survived", accountability.whatSurvived],
+            ["what degraded", accountability.whatDegraded],
+            ["accountability not preserved", accountability.notPreserved],
             ["preserved", "explicit request boundary only"],
             ["not preserved", "mechanized replay legitimacy"],
             ["support basis", "bounded retained support becomes visible once replay is prepared"],
@@ -322,6 +334,7 @@ function replayAuditFacts(replay) {
             ["threshold posture", "not yet active"],
             ["fidelity class", fidelity.classLabel],
             ["fidelity meaning", fidelity.note],
+            ["accountability boundary", accountability.note],
             ["classification boundary", memoryClass.semanticBoundary],
             ["semantic boundary", identity.semanticBoundary],
             ["discipline boundary", discipline.boundaryNote],
@@ -334,15 +347,21 @@ function replayAuditFacts(replay) {
         ["legitimacy", replayLegitimacyLabel(replay)],
         ["memory / support class", memoryClass.classLabel],
         ["classification basis", memoryClass.classificationBasis],
+        ["compression / reminting posture", accountability.classLabel],
+        ["accountability basis", accountability.accountabilityBasis],
         ["structural identity", identity.outcomeLabel],
         ["bounded question", identity.boundedQuestion],
         ["declared constraints", identity.declaredConstraints],
         ["support survival", identity.supportSurvival],
         ["mechanized basis", identity.mechanizedBasis],
         ["memory next posture", memoryClass.lawfulNextPosture],
+        ["accountability next posture", accountability.lawfulNextPosture],
         ["lawful next posture", identity.lawfulNextPosture],
         ["basis mode", basisModeLabel(replay)],
         ["retained tier", tierLabel(replay)],
+        ["what survived", accountability.whatSurvived],
+        ["what degraded", accountability.whatDegraded],
+        ["accountability not preserved", accountability.notPreserved],
         ["preserved", summarizeList(preservedReplayPosture(replay))],
         ["not preserved", summarizeList(notPreservedReplayPosture(replay))],
         ["support basis", summarizeSupportBasis(replay?.replay_fidelity_record_v0?.support_basis ?? replay.support_basis)],
@@ -352,6 +371,7 @@ function replayAuditFacts(replay) {
         ["threshold posture", thresholdOutcomeLabel(replay)],
         ["fidelity class", fidelity.classLabel],
         ["fidelity meaning", fidelity.note],
+        ["accountability boundary", accountability.note],
         ["classification boundary", memoryClass.semanticBoundary],
         ["semantic boundary", identity.semanticBoundary],
         ["discipline boundary", discipline.boundaryNote],
@@ -366,20 +386,27 @@ function reconstructionAuditFacts(replay) {
     const discipline = deriveOperatorWeakStateDiscipline(replay);
     const identity = deriveStructuralIdentityPosture(replay, { objectKind: "reconstruction" });
     const memoryClass = deriveMemorySupportClassification({ objectKind: "reconstruction", replay });
+    const accountability = deriveCompressionRemintingAccountability({ objectKind: "reconstruction", replay });
     if (!replay) {
         return [
             ["legitimacy", "awaiting explicit replay request"],
             ["memory / support class", memoryClass.classLabel],
             ["classification basis", memoryClass.classificationBasis],
+            ["compression / reminting posture", accountability.classLabel],
+            ["accountability basis", accountability.accountabilityBasis],
             ["structural identity", identity.outcomeLabel],
             ["bounded question", identity.boundedQuestion],
             ["declared constraints", identity.declaredConstraints],
             ["support survival", identity.supportSurvival],
             ["mechanized basis", identity.mechanizedBasis],
             ["memory next posture", memoryClass.lawfulNextPosture],
+            ["accountability next posture", accountability.lawfulNextPosture],
             ["lawful next posture", identity.lawfulNextPosture],
             ["basis mode", "awaiting explicit replay request"],
             ["retained tier", "not yet declared in an active replay object"],
+            ["what survived", accountability.whatSurvived],
+            ["what degraded", accountability.whatDegraded],
+            ["accountability not preserved", accountability.notPreserved],
             ["preserved", "explicit backend boundary only"],
             ["not preserved", "mechanized support-trace reconstruction"],
             ["support basis", "support-trace basis becomes visible once reconstruction is prepared"],
@@ -389,6 +416,7 @@ function reconstructionAuditFacts(replay) {
             ["fidelity meaning", fidelity.note],
             ["fidelity posture", "not yet active"],
             ["trace depth", "not yet active"],
+            ["accountability boundary", accountability.note],
             ["classification boundary", memoryClass.semanticBoundary],
             ["semantic boundary", identity.semanticBoundary],
             ["discipline boundary", discipline.boundaryNote],
@@ -401,15 +429,21 @@ function reconstructionAuditFacts(replay) {
         ["legitimacy", reconstructionLegitimacyLabel(replay)],
         ["memory / support class", memoryClass.classLabel],
         ["classification basis", memoryClass.classificationBasis],
+        ["compression / reminting posture", accountability.classLabel],
+        ["accountability basis", accountability.accountabilityBasis],
         ["structural identity", identity.outcomeLabel],
         ["bounded question", identity.boundedQuestion],
         ["declared constraints", identity.declaredConstraints],
         ["support survival", identity.supportSurvival],
         ["mechanized basis", identity.mechanizedBasis],
         ["memory next posture", memoryClass.lawfulNextPosture],
+        ["accountability next posture", accountability.lawfulNextPosture],
         ["lawful next posture", identity.lawfulNextPosture],
         ["basis mode", basisModeLabel(replay)],
         ["retained tier", tierLabel(replay)],
+        ["what survived", accountability.whatSurvived],
+        ["what degraded", accountability.whatDegraded],
+        ["accountability not preserved", accountability.notPreserved],
         ["preserved", summarizeList(preservedReconstructionPosture(replay))],
         ["not preserved", summarizeList(notPreservedReconstructionPosture(replay))],
         ["support basis", summarizeSupportBasis(replay?.replay_fidelity_record_v0?.support_basis ?? replay.support_basis)],
@@ -419,6 +453,7 @@ function reconstructionAuditFacts(replay) {
         ["fidelity meaning", fidelity.note],
         ["fidelity posture", replay?.replay_fidelity_record_v0?.fidelity_posture ?? replay?.fidelity_posture ?? "not declared"],
         ["trace depth", `${safeArray(replay?.reconstruction_trace).length} trace steps`],
+        ["accountability boundary", accountability.note],
         ["classification boundary", memoryClass.semanticBoundary],
         ["semantic boundary", identity.semanticBoundary],
         ["discipline boundary", discipline.boundaryNote],
@@ -567,6 +602,11 @@ function buildRetainedStage({ hasActiveResult, workbench, hudModel }) {
         hasActiveResult,
         workbench,
     });
+    const accountability = deriveCompressionRemintingAccountability({
+        objectKind: "retained_signature",
+        hasActiveResult,
+        workbench,
+    });
     const supportBasis = summarizeSupportBasis(hudModel ? [
         hudModel.runtime_evidence?.artifact_counts?.m1s > 0 ? "merged_state_evidence" : null,
         hudModel.runtime_evidence?.artifact_counts?.h1s > 0 ? "harmonic_state_evidence" : null,
@@ -603,11 +643,18 @@ function buildRetainedStage({ hasActiveResult, workbench, hudModel }) {
         auditFacts: [
             ["memory / support class", memoryClass.classLabel],
             ["classification basis", memoryClass.classificationBasis],
+            ["compression / reminting posture", accountability.classLabel],
+            ["accountability basis", accountability.accountabilityBasis],
+            ["what survived", accountability.whatSurvived],
+            ["what degraded", accountability.whatDegraded],
+            ["accountability not preserved", accountability.notPreserved],
             ["memory next posture", memoryClass.lawfulNextPosture],
+            ["accountability next posture", accountability.lawfulNextPosture],
+            ["accountability boundary", accountability.note],
             ["classification boundary", memoryClass.semanticBoundary],
         ],
-        postureChips: [memoryClass.chipCode].filter(Boolean),
-        postureNote: memoryClass.note,
+        postureChips: [accountability.chipCode, memoryClass.chipCode].filter(Boolean),
+        postureNote: `${accountability.note} ${memoryClass.note}`,
     };
 }
 

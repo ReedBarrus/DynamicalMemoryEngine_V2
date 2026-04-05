@@ -33,6 +33,8 @@ function tone(status) {
         status === "replayable" ||
         status === "reconstructable" ||
         status === "memory_bearing" ||
+        status === "directly_retained" ||
+        status === "compressed_retained" ||
         status === "tier_0_live" ||
         status === "identity_conserved" ||
         status === "conserved" ||
@@ -75,12 +77,16 @@ function tone(status) {
     if (
         status === "replay_support_only" ||
         status === "review_only" ||
+        status === "reminted" ||
         status === "identity_unresolved" ||
         status === "unresolved" ||
         status === "unresolved_support_trace" ||
         status === "review_required"
     ) {
         return { fg: C.slate, bg: C.slateFaint, border: C.slateDim };
+    }
+    if (status === "reconstructed") {
+        return { fg: C.blue, bg: C.blueFaint, border: C.blue };
     }
     if (status === "failed" || status === "identity_broken") {
         return { fg: C.red, bg: C.redFaint, border: C.red };
@@ -281,6 +287,7 @@ function StageCard({ stage }) {
                     Structural identity remains grounded in bounded question, declared constraints, support survival,
                     and mechanized basis.
                     Memory-bearing status is support-grounded, not semantic or conversational.
+                    Reminting is distinct from direct preservation. Compression convenience is not continuity proof.
                     Tier 0 live support, Tier 1 receipt lineage, and Tier 2+ insufficiency are not equivalent.
                     Preserved does not mean equivalent.
                     Conserved, narrowed, degraded, insufficient, unresolved, and failed are separate bounded postures.
@@ -632,7 +639,8 @@ export default function OperatorLegibilityPanel({ shellState }) {
                         remain coarse at top-line runtime counters and should be read that way. Failure remains
                         explicit failure. Insufficiency remains bounded insufficiency. Semantic summaries remain
                         interpretive and do not carry preservation by themselves. Semantic usefulness does not
-                        make an object memory-bearing.
+                        make an object memory-bearing. Compression convenience does not prove direct preservation.
+                        Reminting must not silently read as direct retention.
                     </div>
                 </div>
             </div>
