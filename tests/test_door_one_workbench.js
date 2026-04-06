@@ -361,12 +361,13 @@ ok(wbSingle.runtime && typeof wbSingle.runtime === "object", "A6: runtime sectio
 ok(wbSingle.semantic_overlay && typeof wbSingle.semantic_overlay === "object", "A7: semantic_overlay section present");
 ok(wbSingle.readiness_overlay && typeof wbSingle.readiness_overlay === "object", "A8: readiness_overlay section present");
 ok(wbSingle.review_overlay && typeof wbSingle.review_overlay === "object", "A9: review_overlay section present");
-ok(wbSingle.interpretation && typeof wbSingle.interpretation === "object", "A10: interpretation compatibility section present");
-ok(wbSingle.cross_run && typeof wbSingle.cross_run === "object", "A11: cross_run section present");
-ok(wbSingle.promotion_readiness && typeof wbSingle.promotion_readiness === "object", "A12: promotion_readiness compatibility section present");
-ok(wbSingle.canon_candidate && typeof wbSingle.canon_candidate === "object", "A13: canon_candidate compatibility section present");
-ok(wbSingle.consensus_review && typeof wbSingle.consensus_review === "object", "A14: consensus_review compatibility section present");
-ok(Array.isArray(wbSingle.notes), "A15: notes array present");
+ok(wbSingle.compatibility_aliases && typeof wbSingle.compatibility_aliases === "object", "A10: compatibility_aliases section present");
+ok(wbSingle.interpretation && typeof wbSingle.interpretation === "object", "A11: interpretation compatibility section present");
+ok(wbSingle.cross_run && typeof wbSingle.cross_run === "object", "A12: cross_run section present");
+ok(wbSingle.promotion_readiness && typeof wbSingle.promotion_readiness === "object", "A13: promotion_readiness compatibility section present");
+ok(wbSingle.canon_candidate && typeof wbSingle.canon_candidate === "object", "A14: canon_candidate compatibility section present");
+ok(wbSingle.consensus_review && typeof wbSingle.consensus_review === "object", "A15: consensus_review compatibility section present");
+ok(Array.isArray(wbSingle.notes), "A16: notes array present");
 
 section("B. Single-run mode");
 eq(wbSingle.scope.stream_id, runA?.artifacts?.a1?.stream_id ?? null, "B1: scope.stream_id sourced from A1");
@@ -451,8 +452,32 @@ ok(wbSingle.runtime.audit && typeof wbSingle.runtime.audit === "object", "F4: ru
 ok(wbSingle.semantic_overlay.trajectory && typeof wbSingle.semantic_overlay.trajectory === "object", "F5: semantic_overlay.trajectory present");
 eq(wbSingle.semantic_overlay.trajectory.query_class, "Q2_continuity", "F6: semantic_overlay.trajectory query_class declared");
 ok(wbSingle.semantic_overlay.attention_memory && typeof wbSingle.semantic_overlay.attention_memory === "object", "F7: semantic_overlay.attention_memory present");
-ok(wbSingle.interpretation.trajectory && typeof wbSingle.interpretation.trajectory === "object", "F8: interpretation.trajectory compatibility alias present");
-ok(wbSingle.interpretation.attention_memory && typeof wbSingle.interpretation.attention_memory === "object", "F9: interpretation.attention_memory compatibility alias present");
+ok(wbSingle.compatibility_aliases.interpretation && typeof wbSingle.compatibility_aliases.interpretation === "object", "F8: compatibility_aliases.interpretation present");
+ok(wbSingle.compatibility_aliases.promotion_readiness && typeof wbSingle.compatibility_aliases.promotion_readiness === "object", "F9: compatibility_aliases.promotion_readiness present");
+ok(wbSingle.compatibility_aliases.canon_candidate && typeof wbSingle.compatibility_aliases.canon_candidate === "object", "F10: compatibility_aliases.canon_candidate present");
+ok(wbSingle.compatibility_aliases.consensus_review && typeof wbSingle.compatibility_aliases.consensus_review === "object", "F11: compatibility_aliases.consensus_review present");
+ok(wbSingle.interpretation.trajectory && typeof wbSingle.interpretation.trajectory === "object", "F12: interpretation.trajectory compatibility alias present");
+ok(wbSingle.interpretation.attention_memory && typeof wbSingle.interpretation.attention_memory === "object", "F13: interpretation.attention_memory compatibility alias present");
+deepEq(
+    wbSingle.compatibility_aliases.interpretation,
+    wbSingle.interpretation,
+    "F14: interpretation alias mirrored under compatibility_aliases"
+);
+deepEq(
+    wbSingle.compatibility_aliases.promotion_readiness,
+    wbSingle.promotion_readiness,
+    "F15: promotion_readiness alias mirrored under compatibility_aliases"
+);
+deepEq(
+    wbSingle.compatibility_aliases.canon_candidate,
+    wbSingle.canon_candidate,
+    "F16: canon_candidate alias mirrored under compatibility_aliases"
+);
+deepEq(
+    wbSingle.compatibility_aliases.consensus_review,
+    wbSingle.consensus_review,
+    "F17: consensus_review alias mirrored under compatibility_aliases"
+);
 
 section("G. Determinism");
 const wbCross2 = workbench.assemble(runA, {
@@ -492,8 +517,13 @@ includes(
 );
 includes(
     wbCross.notes.join(" "),
-    "compatibility aliases remain transitional only",
-    "I10: note preserves transitional alias boundary"
+    "Structural runtime remains the primary workbench section",
+    "I10: note preserves structural primacy"
+);
+includes(
+    wbCross.notes.join(" "),
+    "Compatibility aliases are grouped under compatibility_aliases",
+    "I11: note preserves compatibility alias grouping boundary"
 );
 
 section("J. Failed input handling");
