@@ -1,27 +1,22 @@
-# README.CleanupFolderIndex.md
+# Cleanup Queue
 
-This folder holds bounded cleanup, transition, and backlog notes that support ongoing DME refinement without changing constitutional meaning by themselves.
+This folder contains architecturally valid but not yet mechanized or enforced specifications.
 
-Recommended contents include:
+Each item must resolve one of the following before promotion:
 
-* semantic overlay cleanup backlog
-* app surface transition notes
-* viewer contract notes
-* telemetry contract notes
-* later bounded residue audits
+- Mechanization gap (code does not support it yet)
+- Instrumentation gap (cannot be audited yet)
+- Boundary clarity gap (layer ownership not finalized)
 
-Rule:
+## Active Items
 
-These notes are for **bounded cleanup and transition coordination** only.
+- Resolution Path Equivalence (QueryOp dependency)
+- Semantic Triad Consolidation (Claude feedback alignment)
 
-They should:
+## Promotion Criteria
 
-* preserve visibility of unfinished but controlled residue
-* support future packetization
-* prevent thread-only planning from disappearing
+An item may move to core/ or operator-level documentation when:
 
-They should not:
-
-* become a second constitution
-* silently redefine runtime meaning
-* or replace seam-local implementation packets
+- It is fully checkable
+- It does not rely on hidden reconstruction
+- It respects layer authority boundaries
