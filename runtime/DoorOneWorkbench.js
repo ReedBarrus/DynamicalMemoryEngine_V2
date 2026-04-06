@@ -125,10 +125,55 @@ export class DoorOneWorkbench {
         const consensusReview =
             this._resolveConsensusReview(canonCandidate, opts);
 
+        const runtime = {
+            artifacts: this._copy(result?.artifacts ?? {}),
+            substrate: this._copy(result?.substrate ?? {}),
+            summaries: this._copy(result?.summaries ?? {}),
+            audit: this._copy(result?.audit ?? {}),
+        };
+
+        const semanticOverlay = {
+            trajectory: this._copy(
+                result?.semantic_overlay?.trajectory ??
+                result?.interpretation?.trajectory ??
+                null
+            ),
+            attention_memory: this._copy(
+                result?.semantic_overlay?.attention_memory ??
+                result?.interpretation?.attention_memory ??
+                null
+            ),
+        };
+
+        const readinessOverlay = {
+            promotion_readiness: this._copy(promotionReadiness),
+        };
+
+        const reviewOverlay = {
+            canon_candidate: this._copy(canonCandidate),
+            consensus_review: consensusReview ? this._copy(consensusReview) : null,
+        };
+
+        const compatibilityAliases = {
+            interpretation: {
+                trajectory: this._copy(result?.interpretation?.trajectory ?? null),
+                attention_memory: this._copy(result?.interpretation?.attention_memory ?? null),
+            },
+            promotion_readiness: {
+                report: this._copy(promotionReadiness),
+            },
+            canon_candidate: {
+                dossier: this._copy(canonCandidate),
+            },
+            consensus_review: {
+                review: consensusReview ? this._copy(consensusReview) : null,
+            },
+        };
+
         return {
             workbench_type: "runtime:door_one_workbench",
             generated_from:
-                "Door One runtime, semantic/readiness/review overlay bundles, cross-run, and transitional compatibility surfaces only; integration view, not canon",
+                "Door One runtime primary section, downstream semantic/readiness/review overlay bundles, cross-run, and transitional compatibility aliases only; integration view, not canon",
             scope: {
                 stream_id: result?.artifacts?.a1?.stream_id ?? null,
                 source_id: result?.artifacts?.a1?.source_id ?? null,
@@ -147,61 +192,21 @@ export class DoorOneWorkbench {
                     run_count: crossRunReport?.scope?.run_count ?? 0,
                 },
             },
-
-            runtime: {
-                artifacts: this._copy(result?.artifacts ?? {}),
-                substrate: this._copy(result?.substrate ?? {}),
-                summaries: this._copy(result?.summaries ?? {}),
-                audit: this._copy(result?.audit ?? {}),
-            },
-
-            semantic_overlay: {
-                trajectory: this._copy(
-                    result?.semantic_overlay?.trajectory ??
-                    result?.interpretation?.trajectory ??
-                    null
-                ),
-                attention_memory: this._copy(
-                    result?.semantic_overlay?.attention_memory ??
-                    result?.interpretation?.attention_memory ??
-                    null
-                ),
-            },
-
-            readiness_overlay: {
-                promotion_readiness: this._copy(promotionReadiness),
-            },
-
-            review_overlay: {
-                canon_candidate: this._copy(canonCandidate),
-                consensus_review: consensusReview ? this._copy(consensusReview) : null,
-            },
-
-            interpretation: {
-                // Transitional compatibility alias while downstream consumers still read interpretation.*
-                trajectory: this._copy(result?.interpretation?.trajectory ?? null),
-                attention_memory: this._copy(result?.interpretation?.attention_memory ?? null),
-            },
+            runtime,
+            semantic_overlay: semanticOverlay,
+            readiness_overlay: readinessOverlay,
+            review_overlay: reviewOverlay,
+            compatibility_aliases: this._copy(compatibilityAliases),
 
             cross_run: {
                 available: !!crossRunReport,
                 report: crossRunReport ? this._copy(crossRunReport) : null,
             },
 
-            promotion_readiness: {
-                // Transitional compatibility alias while downstream consumers are bundle-migrated.
-                report: this._copy(promotionReadiness),
-            },
-
-            canon_candidate: {
-                // Transitional compatibility alias while downstream consumers are bundle-migrated.
-                dossier: this._copy(canonCandidate),
-            },
-
-            consensus_review: {
-                // Transitional compatibility alias while downstream consumers are bundle-migrated.
-                review: consensusReview ? this._copy(consensusReview) : null,
-            },
+            interpretation: this._copy(compatibilityAliases.interpretation),
+            promotion_readiness: this._copy(compatibilityAliases.promotion_readiness),
+            canon_candidate: this._copy(compatibilityAliases.canon_candidate),
+            consensus_review: this._copy(compatibilityAliases.consensus_review),
 
             notes: this._buildNotes(crossRunReport, consensusReview),
         };
@@ -243,7 +248,8 @@ export class DoorOneWorkbench {
             "Workbench is an integration view, not canon.",
             "Consensus review remains explicit and does not itself imply C1 minting in v0.1.",
             "Trajectory semantic overlay remains removable and does not become structural runtime substance by itself.",
-            "Semantic, readiness, and review outputs are bundled downstream of structural runtime; compatibility aliases remain transitional only.",
+            "Structural runtime remains the primary workbench section; semantic, readiness, and review outputs are attached downstream as explicit bundles.",
+            "Compatibility aliases are grouped under compatibility_aliases and mirrored at top level only as transitional downstream bridges.",
         ];
 
         if (!crossRunReport) {
