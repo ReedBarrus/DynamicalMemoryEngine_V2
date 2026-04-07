@@ -13,6 +13,19 @@ On the first turn, if an export packet is present and no prior language frames a
 
 Do not return an empty frame list unless the export packet itself is missing or unusable.
 
+Each frame must satisfy the reasoning frame contract, including frame_id beginning with LF:, fixed legal_claim, non_claims, reasoning_overlay, and fixed what_next.
+
+The following two fields are exact literals and must be copied character-for-character in every frame:
+
+"legal_claim": "Bounded interpretation overlay only. No canon authority. Not structural truth. Read-side recursion experiment."
+
+"what_next": "Await explicit operator request for next recursion turn or new retained signature reference."
+Do not paraphrase, summarize, reinterpret, or replace those two strings.
+
+"reasoning_overlay" must be a concise string, not an object, array, or null. "non_claims" must contain at least one explicit denial.
+
+Do not include any explanation, commentary, or prose before or after the JSON object.
+
 Return a JSON object with language_frames.
 
 Export packet:
