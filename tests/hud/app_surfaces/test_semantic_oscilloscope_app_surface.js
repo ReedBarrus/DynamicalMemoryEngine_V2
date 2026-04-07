@@ -22,6 +22,7 @@ function finish() {
 }
 
 let routerSrc = null;
+let viewerAdapterSrc = null;
 let appSrc = null;
 let appMainSrc = null;
 let appHtmlSrc = null;
@@ -31,6 +32,7 @@ let hudSrc = null;
 let tandemSrc = null;
 
 try { routerSrc = await readFile(path.join(ROOT, "hud/HomeRouterShell.jsx"), "utf8"); } catch (_) {}
+try { viewerAdapterSrc = await readFile(path.join(ROOT, "hud/adapters/structuralViewerPayloadAdapter.js"), "utf8"); } catch (_) {}
 try { appSrc = await readFile(path.join(ROOT, "hud/SemanticOscilloscopeApp.jsx"), "utf8"); } catch (_) {}
 try { appMainSrc = await readFile(path.join(ROOT, "hud/app_main.jsx"), "utf8"); } catch (_) {}
 try { appHtmlSrc = await readFile(path.join(ROOT, "app.html"), "utf8"); } catch (_) {}
@@ -41,15 +43,19 @@ try { tandemSrc = await readFile(path.join(ROOT, "hud/adapters/tandemAdapter.js"
 
 section("A. App surface file placement");
 ok(routerSrc !== null, "A1: HomeRouterShell exists");
-ok(appSrc !== null, "A2: SemanticOscilloscopeApp exists");
-ok(appMainSrc !== null, "A3: app_main exists");
-ok(appHtmlSrc !== null, "A4: app.html exists");
+ok(viewerAdapterSrc !== null, "A2: structuralViewerPayloadAdapter exists");
+ok(appSrc !== null, "A3: SemanticOscilloscopeApp exists");
+ok(appMainSrc !== null, "A4: app_main exists");
+ok(appHtmlSrc !== null, "A5: app.html exists");
 if (appMainSrc) {
-    ok(appMainSrc.includes("HomeRouterShell"), "A5: app_main imports HomeRouterShell");
+    ok(appMainSrc.includes("HomeRouterShell"), "A6: app_main imports HomeRouterShell");
 }
 if (appHtmlSrc) {
-    ok(appHtmlSrc.includes("app_main.jsx"), "A6: app.html points to app_main.jsx");
-    ok(appHtmlSrc.includes("Home Router Shell"), "A7: app.html names the home router shell");
+    ok(appHtmlSrc.includes("app_main.jsx"), "A7: app.html points to app_main.jsx");
+    ok(appHtmlSrc.includes("Home Router Shell"), "A8: app.html names the home router shell");
+}
+if (viewerAdapterSrc) {
+    ok(viewerAdapterSrc.includes("one shared read-side viewer payload") || viewerAdapterSrc.includes("shared structural viewer payload"), "A9: adapter source declares shared payload posture");
 }
 
 section("B. Home router shell stays thin");
@@ -60,8 +66,9 @@ if (routerSrc) {
     ok(routerSrc.includes("Display below authority"), "B4: shell preserves below-authority posture");
     ok(routerSrc.includes("LegacyRoute"), "B5: shell preserves transitional legacy route");
     ok(routerSrc.includes("placeholder route"), "B6: viewer routes are placeholder-level in this packet");
-    ok(!routerSrc.includes("MetaLayerObjectExecutionShell"), "B7: top-level shell does not embed execution controls directly");
-    ok(!routerSrc.includes("DoorOneStructuralMemoryHUD"), "B8: top-level shell is not itself the dense inspection HUD");
+    ok(routerSrc.includes("buildStructuralViewerPayload"), "B7: top-level shell uses shared viewer payload adapter");
+    ok(!routerSrc.includes("MetaLayerObjectExecutionShell"), "B8: top-level shell does not embed execution controls directly");
+    ok(!routerSrc.includes("DoorOneStructuralMemoryHUD"), "B9: top-level shell is not itself the dense inspection HUD");
 }
 
 section("C. Route choices and reachability remain explicit");
@@ -74,6 +81,7 @@ if (routerSrc) {
     ok(routerSrc.includes("execution.html") && routerSrc.includes("index.html") && routerSrc.includes("demo.html"), "C6: standalone existing functionality remains reachable");
     ok(routerSrc.includes("SemanticOscilloscopeApp"), "C7: legacy composed app remains reachable from the shell");
     ok(routerSrc.includes("Live / Static / Inspection entry points"), "C8: home shell presents explicit viewer-family entry points");
+    ok(routerSrc.includes("payload.structural") && routerSrc.includes("payload.overlays"), "C9: placeholder routes read structural and overlay sections from shared payload");
 }
 
 section("D. Legacy composed app stays preserved");

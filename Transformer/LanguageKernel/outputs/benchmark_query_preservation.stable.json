@@ -48,6 +48,7 @@
     "prompt_receipt_id": "PR:run_1775479542686:001",
     "response_receipt_id": "RR:run_1775479542686:001"
   },
+  "panel_outcome": "contract_conformant",
   "final_status": "valid",
-  "benchmarked_at": "2026-04-07T06:38:16Z"
+  "benchmarked_at": "2026-04-07T08:26:43Z"
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { buildStructuralViewerPayload } from "./adapters/structuralViewerPayloadAdapter.js";
 import SemanticOscilloscopeApp from "./SemanticOscilloscopeApp.jsx";
 
 const ROUTES = {
@@ -73,6 +74,16 @@ function navigate(path) {
 
 function openStandalone(path) {
     window.location.href = path;
+}
+
+function summarizeKeys(value, fallback) {
+    const keys = Object.keys(value ?? {});
+    return keys.length > 0 ? keys.join(", ") : fallback;
+}
+
+function summarizeList(values, fallback) {
+    const items = Array.isArray(values) ? values.filter(Boolean) : [];
+    return items.length > 0 ? items.join(", ") : fallback;
 }
 
 function NavPill({ label, active, onClick }) {
@@ -353,7 +364,7 @@ function HomeRoute() {
     );
 }
 
-function PlaceholderRoute({ title, note, guidance, routePath }) {
+function PlaceholderRoute({ title, note, guidance, payload }) {
     return (
         <div style={{ display: "grid", gap: "18px" }}>
             <SectionCard
@@ -369,8 +380,19 @@ function PlaceholderRoute({ title, note, guidance, routePath }) {
                         padding: "16px",
                     }}
                 >
-                    <DetailRow label="Route path" value={routePath} />
+                    <DetailRow label="Route path" value={payload.mode ? `/${payload.mode}` : "unbound"} />
                     <DetailRow label="Status" value="placeholder route" />
+                    <DetailRow label="Source header" value={`${payload.source.source_family} · ${payload.source.mode_posture}`} />
+                    <DetailRow label="Lineage" value={summarizeList(payload.lineage.generated_from, "generated_from pending")} />
+                    <DetailRow label="Structural" value={summarizeKeys(payload.structural, "structural payload present with no active sections yet")} />
+                    <DetailRow label="Overlays" value={summarizeKeys(payload.overlays, "optional and currently absent")} />
+                    <DetailRow
+                        label="Telemetry"
+                        value={
+                            payload.telemetry?.placeholder_status ??
+                            (payload.telemetry ? "telemetry attached" : "not required for this mode")
+                        }
+                    />
                     <DetailRow label="Current role" value="Placeholder destination only. No deep viewer rendering is introduced in this packet." />
                     <DetailRow label="Guidance" value={guidance} />
                 </div>
@@ -442,34 +464,46 @@ function LegacyRoute() {
 
 function RouteBody({ route }) {
     if (route === ROUTES.live) {
+        const payload = buildStructuralViewerPayload({
+            mode: "live",
+            sourceFamilyLabel: "unspecified",
+        });
         return (
             <PlaceholderRoute
                 title="Live"
                 note="Runtime-facing viewer family route. Timing honesty and live telemetry remain future viewer work, not shell work."
                 guidance="Do not turn this placeholder into a dense inspection panel. The live route is reserved for later runtime-facing structural viewing."
-                routePath={ROUTES.live}
+                payload={payload}
             />
         );
     }
 
     if (route === ROUTES.static) {
+        const payload = buildStructuralViewerPayload({
+            mode: "static",
+            sourceFamilyLabel: "unspecified",
+        });
         return (
             <PlaceholderRoute
                 title="Static"
                 note="Static viewer family route. Bounded structural comparison and provenance-forward reading remain future viewer work."
                 guidance="Do not pull live telemetry or dense mixed-surface content into this placeholder. Static purpose remains separate from live and inspection."
-                routePath={ROUTES.static}
+                payload={payload}
             />
         );
     }
 
     if (route === ROUTES.inspection) {
+        const payload = buildStructuralViewerPayload({
+            mode: "inspection",
+            sourceFamilyLabel: "unspecified",
+        });
         return (
             <PlaceholderRoute
                 title="Inspection"
                 note="Inspection viewer family route. Dense workbench-native audit surfaces remain future migration work."
                 guidance="This route establishes explicit inspection purpose now. The current composed environment remains the transitional legacy path until a dedicated inspection viewer is built."
-                routePath={ROUTES.inspection}
+                payload={payload}
             />
         );
     }

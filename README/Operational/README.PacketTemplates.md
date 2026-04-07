@@ -200,6 +200,121 @@ If that update is intentionally deferred, the return packet must say so explicit
 
 ---
 
+#### 7A. Workflow append / accounting obligations
+
+* packet-lineage update requirement:
+
+  * if this packet changes workflow continuity materially, the Engineer must update:
+
+    * `README/Operational/README.PacketLineage.md`
+  * update triggers include:
+
+    * new bounded lineage worth tracking
+    * route result reached
+    * files created
+    * files moved
+    * folders created
+    * docs updated materially
+    * packet split / supersede / merge / follow-on routing
+  * the lineage entry should preserve at minimum:
+
+    * `packet_id`
+    * `task_title`
+    * `date`
+    * `parent_packet_id` or ancestry
+    * `route_result`
+    * `files_created`
+    * `files_moved`
+    * `folders_created`
+    * `docs_updated`
+    * `supersedes`
+    * `split_from`
+    * `merged_into`
+    * `follow_on_packets`
+    * `receipts`
+    * `notes`
+    * `explicit_non_claims`
+
+* repo-accounting update requirement:
+
+  * if this packet materially changes current repo/workflow placement or status, the Engineer must update:
+
+    * `README/Operational/README.RepoAccountingSurface.md`
+  * update triggers include:
+
+    * file creation
+    * file move
+    * folder/subfolder creation
+    * material zone classification change
+    * material test grouping change
+    * material README grouping change
+    * recurring path/reference drift important enough to route cleanup
+  * accounting updates should preserve compact current-state posture and must not become a history log
+
+* placement-law update requirement:
+
+  * if topology changes materially, the Engineer must also update:
+
+    * `README.RepoPlacementConstitution.md`
+  * examples:
+
+    * new repo zone
+    * new README subfolder class
+    * new test subgroup family
+    * meaningful regrouping that changes placement law rather than only one local file
+
+* active-trajectory update requirement:
+
+  * if this packet materially advances, parks, activates, or re-routes a live development line, the Engineer should update:
+
+    * `README/Operational/README.ActiveTrajectories.md`
+  * this is especially relevant when:
+
+    * a packet begins a new multi-packet line
+    * a packet changes `current_packet` or `next_expected_packet`
+    * a trajectory moves from projected -> active, active -> parked, or review_only -> active
+  * do not update trajectories for trivial local patches that do not affect development-line motion
+
+* required return-packet receipts:
+
+  * the Engineer return packet must explicitly include:
+
+    * accounting updates performed
+    * packet-lineage updates performed
+    * active-trajectory updates performed, if any
+    * placement-law updates performed, if topology changed
+    * files created
+    * files moved
+    * folders created
+    * path/reference repairs performed
+    * unresolved path/reference drift explicitly stated
+
+* explicit defer rule:
+
+  * if any required workflow/accounting update is intentionally deferred, the return packet must say so explicitly and explain why the deferment is lawful
+
+* non-inflation rule:
+
+  * packet lineage is history/route continuity, not present-state proof
+  * repo accounting is present-state placement/status, not packet history
+  * active trajectories are strategic motion, not roadmap authority
+  * none of these workflow surfaces authorize runtime meaning, canon status, or architectural truth by themselves
+
+Shorter Workflow append:
+
+Update README/Operational/README.PacketLineage.md if this packet changes lineage, route result, files/folders created or moved, docs updated materially, or follow-on packet routing.
+Update README/Operational/README.RepoAccountingSurface.md if this packet materially changes current repo/workflow placement, grouping, or status.
+Update README.RepoPlacementConstitution.md if topology changes materially.
+Update README/Operational/README.ActiveTrajectories.md if this packet materially advances, activates, parks, or reroutes a live development line.
+Engineer return packet must explicitly state:
+files created / moved / folders created
+accounting updates performed
+lineage updates performed
+trajectory updates performed if any
+placement-law updates performed if topology changed
+path/reference repairs or unresolved drift
+If any of the above are deferred, the return packet must say so explicitly.
+
 ## 8. One-line summary
 
 This note defines the standard request and return packet shapes for bounded DME workflow so packet movement stays legible, auditable, and consistent without forcing full template repetition in every handoff.
