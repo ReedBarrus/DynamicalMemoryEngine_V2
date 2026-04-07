@@ -122,6 +122,8 @@ function buildPublishedShellState(activeShellState = {}) {
         runStatus: activeShellState?.runStatus ?? "idle",
         runError: activeShellState?.runError ?? null,
         hasActiveResult: !!activeShellState?.hasActiveResult,
+        publishedAtMs: Date.now(),
+        publicationSource: "execution_shell_export",
     };
 }
 

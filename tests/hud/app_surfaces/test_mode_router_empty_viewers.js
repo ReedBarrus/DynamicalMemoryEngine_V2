@@ -93,18 +93,22 @@ if (routerSrc) {
 section("B. Distinct mode posture stays explicit");
 if (liveSrc) {
     ok(liveSrc.includes("Runtime-facing mode shell"), "B1: live shell title is explicit");
-    ok(liveSrc.includes("Telemetry is not yet implemented here."), "B2: live shell keeps telemetry honest");
-    ok(liveSrc.includes("Structural priority"), "B3: live shell keeps structural-first posture");
+    ok(liveSrc.includes("Live Telemetry Rail"), "B2: live shell includes compact telemetry rail");
+    ok(liveSrc.includes("Runtime/view timing posture"), "B3: live shell labels telemetry as timing posture");
+    ok(liveSrc.includes("Unwired metrics:"), "B4: live shell keeps unavailable telemetry explicit");
+    ok(liveSrc.includes("Structural priority"), "B5: live shell keeps structural-first posture");
 }
 if (staticSrc) {
-    ok(staticSrc.includes("Bounded structural mode shell"), "B4: static shell title is explicit");
-    ok(staticSrc.includes("Static mode is not live playback paused."), "B5: static shell avoids fake live posture");
-    ok(staticSrc.includes("Provenance-first reading"), "B6: static shell keeps provenance visible");
+    ok(staticSrc.includes("Bounded structural mode shell"), "B6: static shell title is explicit");
+    ok(staticSrc.includes("Static mode is not live playback paused."), "B7: static shell avoids fake live posture");
+    ok(staticSrc.includes("Provenance-first reading"), "B8: static shell keeps provenance visible");
+    ok(!staticSrc.includes("Live Telemetry Rail"), "B9: static shell does not inherit live telemetry rail");
 }
 if (inspectionSrc) {
-    ok(inspectionSrc.includes("Audit-facing mode shell"), "B7: inspection shell title is explicit");
-    ok(inspectionSrc.includes("does not silently become the default top-level face again"), "B8: inspection shell stays non-default");
-    ok(inspectionSrc.includes("settlement, identity continuity, or canon posture"), "B9: inspection shell avoids semantic inflation");
+    ok(inspectionSrc.includes("Audit-facing mode shell"), "B10: inspection shell title is explicit");
+    ok(inspectionSrc.includes("does not silently become the default top-level face again"), "B11: inspection shell stays non-default");
+    ok(inspectionSrc.includes("settlement, identity continuity, or canon posture"), "B12: inspection shell avoids semantic inflation");
+    ok(!inspectionSrc.includes("Live Telemetry Rail"), "B13: inspection shell does not inherit live telemetry rail");
 }
 
 section("C. Shared payload seam remains the common base");
@@ -116,8 +120,9 @@ if (frameSrc) {
     ok(frameSrc.includes("payload.telemetry?.placeholder_status"), "C5: frame keeps telemetry placeholder posture shallow");
     ok(frameSrc.includes("payload.source.state_basis"), "C6: frame exposes state basis");
     ok(frameSrc.includes("payload.source.state_availability"), "C7: frame exposes fallback posture when state is absent");
-    ok(!frameSrc.includes("settlement_report"), "C8: frame does not require settlement_report");
-    ok(!frameSrc.includes("identity_audit"), "C9: frame does not require identity_audit");
+    ok(!frameSrc.includes("Live Telemetry Rail"), "C8: shared frame does not itself become the live telemetry rail");
+    ok(!frameSrc.includes("settlement_report"), "C9: frame does not require settlement_report");
+    ok(!frameSrc.includes("identity_audit"), "C10: frame does not require identity_audit");
 }
 
 section("D. State threading remains honest");
@@ -146,11 +151,13 @@ section("E. Adapter output still feeds the shells honestly");
     eq(JSON.stringify(staticPayload.lineage.provenance_refs), JSON.stringify(inspectionPayload.lineage.provenance_refs), "E2: lineage provenance stays shared across modes");
     ok(JSON.stringify(livePayload.structural) === JSON.stringify(inspectionPayload.structural), "E3: structural base does not drift by mode");
     eq(livePayload.source.state_basis, "active_shell_state", "E4: active payload exposes active shell state basis");
-    eq(livePayload.telemetry?.placeholder_status, "live_telemetry_unwired", "E5: live telemetry remains explicit placeholder");
-    eq(staticPayload.telemetry, undefined, "E6: static telemetry remains optional");
-    eq(inspectionPayload.telemetry, undefined, "E7: inspection telemetry remains optional");
-    ok(!JSON.stringify(inspectionPayload).includes('"settlement_report"'), "E8: settlement_report remains non-required");
-    ok(!JSON.stringify(inspectionPayload).includes('"identity_audit"'), "E9: identity_audit remains non-required");
+    eq(livePayload.telemetry?.rail_status, "live_runtime_attached", "E5: live telemetry rail reports attached live runtime");
+    eq(livePayload.telemetry?.placeholder_status, "timing_metrics_partially_unwired", "E6: live telemetry keeps unwired metrics explicit");
+    ok(Array.isArray(livePayload.telemetry?.unavailable_fields), "E7: live telemetry lists unavailable metrics");
+    eq(staticPayload.telemetry, undefined, "E8: static telemetry remains optional");
+    eq(inspectionPayload.telemetry, undefined, "E9: inspection telemetry remains optional");
+    ok(!JSON.stringify(inspectionPayload).includes('"settlement_report"'), "E10: settlement_report remains non-required");
+    ok(!JSON.stringify(inspectionPayload).includes('"identity_audit"'), "E11: identity_audit remains non-required");
 }
 
 section("F. Fallback posture remains explicit when real state is absent");

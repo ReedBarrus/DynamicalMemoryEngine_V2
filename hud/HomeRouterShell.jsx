@@ -84,6 +84,8 @@ function buildRoutePayload(mode, shellState) {
     const activeShellState = shellState && typeof shellState === "object" ? shellState : null;
     return buildStructuralViewerPayload({
         mode,
+        runId: activeShellState?.runId ?? null,
+        activeRunLabel: activeShellState?.activeRunLabel ?? null,
         runResult: activeShellState?.hasActiveResult ? activeShellState.runResult : null,
         workbench: activeShellState?.hasActiveResult ? activeShellState.workbench : null,
         requestLog: activeShellState?.requestLog ?? [],
@@ -92,6 +94,9 @@ function buildRoutePayload(mode, shellState) {
         runStatus: activeShellState?.runStatus ?? "idle",
         runError: activeShellState?.runError ?? null,
         hasActiveResult: activeShellState?.hasActiveResult ?? false,
+        publishedAtMs: activeShellState?.publishedAtMs ?? null,
+        publicationSource: activeShellState?.publicationSource ?? null,
+        viewObservedAtMs: Date.now(),
     });
 }
 

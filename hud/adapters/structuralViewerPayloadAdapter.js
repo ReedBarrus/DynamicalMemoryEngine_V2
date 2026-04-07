@@ -56,6 +56,8 @@ function toTimestampRange(workbench, runResult) {
 
 function extractBaseInput({
     mode = "static",
+    runId = null,
+    activeRunLabel = null,
     runResult = null,
     workbench = null,
     requestLog = [],
@@ -64,10 +66,15 @@ function extractBaseInput({
     runStatus = "idle",
     runError = null,
     hasActiveResult = false,
+    publishedAtMs = null,
+    publicationSource = null,
+    viewObservedAtMs = null,
     telemetry = null,
 } = {}) {
     return {
         mode,
+        runId,
+        activeRunLabel,
         runResult,
         workbench,
         requestLog: safeArray(requestLog),
@@ -76,6 +83,9 @@ function extractBaseInput({
         runStatus,
         runError,
         hasActiveResult,
+        publishedAtMs,
+        publicationSource,
+        viewObservedAtMs,
         telemetry: safeObject(telemetry),
     };
 }
@@ -296,9 +306,45 @@ function buildTelemetry(input) {
     if (telemetry) return telemetry;
 
     if (mode === "live") {
+        const hasActiveRuntime = input.hasActiveResult === true || !!(input.runResult?.ok && input.workbench);
+        const timestampRange = toTimestampRange(input.workbench, input.runResult);
+        const hasPublishedAt = Number.isFinite(input.publishedAtMs);
+        const hasObservedAt = Number.isFinite(input.viewObservedAtMs);
+        const exportAgeMs =
+            hasPublishedAt && hasObservedAt
+                ? Math.max(0, input.viewObservedAtMs - input.publishedAtMs)
+                : undefined;
+        const unavailableFields = [
+            "input_rate_hz",
+            "pipeline_latency_ms",
+            "render_fps",
+            "dropped_frames",
+            "browser_jitter_ms",
+            "processing_jitter_ms",
+            "queue_depth",
+            "update_cadence_ms",
+        ];
+
         return {
-            placeholder_status: "live_telemetry_unwired",
-            visibility_note: "timing conditions remain separate from structural evidence and overlays",
+            rail_status: hasActiveRuntime ? "live_runtime_attached" : "live_runtime_unavailable",
+            placeholder_status: hasActiveRuntime
+                ? "timing_metrics_partially_unwired"
+                : "live_telemetry_unavailable_until_active_state",
+            visibility_note: "Telemetry describes viewer/runtime timing posture only, not structural evidence or overlays.",
+            availability_note: hasActiveRuntime
+                ? "Showing current shell export posture and available timing stamps. Cadence and jitter metrics remain unwired."
+                : "No active runtime/workbench state is visible. Live telemetry is limited to shell export posture.",
+            run_status: input.runStatus ?? "idle",
+            run_id: input.runId ?? undefined,
+            active_run_label: input.activeRunLabel ?? input.runResult?.run_label ?? undefined,
+            publication_source: input.publicationSource ?? undefined,
+            published_at_ms: hasPublishedAt ? input.publishedAtMs : undefined,
+            view_observed_at_ms: hasObservedAt ? input.viewObservedAtMs : undefined,
+            export_age_ms: exportAgeMs,
+            source_window: Array.isArray(timestampRange)
+                ? { t_start: timestampRange[0], t_end: timestampRange[1] }
+                : undefined,
+            unavailable_fields: unavailableFields,
         };
     }
 
