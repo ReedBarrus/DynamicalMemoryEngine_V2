@@ -300,20 +300,38 @@ If that update is intentionally deferred, the return packet must say so explicit
   * active trajectories are strategic motion, not roadmap authority
   * none of these workflow surfaces authorize runtime meaning, canon status, or architectural truth by themselves
 
-Shorter Workflow append:
+Workflow append — required operational synchronization
 
-Update README/Operational/README.PacketLineage.md if this packet changes lineage, route result, files/folders created or moved, docs updated materially, or follow-on packet routing.
-Update README/Operational/README.RepoAccountingSurface.md if this packet materially changes current repo/workflow placement, grouping, or status.
-Update README.RepoPlacementConstitution.md if topology changes materially.
-Update README/Operational/README.ActiveTrajectories.md if this packet materially advances, activates, parks, or reroutes a live development line.
-Engineer return packet must explicitly state:
-files created / moved / folders created
+If this packet changes lineage, route result, files/folders created or moved, docs updated materially, follow-on packet routing, or active development posture, Engineer must review and update the relevant operational surfaces.
+
+Required update targets:
+
+README/Operational/README.PacketLineage.md
+update if packet lineage, route result, follow-on packet routing, or materially relevant file/doc effects changed
+README/Operational/README.RepoAccountingSurface.md
+update if repo/workflow placement, grouping, active packet surface, or seam status changed materially
+README.RepoPlacementConstitution.md
+update only if topology changed materially enough to alter placement law or canonical target layout
+README/Operational/README.ActiveTrajectories.md
+update if this packet materially advances, activates, parks, narrows, or reroutes a live development line
+Engineer return packet must explicitly state
+files created
+files moved
+folders created
 accounting updates performed
 lineage updates performed
 trajectory updates performed if any
 placement-law updates performed if topology changed
-path/reference repairs or unresolved drift
-If any of the above are deferred, the return packet must say so explicitly.
+path/reference repairs performed
+unresolved drift, if any
+If deferred
+
+If any operational/accounting update is not performed, the return packet must say explicitly:
+
+which update was deferred
+why it was deferred
+whether that deferment is lawful for this packet
+which follow-on packet now owns it
 
 ## 8. One-line summary
 

@@ -1,0 +1,130 @@
+// tests/hud/app_surfaces/test_mode_router_empty_viewers.js
+//
+// Seam-local contract tests for D1.UI.MODE_ROUTER_EMPTY_VIEWERS_015.
+
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { buildStructuralViewerPayload } from "../../../hud/adapters/structuralViewerPayloadAdapter.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, "../../..");
+
+let PASS = 0;
+let FAIL = 0;
+function section(title) { console.log(`\n-- ${title} --`); }
+function ok(cond, label) {
+    if (cond) { PASS++; console.log(`  ok ${label}`); }
+    else { FAIL++; console.error(`  not ok ${label}`); }
+}
+function eq(actual, expected, label) {
+    ok(
+        Object.is(actual, expected),
+        `${label}${Object.is(actual, expected) ? "" : ` (expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)})`}`
+    );
+}
+function finish() {
+    console.log(`\n${PASS} passed   ${FAIL} failed`);
+    if (FAIL > 0) process.exit(1);
+}
+
+const INPUT = {
+    mode: "inspection",
+    sourceFamilyLabel: "Synthetic Signal",
+    runResult: {
+        ok: true,
+        run_label: "run.viewer.mode-shells.001",
+        artifacts: {
+            a1: {
+                source_id: "synthetic.mode.shells",
+                timestamps: [0, 1],
+            },
+        },
+    },
+    workbench: {
+        scope: {
+            stream_id: "stream.mode.shells.001",
+            source_id: "synthetic.mode.shells",
+        },
+        runtime: {
+            substrate: {
+                basin_count: 1,
+                state_count: 2,
+            },
+            artifacts: {
+                anomaly_reports: [],
+            },
+        },
+    },
+};
+
+let routerSrc = null;
+let liveSrc = null;
+let staticSrc = null;
+let inspectionSrc = null;
+let frameSrc = null;
+
+try { routerSrc = await readFile(path.join(ROOT, "hud/HomeRouterShell.jsx"), "utf8"); } catch (_) {}
+try { liveSrc = await readFile(path.join(ROOT, "hud/LiveModeShell.jsx"), "utf8"); } catch (_) {}
+try { staticSrc = await readFile(path.join(ROOT, "hud/StaticModeShell.jsx"), "utf8"); } catch (_) {}
+try { inspectionSrc = await readFile(path.join(ROOT, "hud/InspectionModeShell.jsx"), "utf8"); } catch (_) {}
+try { frameSrc = await readFile(path.join(ROOT, "hud/ViewerModeShellFrame.jsx"), "utf8"); } catch (_) {}
+
+section("A. Mode shell files exist and are wired");
+ok(routerSrc !== null, "A1: HomeRouterShell exists");
+ok(liveSrc !== null, "A2: LiveModeShell exists");
+ok(staticSrc !== null, "A3: StaticModeShell exists");
+ok(inspectionSrc !== null, "A4: InspectionModeShell exists");
+ok(frameSrc !== null, "A5: ViewerModeShellFrame exists");
+if (routerSrc) {
+    ok(routerSrc.includes('import LiveModeShell from "./LiveModeShell.jsx";'), "A6: router imports LiveModeShell");
+    ok(routerSrc.includes('import StaticModeShell from "./StaticModeShell.jsx";'), "A7: router imports StaticModeShell");
+    ok(routerSrc.includes('import InspectionModeShell from "./InspectionModeShell.jsx";'), "A8: router imports InspectionModeShell");
+}
+
+section("B. Distinct mode posture stays explicit");
+if (liveSrc) {
+    ok(liveSrc.includes("Runtime-facing mode shell"), "B1: live shell title is explicit");
+    ok(liveSrc.includes("Telemetry is not yet implemented here."), "B2: live shell keeps telemetry honest");
+    ok(liveSrc.includes("Structural priority"), "B3: live shell keeps structural-first posture");
+}
+if (staticSrc) {
+    ok(staticSrc.includes("Bounded structural mode shell"), "B4: static shell title is explicit");
+    ok(staticSrc.includes("Static mode is not live playback paused."), "B5: static shell avoids fake live posture");
+    ok(staticSrc.includes("Provenance-first reading"), "B6: static shell keeps provenance visible");
+}
+if (inspectionSrc) {
+    ok(inspectionSrc.includes("Audit-facing mode shell"), "B7: inspection shell title is explicit");
+    ok(inspectionSrc.includes("does not silently become the default top-level face again"), "B8: inspection shell stays non-default");
+    ok(inspectionSrc.includes("settlement, identity continuity, or canon posture"), "B9: inspection shell avoids semantic inflation");
+}
+
+section("C. Shared payload seam remains the common base");
+if (frameSrc) {
+    ok(frameSrc.includes("All mode shells consume the same shared payload seam."), "C1: shared frame declares one payload seam");
+    ok(frameSrc.includes("Mode changes posture, not truth source."), "C2: frame rejects mode-local truth drift");
+    ok(frameSrc.includes("payload.structural"), "C3: frame reads structural payload");
+    ok(frameSrc.includes("payload.overlays"), "C4: frame treats overlays as optional");
+    ok(frameSrc.includes("payload.telemetry?.placeholder_status"), "C5: frame keeps telemetry placeholder posture shallow");
+    ok(!frameSrc.includes("settlement_report"), "C6: frame does not require settlement_report");
+    ok(!frameSrc.includes("identity_audit"), "C7: frame does not require identity_audit");
+}
+
+section("D. Adapter output still feeds the shells honestly");
+{
+    const livePayload = buildStructuralViewerPayload({ ...INPUT, mode: "live" });
+    const staticPayload = buildStructuralViewerPayload({ ...INPUT, mode: "static" });
+    const inspectionPayload = buildStructuralViewerPayload({ ...INPUT, mode: "inspection" });
+
+    eq(livePayload.source.source_id, staticPayload.source.source_id, "D1: source header is shared across modes");
+    eq(JSON.stringify(staticPayload.lineage.provenance_refs), JSON.stringify(inspectionPayload.lineage.provenance_refs), "D2: lineage provenance stays shared across modes");
+    ok(JSON.stringify(livePayload.structural) === JSON.stringify(inspectionPayload.structural), "D3: structural base does not drift by mode");
+    eq(livePayload.telemetry?.placeholder_status, "live_telemetry_unwired", "D4: live telemetry remains explicit placeholder");
+    eq(staticPayload.telemetry, undefined, "D5: static telemetry remains optional");
+    eq(inspectionPayload.telemetry, undefined, "D6: inspection telemetry remains optional");
+    ok(!JSON.stringify(inspectionPayload).includes('"settlement_report"'), "D7: settlement_report remains non-required");
+    ok(!JSON.stringify(inspectionPayload).includes('"identity_audit"'), "D8: identity_audit remains non-required");
+}
+
+finish();
