@@ -104,6 +104,8 @@ if (routerSrc) {
     ok(routerSrc.includes("runResult: activeShellState?.hasActiveResult ? activeShellState.runResult : null"), "C11: router only threads real runResult when active state exists");
     ok(routerSrc.includes("workbench: activeShellState?.hasActiveResult ? activeShellState.workbench : null"), "C12: router only threads real workbench when active state exists");
     ok(routerSrc.includes('sourceFamilyLabel: activeShellState?.sourceFamilyLabel ?? "unspecified"'), "C13: router threads real source family label with explicit fallback");
+    ok(routerSrc.includes("publishedAtMs: activeShellState?.publishedAtMs ?? null"), "C14: router threads live shell export timing when available");
+    ok(routerSrc.includes("viewObservedAtMs: Date.now()"), "C15: router captures live view observation timing");
 }
 
 section("D. Mode shells stay distinct over one shared payload seam");
@@ -111,19 +113,24 @@ if (liveModeShellSrc && staticModeShellSrc && inspectionModeShellSrc && viewerMo
     ok(liveModeShellSrc.includes('import ViewerModeShellFrame from "./ViewerModeShellFrame.jsx"'), "D1: live mode shell uses shared frame");
     ok(staticModeShellSrc.includes('import ViewerModeShellFrame from "./ViewerModeShellFrame.jsx"'), "D2: static mode shell uses shared frame");
     ok(inspectionModeShellSrc.includes('import ViewerModeShellFrame from "./ViewerModeShellFrame.jsx"'), "D3: inspection mode shell uses shared frame");
-    ok(liveModeShellSrc.includes("Telemetry is not yet implemented here."), "D4: live shell keeps telemetry honesty explicit");
-    ok(liveModeShellSrc.includes("Structural priority"), "D5: live shell keeps structural-first posture");
-    ok(staticModeShellSrc.includes("Static mode is not live playback paused."), "D6: static shell does not fake live posture");
-    ok(staticModeShellSrc.includes("Provenance-first reading"), "D7: static shell keeps provenance posture explicit");
-    ok(inspectionModeShellSrc.includes("does not silently become the default top-level face again"), "D8: inspection shell stays non-default");
-    ok(inspectionModeShellSrc.includes("settlement, identity continuity, or canon posture"), "D9: inspection shell avoids semantic inflation");
-    ok(viewerModeShellFrameSrc.includes("All mode shells consume the same shared payload seam."), "D10: shared frame preserves one payload seam");
-    ok(viewerModeShellFrameSrc.includes("payload.structural"), "D11: shared frame reads structural section");
-    ok(viewerModeShellFrameSrc.includes("payload.overlays"), "D12: shared frame keeps overlays optional");
-    ok(viewerModeShellFrameSrc.includes("payload.source.state_basis"), "D13: shared frame shows state basis explicitly");
-    ok(viewerModeShellFrameSrc.includes("payload.source.state_availability"), "D14: shared frame shows fallback or active state posture explicitly");
-    ok(!viewerModeShellFrameSrc.includes("settlement_report"), "D15: shared frame does not require settlement_report");
-    ok(!viewerModeShellFrameSrc.includes("identity_audit"), "D16: shared frame does not require identity_audit");
+    ok(liveModeShellSrc.includes("Live Telemetry Rail"), "D4: live shell adds bounded telemetry rail");
+    ok(liveModeShellSrc.includes("Runtime/view timing posture"), "D5: live shell keeps telemetry operational");
+    ok(liveModeShellSrc.includes("Unwired metrics:"), "D6: live shell keeps unavailable telemetry explicit");
+    ok(liveModeShellSrc.includes("Structural priority"), "D7: live shell keeps structural-first posture");
+    ok(!staticModeShellSrc.includes("Live Telemetry Rail"), "D8: static shell does not inherit live telemetry rail");
+    ok(staticModeShellSrc.includes("Static mode is not live playback paused."), "D9: static shell does not fake live posture");
+    ok(staticModeShellSrc.includes("Provenance-first reading"), "D10: static shell keeps provenance posture explicit");
+    ok(!inspectionModeShellSrc.includes("Live Telemetry Rail"), "D11: inspection shell does not inherit live telemetry rail");
+    ok(inspectionModeShellSrc.includes("does not silently become the default top-level face again"), "D12: inspection shell stays non-default");
+    ok(inspectionModeShellSrc.includes("settlement, identity continuity, or canon posture"), "D13: inspection shell avoids semantic inflation");
+    ok(viewerModeShellFrameSrc.includes("All mode shells consume the same shared payload seam."), "D14: shared frame preserves one payload seam");
+    ok(viewerModeShellFrameSrc.includes("payload.structural"), "D15: shared frame reads structural section");
+    ok(viewerModeShellFrameSrc.includes("payload.overlays"), "D16: shared frame keeps overlays optional");
+    ok(viewerModeShellFrameSrc.includes("payload.source.state_basis"), "D17: shared frame shows state basis explicitly");
+    ok(viewerModeShellFrameSrc.includes("payload.source.state_availability"), "D18: shared frame shows fallback or active state posture explicitly");
+    ok(!viewerModeShellFrameSrc.includes("Live Telemetry Rail"), "D19: shared frame does not become the live telemetry rail");
+    ok(!viewerModeShellFrameSrc.includes("settlement_report"), "D20: shared frame does not require settlement_report");
+    ok(!viewerModeShellFrameSrc.includes("identity_audit"), "D21: shared frame does not require identity_audit");
 }
 
 section("E. Legacy composed app stays preserved");
@@ -168,6 +175,8 @@ if (shellStateRouterSrc) {
     ok(shellStateRouterSrc.includes('ACTIVE_SHELL_STATE_EVENT = "dme:active-shell-state"'), "G11: shellStateRouter declares active-shell-state event");
     ok(shellStateRouterSrc.includes("readPublishedShellState"), "G12: shellStateRouter can read published shell state");
     ok(shellStateRouterSrc.includes("publishActiveShellState"), "G13: shellStateRouter can publish shell state");
+    ok(shellStateRouterSrc.includes("publishedAtMs: Date.now()"), "G14: shellStateRouter stamps live shell export time");
+    ok(shellStateRouterSrc.includes('publicationSource: "execution_shell_export"'), "G15: shellStateRouter labels live export source");
 }
 
 section("H. Downstream surfaces remain bounded");

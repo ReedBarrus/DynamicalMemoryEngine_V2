@@ -34,7 +34,13 @@ function finish() {
 
 const FULL_INPUT = {
     mode: "live",
+    runId: "shell.run.001",
+    activeRunLabel: "run.viewer.001",
     sourceFamilyLabel: "Synthetic Signal",
+    publishedAtMs: 1700000000000,
+    publicationSource: "execution_shell_export",
+    viewObservedAtMs: 1700000000125,
+    hasActiveResult: true,
     runResult: {
         ok: true,
         run_label: "run.viewer.001",
@@ -199,6 +205,9 @@ section("B. Shared payload shape is present");
     eq(payload.source.source_id, "synthetic.viewer", "B8: source_id mapped");
     eq(payload.source.source_family, "Synthetic Signal", "B9: source_family mapped");
     eq(payload.source.state_basis, "active_shell_state", "B10: active shell state basis exposed when runResult/workbench are present");
+    eq(payload.telemetry.rail_status, "live_runtime_attached", "B11: live telemetry rail reports attached runtime");
+    eq(payload.telemetry.publication_source, "execution_shell_export", "B12: live telemetry keeps export source visible");
+    eq(payload.telemetry.export_age_ms, 125, "B13: live telemetry exposes export age");
 }
 
 section("C. Same structural base across modes");
@@ -215,10 +224,11 @@ section("C. Same structural base across modes");
     deepEq(live.lineage.provenance_refs, inspection.lineage.provenance_refs, "C5: provenance refs shared across modes");
     deepEq(live.structural, staticPayload.structural, "C6: structural section shared across live/static");
     deepEq(live.overlays, inspection.overlays, "C7: overlays shared across live/inspection");
-    ok(live.telemetry?.placeholder_status === "live_telemetry_unwired", "C8: live telemetry placeholder is explicit");
-    eq(staticPayload.telemetry, undefined, "C9: static telemetry omitted by default");
-    eq(inspection.telemetry, undefined, "C10: inspection telemetry omitted by default");
-    eq(inspection.source.state_basis, "active_shell_state", "C11: active shell state basis preserved across modes");
+    ok(live.telemetry?.placeholder_status === "timing_metrics_partially_unwired", "C8: live telemetry keeps unwired metrics explicit");
+    ok(Array.isArray(live.telemetry?.unavailable_fields), "C9: live telemetry lists unavailable metrics");
+    eq(staticPayload.telemetry, undefined, "C10: static telemetry omitted by default");
+    eq(inspection.telemetry, undefined, "C11: inspection telemetry omitted by default");
+    eq(inspection.source.state_basis, "active_shell_state", "C12: active shell state basis preserved across modes");
 }
 
 section("D. Overlays remain optional");
@@ -246,6 +256,14 @@ section("F. Fallback posture remains explicit");
     ok(payload.lineage.generated_from.includes("shell_state_fallback"), "F3: lineage records shell-state fallback basis");
     ok(payload.structural && typeof payload.structural === "object", "F4: structural section remains present even when empty");
     eq(payload.overlays, undefined, "F5: overlays remain optional during fallback");
+}
+
+section("G. Live telemetry stays distinct from structure and overlays");
+{
+    const payload = buildStructuralViewerPayload(FULL_INPUT);
+    ok(!Object.prototype.hasOwnProperty.call(payload.structural, "telemetry"), "G1: telemetry is not fused into structural section");
+    ok(!Object.prototype.hasOwnProperty.call(payload.overlays ?? {}, "telemetry"), "G2: telemetry is not fused into overlays");
+    ok(payload.telemetry.visibility_note.includes("not structural evidence or overlays"), "G3: telemetry note keeps the distinction explicit");
 }
 
 finish();
