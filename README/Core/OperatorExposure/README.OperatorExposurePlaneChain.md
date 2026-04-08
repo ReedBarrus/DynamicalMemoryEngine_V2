@@ -215,7 +215,7 @@ These are query-bearing, inspection-bearing, evaluative, or closure-bearing seam
 
 Typical members:
 
-- QueryOp
+- future query seam
 - review surfaces
 - semantic overlay
 - consultation/readiness surfaces

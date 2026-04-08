@@ -319,7 +319,7 @@ raw restoration or source truth
 Q — QueryResult
 
 Definition
-Tooling / recognition artifact returned by QueryOp.
+Tooling / recognition artifact returned by the future query seam.
 
 Layer / seam
 Perception Space
@@ -384,7 +384,7 @@ Nearest field language
 processing pipeline, deterministic transform chain
 
 Must not be confused with
-workbench, HUD, canon process
+inspection assembly, HUD, canon process
 
 5. Runtime coordination and inspection terms
 DoorOneExecutiveLane
@@ -404,16 +404,16 @@ semantic authority, canon surface, UI logic
 Notes
 It normalizes accepted input shapes and coordinates lawful repeated-run execution.
 
-DoorOneOrchestrator
+FutureSingleRunCoordinator
 
 Definition
-Single-run end-to-end Door One coordinator.
+Single-run end-to-end execution coordinator placeholder for future implementation.
 
 Layer / seam
 Runtime coordination seam
 
 Authority posture
-Bounded orchestrator only
+Bounded coordination only
 
 CrossRunSession
 
@@ -429,13 +429,13 @@ Observational only
 Must not be confused with
 canon promotion, truth accumulation, prediction layer
 
-DoorOneWorkbench
+FutureInspectionAssembly
 
 Definition
-Integration and inspection assembly surface over runtime and optional cross-run outputs.
+Integration and inspection assembly placeholder over runtime and optional cross-run outputs.
 
 Layer / seam
-Workbench seam
+Inspection assembly seam
 
 Authority posture
 Inspection-only; below canon
@@ -444,7 +444,7 @@ Must not be confused with
 canon minting, prediction, runtime truth
 
 Notes
-Workbench assembles bounded reports and readiness surfaces without changing runtime meaning.
+The inspection assembly placeholder gathers bounded reports and readiness surfaces without changing runtime meaning.
 
 HUD
 
@@ -798,7 +798,7 @@ Layer / seam
 Canon boundary only
 
 Must not be confused with
-merge, recurrence, workbench packaging, dossier existence
+merge, recurrence, inspection packaging, dossier existence
 
 Consensus
 

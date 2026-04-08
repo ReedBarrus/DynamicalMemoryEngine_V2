@@ -569,7 +569,7 @@ This result remains:
 - non-predictive,
 - non-promotive.
 
-It does not modify BasinOp, runtime artifact authority, workbench readiness, or promotion behavior.
+It does not modify the future basin-classification seam, runtime artifact authority, inspection-assembly readiness, or promotion behavior.
 
 ### Current declared replay result
 
@@ -636,7 +636,7 @@ This result remains:
 - non-predictive,
 - non-promotive.
 
-It does not modify BasinOp, runtime artifact meaning, workbench readiness, or promotion behavior.
+It does not modify the future basin-classification seam, runtime artifact meaning, inspection-assembly readiness, or promotion behavior.
 
 ### Perturbation families tested
 

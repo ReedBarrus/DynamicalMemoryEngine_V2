@@ -71,7 +71,7 @@ Basins, trajectories, and segment structures are runtime organizational construc
 All replay must declare its lens. Replay is not raw restoration unless explicitly defined as such. No denoising, beautification, or enhancement unless the lens permits it and the receipt says so.
 
 **Rule 5 — Consensus is promotion-only.**
-`ConsensusOp` is not a standard data transform. It is a promotion boundary and must remain separate from runtime pipeline operation.
+The future promotion operator is not a standard data transform. It is a promotion boundary and must remain separate from runtime pipeline operation.
 
 **Rule 6 — Deferred layers stay deferred.**
 Prediction, agency, ecology, symbolic, and meta layers may appear in roadmap discussion but must not silently reshape active code until explicitly authorized.

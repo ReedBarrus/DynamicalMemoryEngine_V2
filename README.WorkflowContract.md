@@ -43,7 +43,7 @@ Engineer must follow these rules on every task.
 
 3. **Preserve layer boundaries.** Do not blur runtime memory and canon, canon and substrate, substrate and symbolic abstraction, replay and enhancement.
 
-4. **Consensus is a promotion gate.** ConsensusOp must remain promotion-oriented and may remain stubbed until runtime and substrate semantics stabilize.
+4. **Consensus is a promotion gate.** The future promotion operator must remain promotion-oriented and may remain stubbed until runtime and substrate semantics stabilize.
 
 5. **Prefer minimal lawful patches.** Fix the smallest layer that honestly resolves the issue.
 
@@ -1027,7 +1027,7 @@ Segment tracker correctness; trajectory memory behavior; proto-basin semantics; 
 Clean runners; compact summaries; batch and stream workflows; developer tooling.
 
 **Phase D — Canon Design**
-Formal promotion criteria; canonical state contract; true ConsensusOp behavior.
+Formal promotion criteria; canonical state contract; true future promotion operator behavior.
 
 Prediction and all higher layers remain deferred until Phase D is stable.
 

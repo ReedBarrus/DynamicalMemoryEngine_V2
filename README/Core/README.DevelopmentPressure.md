@@ -258,7 +258,7 @@ It is a read-side discipline intended to keep provenance and runtime evidence vi
 Every major feature should answer a real question.
 
 System Feature	Question It Answers
-TrajectoryBuffer	Is the system converging or drifting?
+Trajectory state buffer	Is the system converging or drifting?
 Basin detection	Are we revisiting known regimes?
 Trajectory query	Have we seen this behavior before?
 Regime shift detection	When did the system change modes?

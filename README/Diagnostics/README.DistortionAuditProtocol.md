@@ -241,7 +241,7 @@ Are split/merge/readiness terms masking branch vs fracture vs re-entry?
 
 Likely action:
 
-refine read-side interpretation before modifying BasinOp
+refine read-side interpretation before modifying the future basin-classification seam
 9.5 Replay / transition probes
 
 Ask:

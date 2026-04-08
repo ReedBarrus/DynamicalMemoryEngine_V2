@@ -288,7 +288,7 @@ Examples:
 A packet whose purpose is to reduce future implementation fragility by isolating a mixed-responsibility seam.
 
 Example:
-- extracting `ReplayRegion` into its own file before behavior changes
+- extracting `FutureReplaySurfaceRegion` into its own file before behavior changes
 
 ### 5.3 Closure-gate packet
 

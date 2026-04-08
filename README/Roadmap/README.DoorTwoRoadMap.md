@@ -410,7 +410,7 @@ Example posture:
 
 ```json
 {
-  "promotion_operator": "ConsensusOp",
+  "promotion_operator": "FuturePromotionOperator",
   "promotion_operator_version": "0.1.0",
   "policy_refs": [
     "consensus.door2.v1",
@@ -527,7 +527,7 @@ This section should not carry legitimacy-critical meaning.
     "supersession_rule": "explicit_promotion_only"
   },
   "provenance": {
-    "promotion_operator": "ConsensusOp",
+    "promotion_operator": "FuturePromotionOperator",
     "policy_refs": ["consensus.door2.v1"],
     "input_refs": ["candidate_07", "candidate_12"]
   },

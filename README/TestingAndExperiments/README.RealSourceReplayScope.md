@@ -48,9 +48,9 @@ lineage-bound
 reversible
 observational only
 3.2 This experiment must not:
-modify BasinOp clustering logic
+modify future basin-classification seam logic
 change runtime operator contracts
-change workbench readiness or promotion scoring
+change inspection-assembly readiness or promotion scoring
 add flow_mode, resilience classes, or derived interpretations to authoritative runtime artifacts
 treat replay classification as canon, ontology, truth, or trusted prediction
 silently replace structural metrics with semantic language
@@ -432,7 +432,7 @@ This remains:
 - non-predictive
 - non-promotive
 
-No runtime operator contracts, BasinOp semantics, or workbench authority were changed.
+No runtime operator contracts, future basin-classification seam semantics, or inspection-assembly authority were changed.
 
 ### Current structural result
 
@@ -483,7 +483,7 @@ This result remains:
 - non-predictive
 - non-promotive
 
-It does not modify BasinOp, runtime operator contracts, workbench authority, or promotion behavior.
+It does not modify the future basin-classification seam, runtime operator contracts, inspection-assembly authority, or promotion behavior.
 
 ### Current structural result
 
@@ -544,7 +544,7 @@ This result remains:
 - non-predictive
 - non-promotive
 
-It does not modify BasinOp, runtime contracts, workbench authority, or promotion behavior.
+It does not modify the future basin-classification seam, runtime contracts, inspection-assembly authority, or promotion behavior.
 
 ### Current structural refinement
 
@@ -584,7 +584,7 @@ This result remains:
 - non-predictive
 - non-promotive
 
-It does not modify BasinOp, runtime contracts, workbench authority, or promotion behavior.
+It does not modify the future basin-classification seam, runtime contracts, inspection-assembly authority, or promotion behavior.
 
 ## Current lens status for real-source replay
 
