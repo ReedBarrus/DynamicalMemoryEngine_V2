@@ -1,6 +1,6 @@
 # README_MasterConstitution.md
-# Dynamical Memory Engine — Master Constitution
-
+# Dynamical Memory Engine_V2 — Master Constitution
+Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 ---
 
 ## 1. Purpose and Authority Order
