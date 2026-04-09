@@ -11,7 +11,7 @@ It does **not** override:
 - `README_MasterConstitution.md`
 - `README_WorkflowContract.md`
 - `README.RebuildPosture.md`
-- `README.RepoLayout.v2.md`
+- `README.RepoLayout.md`
 - `README.TemporalDevelopmentProjection.v0.md`
 - `README.ValidatorAndOperatorReturnPosture.v0.md`
 - `README.TemporalExecutionSurface.v0.md`

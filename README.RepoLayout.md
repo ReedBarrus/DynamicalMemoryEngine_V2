@@ -127,6 +127,45 @@ One-line summary:
 
 ---
 
+### 4.11 `execution/`
+
+Purpose:
+
+execution-facing runtime support only
+
+This folder contains bounded execution-facing implementation surfaces such as:
+
+- source intake surfaces
+- orchestrators
+- execution hosts
+- execution-local routing helpers
+
+It exists to keep execution-facing seams separate from:
+
+- runtime transform operators
+- validators
+- read-side planes / renderers
+- packets
+- and README law surfaces
+
+This folder must not become:
+
+- a runtime transform folder
+- a plane/rendering folder
+- a semantic overlay surface
+- a validator library
+- or a mixed product-shell implementation zone
+
+Expected current internal posture:
+
+- `execution/intake/`
+- `execution/orchestration/`
+- execution-surface implementation files may live directly under `execution/` when they are host surfaces rather than subfamilies
+
+One-line summary:
+
+**`execution/` is for source intake, orchestration, execution hosting, and execution-local routing — not runtime transforms, not validators, and not read-side rendering.**
+
 ### 4.2 `planes/`
 
 Purpose:
