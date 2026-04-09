@@ -82,10 +82,10 @@ Corollary rules:
 
 The active rebuilt-floor scope is exactly:
 
-* `IngestFloor`
-* `ClockAlignFloor`
-* `WindowFloor`
-* `TransformFloor`
+* `IngestOp`
+* `ClockAlignOp`
+* `WindowOp`
+* `TransformOp`
 
 The active primary artifact classes are exactly:
 
@@ -106,10 +106,10 @@ The current rebuilt-floor primary chain is:
 
 Expanded by operator:
 
-* `IngestFloor` emits `P0_IngestFrame`
-* `ClockAlignFloor` consumes `P0_IngestFrame` and emits `P1_AlignedFrame`
-* `WindowFloor` consumes `P1_AlignedFrame` and emits `P2_WindowFrame` (one or more bounded window frames)
-* `TransformFloor` consumes `P2_WindowFrame` and emits `P3_SpectralFrame`
+* `IngestOp` emits `P0_IngestFrame`
+* `ClockAlignOp` consumes `P0_IngestFrame` and emits `P1_AlignedFrame`
+* `WindowOp` consumes `P1_AlignedFrame` and emits `P2_WindowFrame` (one or more bounded window frames)
+* `TransformOp` consumes `P2_WindowFrame` and emits `P3_SpectralFrame`
 
 This is the only active primary chain at v0.
 
@@ -372,9 +372,9 @@ Transform remains in the primary lane, but it is the first representational rema
 
 The rebuilt-floor active primary edges are:
 
-* `IngestFloor` -> `ClockAlignFloor`
-* `ClockAlignFloor` -> `WindowFloor`
-* `WindowFloor` -> `TransformFloor`
+* `IngestOp` -> `ClockAlignOp`
+* `ClockAlignOp` -> `WindowOp`
+* `WindowOp` -> `TransformOp`
 
 Each active primary edge must obey all of the following:
 
@@ -386,7 +386,7 @@ Each active primary edge must obey all of the following:
 
 Windowing is the only multiplicity exception:
 
-* `WindowFloor` may emit multiple `P2_WindowFrame` objects from one `P1_AlignedFrame`
+* `WindowOp` may emit multiple `P2_WindowFrame` objects from one `P1_AlignedFrame`
 * each emitted `P2_WindowFrame` must still remain individually primary-pure
 
 ---
@@ -413,8 +413,7 @@ No deferred operator or deferred semantic/review seam may shape the rebuilt floo
 
 ---
 
-### 13.1 Raw temporal vector at WindowFloor
-
+### 13.1 Raw temporal vector at WindowOp
 The raw pre-window vector is excluded from `P2`.
 
 Reason:
@@ -425,8 +424,7 @@ Reason:
 
 If retained, the raw vector must live in a lawful companion lane.
 
-### 13.2 Magnitude / phase at TransformFloor
-
+### 13.2 Magnitude / phase at TransformOp
 Magnitude and phase are excluded from `P3`.
 
 Reason:
@@ -482,9 +480,9 @@ This note does not yet define:
 
 Those require later packets.
 
-## Deferred admission note — MergeFloor
+## Deferred admission note — MergeOp
 
-`MergeFloor` is the first major downstream operator expected to pressure the rebuilt primary architecture after `TransformOp`.
+`MergeOp` is the first major downstream operator expected to pressure the rebuilt primary architecture after `TransformOp`.
 
 Its admission is deferred until all of the following exist:
 

@@ -357,7 +357,7 @@ They are written specifically for the current TemporalRegime rebuild, using:
 
 These shapes should not yet be mistaken for universal multi-regime schemas.
 
-DerivedRegime and SymbolicRegime may later require their own companion variants.
+SupportRegime and SymbolicRegime may later require their own companion variants.
 
 ---
 

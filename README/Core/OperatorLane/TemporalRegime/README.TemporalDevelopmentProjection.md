@@ -337,6 +337,76 @@ If the answer is no, do not start the packet yet.
 
 ---
 
-## 14. One-line operational summary
+## 14. Current Temporal Chain Status
+
+The initial deterministic TemporalRegime primary chain is now mechanized through the first four floors:
+
+- `IngestOp` → `P0`
+- `ClockAlignOp` → `P1`
+- `WindowOp` → `P2`
+- `TransformOp` → `P3`
+
+This means the rebuild now has active:
+
+- temporal primitives
+- temporal floor types
+- floor-local validators
+- bounded operator implementations
+- explicit emission bundle posture
+- primary-only chain input posture
+
+### 14.1 What is now mechanized
+
+The following seams are now mechanized at bounded runtime seams:
+
+- `.wav` admission at ingest
+- deterministic clock alignment
+- deterministic bounded windowing with lawful multiplicity
+- deterministic transform-domain remap into Cartesian spectral geometry
+
+### 14.2 What remains intentionally narrow
+
+The current chain remains intentionally narrow.
+
+Examples:
+
+- ingest is `.wav`-first
+- clock alignment uses a narrow declared policy family
+- windowing uses a narrow declared segmentation/window policy family
+- transform uses a narrow declared DFT/cartesian policy family
+- planes are typed but not yet broadly mechanized
+
+These narrow implementations are lawful current seams, not final framework claims.
+
+### 14.3 What is explicitly not yet claimed
+
+The following are still not claimed:
+
+- SupportRegime admission
+- merge / compress / anomaly operator mechanization
+- semantic overlay implementation
+- consulted-mode operator input
+- broad read-side inspection infrastructure
+- transform or ingest framework generalization
+- SymbolicRegime implementation
+
+### 14.4 Immediate next stabilization target
+
+The next stabilization target is read-side inspection.
+
+The goal is to make the mechanized TemporalRegime chain directly viewable and auditable before defining SupportRegime admission.
+
+That means the next lawful pressure is:
+
+- truthful plane posture
+- minimal execution surface / app surface
+- direct human inspection of `P0 → P3`
+- bounded diagnostic inspection where explicitly allowed
+
+One-line summary:
+
+**The initial TemporalRegime primary chain is now mechanized through `P3`, and the next lawful move is to stabilize read-side inspection before expanding into SupportRegime admission.**
+
+## 15. One-line operational summary
 
 **Temporal Development Projection v0 defines the currently pinned TemporalRegime rebuild landscape, the immediate validator→operator implementation order, and the explicit deferment boundaries that should prevent Codex from widening scope by convenience.**

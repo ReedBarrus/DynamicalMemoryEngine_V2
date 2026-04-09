@@ -1,5 +1,7 @@
 # Dynamical Memory Engine — Repo Layout v2
 
+Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
+
 ## Status
 
 This document defines the active repository layout for the V2 rebuild substrate.

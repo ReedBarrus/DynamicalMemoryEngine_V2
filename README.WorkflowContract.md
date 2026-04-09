@@ -1,5 +1,7 @@
 ﻿# Dynamical Memory Engine - Workflow Contract
 
+Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
+
 ## Purpose
 
 This document defines the working contract for development of the Dynamical Memory Engine.
