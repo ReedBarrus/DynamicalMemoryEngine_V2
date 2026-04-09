@@ -1,0 +1,14 @@
+{
+    "name": "dynamical-memory-engine-v2",
+    "private": true,
+    "type": "module",
+    "version": "0.0.1",
+    "scripts": {
+        "test:intake": "node --experimental-strip-types execution/intake/source_intake_v0.ts",
+        "test:orchestrator": "node --experimental-strip-types execution/orchestration/minimal_orchestrator_v0.ts",
+        "test:host": "node --experimental-strip-types execution/temporal_execution_surface_v0.ts",
+        "test:planes": "node --experimental-strip-types planes/temporal/plane_builders_v0.ts",
+        "test:render": "node --experimental-strip-types planes/temporal/plane_renderer_v0.ts",
+        "test:inspect": "node --experimental-strip-types execution/temporal_inspection_flow_v0.ts"
+    }
+}
