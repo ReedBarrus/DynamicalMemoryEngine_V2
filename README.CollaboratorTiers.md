@@ -10,12 +10,9 @@ It is a supporting governance and collaboration note.
 
 It does **not** override:
 
-- `README_MasterConstitution.md`
-- `README_ConstitutionAppendix.md`
-- `README_WorkflowContract.md`
-- `README_DevelopmentPressure.md`
-- `README_DoorOneRuntimeBoundary.md`
-- `README_DoorOneAcceptanceChecklist.md`
+- `README.MasterConstitution.md`
+- `README.WorkflowContract.md`
+- `README/Constitution/Workflow/README.DevelopmentPressure.md`
 
 Its purpose is narrower:
 

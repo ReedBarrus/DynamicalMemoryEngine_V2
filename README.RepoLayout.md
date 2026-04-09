@@ -1,4 +1,4 @@
-# Dynamical Memory Engine — Repo Layout v2
+# Dynamical Memory Engine - Repo Layout v3
 
 Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
@@ -12,15 +12,16 @@ It does **not** override:
 
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
-- `README.RebuildPosture.md`
+- `README/Constitution/Workflow/README.RebuildPosture.md`
 - the active TemporalRegime floor contracts
 
 Its purpose is narrower:
 
 - define the active folder layout for the rebuild substrate,
 - distinguish runtime implementation surfaces from read-side surfaces and law surfaces,
-- provide a boring and explicit placement grammar for Codex and future packet work,
-- and reduce repo-shape drift before implementation packets begin.
+- define the current internal hierarchy of the `README/` law bank,
+- provide an explicit placement grammar for Codex and future packet work,
+- and reduce repo-shape drift as implementation and documentation both grow.
 
 This note governs **repo layout posture** only.
 
@@ -46,26 +47,26 @@ Without a simple active layout, implementation helpers may reintroduce drift thr
 - plane/runtime collapse,
 - validator/operator collapse,
 - law/runtime cohabitation,
+- stale path references,
 - or inactive regime bleed-through.
 
-This note exists to stop that drift before packetized implementation begins.
+This note exists to stop that drift before it hardens into daily workflow.
 
 One-line summary:
 
-**Repo Layout v2 defines a simple rebuild placement grammar so runtime, read-side, typing, validation, packets, and law remain boringly distinct.**
+**Repo Layout v3 defines a boring placement grammar in which runtime code, packet work, and the README law bank remain clearly separated, while the README bank itself is organized by document role before system area.**
 
 ---
 
 ## 2. Core layout rule
 
-**Each top-level folder should answer one implementation job only.**
+**Each top-level repo zone should answer one implementation job only, and each major `README/` subtree should answer one documentation job only.**
 
 Corollary rules:
 
 - runtime operators are not planes,
 - planes are not runtime lanes,
 - validators are not diagnostics,
-- types are not operator logic,
 - packets are not law,
 - and README law is not runtime implementation.
 
@@ -73,7 +74,7 @@ If a folder begins answering more than one job, the layout has started drifting.
 
 ---
 
-## 3. Active top-level folders
+## 3. Active top-level layout
 
 The active V2 rebuild layout currently recognizes:
 
@@ -84,6 +85,18 @@ The active V2 rebuild layout currently recognizes:
 - `packets/`
 - `README/`
 - `test_signal/`
+
+The repo root also intentionally retains a small set of root-level authority anchors:
+
+- `README.md`
+- `README.MasterConstitution.md`
+- `README.WorkflowContract.md`
+- `README.RepoLayout.md`
+- `README.ActiveLawKernel.md`
+
+These root files are navigation and authority anchors.
+
+They do not replace the internal `README/` hierarchy.
 
 Additional folders may be introduced later only when a bounded packet justifies them.
 
@@ -124,11 +137,11 @@ This folder contains typed, explicit read-side projection logic and plane-facing
 
 Planes are:
 
-- human-facing
-- read-side
-- removable
-- non-primary
-- not runtime lanes
+- human-facing,
+- read-side,
+- removable,
+- non-primary,
+- and not runtime lanes.
 
 This folder must not become:
 
@@ -152,11 +165,11 @@ This folder contains TypeScript type definitions for active rebuild surfaces.
 
 It is where:
 
-- primary artifact families
-- companion families
-- deferred placeholders
-- primitive unions/enums/literals
-- plane types
+- primary artifact families,
+- companion families,
+- deferred placeholders,
+- primitive unions/enums/literals,
+- and plane types
 
 are defined.
 
@@ -182,9 +195,9 @@ This folder contains runtime validators and contract-checking logic.
 
 Validators answer questions like:
 
-- are required fields present?
-- are forbidden fields absent?
-- does this object satisfy its floor contract?
+- are required fields present,
+- are forbidden fields absent,
+- and does this object satisfy its floor contract.
 
 Validators are not diagnostics.
 
@@ -209,6 +222,7 @@ This folder contains packet specs, packet return records, and related bounded im
 Packets are workflow instruments.
 
 They are not runtime code.
+
 They are not law by themselves.
 
 One-line summary:
@@ -221,24 +235,21 @@ One-line summary:
 
 Purpose:
 
-law, architecture, contracts, and governance notes
+the active law bank, architecture bank, workflow bank, and evidence bank
 
-This folder contains the active law bank and rebuild documentation.
+This folder contains the active non-runtime documentation hierarchy.
 
-It is the place for:
+Unlike the older flatter law-bank posture, `README/` is now organized by documentation role first.
 
-- constitutions
-- workflow notes
-- floor contracts
-- regime notes
-- admission criteria
-- repo layout notes
+It must not become:
 
-It must not become a runtime code surface.
+- a runtime code surface,
+- a dumping ground of unrelated notes,
+- or a mixed archive where active and superseded documents are indistinguishable.
 
 One-line summary:
 
-**`README/` is the law bank, not the runtime.**
+**`README/` is the organized documentation bank, not the runtime.**
 
 ---
 
@@ -252,9 +263,9 @@ This folder contains test input material relevant to the active rebuild floor.
 
 Examples:
 
-- `.wav` inputs
-- generated signal fixtures
-- bounded real-source test materials
+- `.wav` inputs,
+- generated signal fixtures,
+- and bounded real-source test materials.
 
 It must not become a dumping ground for unrelated outputs.
 
@@ -264,7 +275,210 @@ One-line summary:
 
 ---
 
-## 5. Regime subfolder rule
+## 5. README hierarchy rule
+
+Inside `README/`, the first classification question is:
+
+**What kind of document is this?**
+
+Only after that should the question become:
+
+**What system area, regime, or program line does it belong to?**
+
+This means the active first-level `README/` branches are:
+
+- `README/Constitution/`
+- `README/Core/`
+- `README/Operational/`
+- `README/Program/`
+- `README/Evidence/`
+- `README/Archive/`
+
+This is an intentional change in posture.
+
+The old drift pattern grouped many notes by topic alone.
+
+The current posture groups them by documentation role first so authority, runtime-adjacent law, workflow instrumentation, and future-facing planning are easier to distinguish.
+
+---
+
+## 6. README branch roles
+
+### 6.1 `README/Constitution/`
+
+Purpose:
+
+durable governing notes and cross-cutting law
+
+This branch contains high-authority notes governing identity, mechanization, workflow, and surface posture.
+
+Current active subdivisions:
+
+- `Identity/`
+- `Mechanization/`
+- `Surfaces/`
+- `Workflow/`
+
+One-line summary:
+
+**`README/Constitution/` is for durable governing law and cross-cutting authority notes.**
+
+---
+
+### 6.2 `README/Core/`
+
+Purpose:
+
+active system meaning below constitutional authority
+
+This branch contains active architecture, regime-local contracts, foundations, and taxonomy notes that describe the current rebuild substrate.
+
+Current active subdivisions:
+
+- `Foundations/`
+- `Regimes/`
+- `Taxonomy/`
+
+One-line summary:
+
+**`README/Core/` is for active system architecture, regime-local notes, and taxonomic meaning below constitution.**
+
+---
+
+### 6.3 `README/Operational/`
+
+Purpose:
+
+mutable workflow instrumentation and current-state tracking
+
+This branch contains compact workflow/accounting surfaces that help current development stay bounded and inspectable.
+
+Current active subdivisions:
+
+- `Accounting/`
+- `Lineage/`
+- `Packets/`
+- `Seams/`
+- `Trajectories/`
+
+One-line summary:
+
+**`README/Operational/` is for current-state workflow instruments, not durable architecture law.**
+
+---
+
+### 6.4 `README/Program/`
+
+Purpose:
+
+future-facing program and roadmap structure
+
+This branch contains Door-level and cross-field planning surfaces that are broader than one packet and broader than one active regime-local seam.
+
+Current active subdivisions:
+
+- `DoorOne/`
+- `DoorTwo/`
+- `DoorThree/`
+- `CrossField/`
+
+One-line summary:
+
+**`README/Program/` is for future-facing development lines and roadmap material, not current runtime authority.**
+
+---
+
+### 6.5 `README/Evidence/`
+
+Purpose:
+
+diagnostics and experiments
+
+This branch contains evidence-oriented notes about diagnostics, experiments, and test-facing evidence surfaces.
+
+Current active subdivisions:
+
+- `Diagnostics/`
+- `Experiments/`
+
+One-line summary:
+
+**`README/Evidence/` is for diagnostics and experiment-facing evidence notes.**
+
+---
+
+### 6.6 `README/Archive/`
+
+Purpose:
+
+non-active or local-use notes retained without active-law status
+
+This branch exists so personal notes, superseded notes, or non-authority references do not continue to read as active governing surfaces.
+
+One-line summary:
+
+**`README/Archive/` is for retained-but-non-active documentation.**
+
+---
+
+## 7. Core subtree grammar
+
+The current `README/Core/` branch uses the following placement grammar:
+
+### 7.1 `README/Core/Foundations/`
+
+For cross-regime architecture and mapping notes that are active system foundations but not themselves constitutional law.
+
+Examples:
+
+- pipeline architecture,
+- exposure-plane chain,
+- emission flow mapping.
+
+### 7.2 `README/Core/Regimes/`
+
+For regime-local notes and regime-local build surfaces.
+
+At present, the active regime branch is:
+
+- `Temporal/`
+
+Recognized but not yet active as comparable documentation banks:
+
+- `Support/`
+- `Symbolic/`
+
+### 7.3 `README/Core/Taxonomy/`
+
+For active taxonomies and glossary-like classification surfaces.
+
+These notes are not workflow instruments and not runtime code.
+
+They are classification surfaces for DME meaning.
+
+---
+
+## 8. Temporal regime grammar inside README
+
+The current active temporal documentation subtree is:
+
+- `README/Core/Regimes/Temporal/Contracts/`
+- `README/Core/Regimes/Temporal/Execution/`
+- `README/Core/Regimes/Temporal/Failure/`
+- `README/Core/Regimes/Temporal/Inspection/`
+- `README/Core/Regimes/Temporal/Operators/`
+- `README/Core/Regimes/Temporal/Sources/`
+- `README/Core/Regimes/Temporal/Validators/`
+
+This subtree is intended to keep temporal notes separated by seam role rather than collecting all temporal notes into one flat bank.
+
+One-line summary:
+
+**Inside the active TemporalRegime README bank, placement follows seam role first: contracts, sources, execution, inspection, failure, operators, and validators.**
+
+---
+
+## 9. Regime subfolder rule for runtime source
 
 The following subfolder grammar is currently recognized inside:
 
@@ -272,6 +486,7 @@ The following subfolder grammar is currently recognized inside:
 - `planes/`
 - `types/`
 - `validators/`
+- `packets/`
 
 Recognized regimes:
 
@@ -284,6 +499,7 @@ Current active implementation scope is:
 - `temporal/`
 
 The existence of `support/` and `symbolic/` does **not** activate those regimes.
+
 They are recognized placement surfaces only.
 
 One-line summary:
@@ -292,7 +508,7 @@ One-line summary:
 
 ---
 
-## 6. Active rebuild posture
+## 10. Active rebuild posture
 
 At present, active rebuild implementation is occurring only in the TemporalRegime floor through:
 
@@ -318,50 +534,82 @@ Accordingly, the first active implementation surfaces should appear primarily un
 - `planes/temporal/`
 - `packets/temporal/`
 
+and the first active temporal documentation surfaces should appear primarily under:
+
+- `README/Core/Regimes/Temporal/Contracts/`
+- `README/Core/Regimes/Temporal/Sources/`
+- `README/Core/Regimes/Temporal/Execution/`
+- `README/Core/Regimes/Temporal/Inspection/`
+- `README/Core/Regimes/Temporal/Failure/`
+- `README/Core/Regimes/Temporal/Operators/`
+- `README/Core/Regimes/Temporal/Validators/`
+
 ---
 
-## 7. Placement rules
+## 11. Placement rules
 
-### Rule 1 — Operators stay in `operators/`
+### Rule 1 - Operators stay in `operators/`
 
 No runtime operator implementation should begin life in `types/`, `validators/`, or `planes/`.
 
-### Rule 2 — Planes stay in `planes/`
+### Rule 2 - Planes stay in `planes/`
 
 No read-side projection should be treated as a runtime lane or operator output family by folder placement.
 
-### Rule 3 — Validators stay in `validators/`
+### Rule 3 - Validators stay in `validators/`
 
 Validation logic must remain distinct from diagnostics and distinct from operators.
 
-### Rule 4 — Types stay in `types/`
+### Rule 4 - Types stay in `types/`
 
 Shared shapes, literals, primitives, and type families belong in `types/`, not scattered across operators.
 
-### Rule 5 — README law stays in `README/`
-
-Governance and architecture notes must remain explicit and inspectable, not embedded as runtime comments only.
-
-### Rule 6 — Packets stay in `packets/`
+### Rule 5 - Packets stay in `packets/`
 
 Implementation movement objects must remain separate from runtime source and separate from law.
 
+### Rule 6 - README law stays in `README/`
+
+Governance and architecture notes must remain explicit and inspectable, not embedded as runtime comments only.
+
+### Rule 7 - README placement should follow document role first
+
+A workflow instrument should not be placed under `Core/` merely because it discusses a core seam.
+
+A roadmap note should not be placed under `Constitution/` merely because it sounds important.
+
+A diagnostic or experiment note should not be placed under `Operational/` merely because it is currently useful.
+
+### Rule 8 - Archive is not active authority
+
+If a note is archived or retained only for local/personal/non-active use, it should not remain in an active authority branch.
+
 ---
 
-## 8. Initial file placement guidance
+## 12. Initial file placement guidance
 
-Current trusted TemporalRegime placement:
+Current trusted TemporalRegime runtime placement:
 
 - `types/temporal/temporal_floor_types_v0.ts`
-- `types/temporal/temporal_primitives_v0.ts` if primitives are split
+- `types/temporal/temporal_primitives_v0.ts` where primitives are split
 - `validators/temporal/` for floor validators
 - `operators/temporal/` for runtime operator code
 - `planes/temporal/` for read-side plane code
 - `packets/temporal/` for packet artifacts
 
+Current trusted temporal documentation placement:
+
+- floor contracts -> `README/Core/Regimes/Temporal/Contracts/`
+- source intake/source family notes -> `README/Core/Regimes/Temporal/Sources/`
+- execution host notes -> `README/Core/Regimes/Temporal/Execution/`
+- plane/rendering notes -> `README/Core/Regimes/Temporal/Inspection/`
+- temporal failure posture -> `README/Core/Regimes/Temporal/Failure/`
+- temporal operator-adjacent notes -> `README/Core/Regimes/Temporal/Operators/`
+- temporal validator return posture -> `README/Core/Regimes/Temporal/Validators/`
+
 ---
 
-## 9. Anti-drift notes
+## 13. Anti-drift notes
 
 The following drifts must remain fenced:
 
@@ -371,29 +619,17 @@ The following drifts must remain fenced:
 - type/operator collapse
 - inactive regime bleed-through
 - packet/runtime blending
+- authority/workflow collapse inside `README/`
+- roadmap/constitution collapse inside `README/`
+- active/archive collapse inside `README/`
 
 If a new file placement makes one of those easier, the placement should be rejected or revised.
 
 ---
 
-## 10. TS floor decisions locked for initial implementation
+## 14. Packet naming pattern
 
-The following decisions are currently locked for the first TemporalRegime type substrate:
-
-1. **literal class strings stay explicit**
-2. **validation detail may expand in validators even if type-level checks remain compact**
-3. **`D3.derived_geometry` is hard-gated to `magnitude` and `phase` only**
-4. **planes are typed early and remain read-side only**
-5. **`T0–T3` placeholders remain declared but deferred**
-6. **primitive splitting is allowed and preferred where it improves legibility and reduces repeated touch surfaces**
-
-These decisions should not be re-opened casually during early implementation.
-
----
-
-## 11. Packet naming pattern
-
-The initial packet naming pattern is:
+The initial packet naming pattern remains:
 
 `packets/<regime>/PKT-<SEAM>-<NNN>.md`
 
@@ -412,20 +648,20 @@ Flat file packet layout is preferred initially.
 
 ---
 
-## 12. Non-goals
+## 15. Non-goals
 
 This note does not yet define:
 
-- final long-run repo layout,
-- product packaging layout,
+- final long-run product packaging layout,
 - build tooling layout,
 - deployment layout,
+- the final long-run documentation taxonomy beyond current active needs,
 - or SupportRegime / SymbolicRegime implementation specifics.
 
 Those require later bounded packets.
 
 ---
 
-## 13. One-line operational summary
+## 16. One-line operational summary
 
-**Repo Layout v2 defines a simple rebuild placement grammar in which operators, planes, types, validators, packets, and law remain explicitly separate, with active implementation currently limited to the TemporalRegime subtree.**
+**Repo Layout v3 defines the current rebuild placement grammar in which runtime code, packets, and the README bank remain explicitly separate, and the README bank itself is organized by document role first and system area second so authority and workflow drift stay visible.**

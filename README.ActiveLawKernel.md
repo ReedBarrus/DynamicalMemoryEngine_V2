@@ -10,13 +10,13 @@ It is a compact working kernel.
 
 It does **not** override:
 
-- `README_MasterConstitution.md`
-- `README_WorkflowContract.md`
-- `README.StructuralIdentityLaw.md`
-- `README.DeclaredVsMechanizedAudit.md`
-- `README.MechanizationClosureGate.md`
-- `README.PacketWorkflowChain.md`
-- `README_DoorOneDevelopmentalOutline.md`
+- `README.MasterConstitution.md`
+- `README.WorkflowContract.md`
+- `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+- `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
+- `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
+- `README/Constitution/Workflow/README.PacketWorkflowChain.md`
+- `README/Constitution/Workflow/README.DevelopmentPressure.md`
 
 Its purpose is narrower:
 
@@ -73,13 +73,13 @@ If a note does not materially help answer one of those questions during active w
 
 The current Active Law Kernel consists of:
 
-1. `README_MasterConstitution.md`
-2. `README_WorkflowContract.md`
-3. `README.StructuralIdentityLaw.md`
-4. `README.DeclaredVsMechanizedAudit.md`
-5. `README.MechanizationClosureGate.md`
-6. `README.PacketWorkflowChain.md`
-7. `README_DoorOneDevelopmentalOutline.md`
+1. `README.MasterConstitution.md`
+2. `README.WorkflowContract.md`
+3. `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+4. `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
+5. `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
+6. `README/Constitution/Workflow/README.PacketWorkflowChain.md`
+7. `README/Constitution/Workflow/README.DevelopmentPressure.md`
 
 These seven notes together form the smallest currently sufficient live law bundle.
 
@@ -89,7 +89,7 @@ These seven notes together form the smallest currently sufficient live law bundl
 
 ### 4.1 Constitutional posture
 
-Inherited from `README_MasterConstitution.md`
+Inherited from `README.MasterConstitution.md`
 
 The Master Constitution remains the top boundary anchor for:
 
@@ -102,7 +102,7 @@ The kernel inherits this without restating it fully.
 
 ### 4.2 Identity law
 
-Inherited from `README.StructuralIdentityLaw.md`
+Inherited from `README/Constitution/Identity/README.StructuralIdentityLaw.md`
 
 A structure retains identity only while:
 
@@ -116,7 +116,7 @@ This is the main sameness law for DME.
 
 ### 4.3 Anti-overclaim law
 
-Inherited from `README.DeclaredVsMechanizedAudit.md` and `README.MechanizationClosureGate.md`
+Inherited from `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md` and `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
 
 The kernel preserves the following practical rules:
 
@@ -137,7 +137,7 @@ A capability may be called mechanized only when:
 
 ### 4.4 Workflow movement law
 
-Inherited from `README_WorkflowContract.md` and `README.PacketWorkflowChain.md`
+Inherited from `README.WorkflowContract.md` and `README/Constitution/Workflow/README.PacketWorkflowChain.md`
 
 Bounded work should move through:
 
@@ -158,7 +158,7 @@ One packet should normally advance:
 
 ### 4.5 Directional development law
 
-Inherited from `README_DoorOneDevelopmentalOutline.md`
+Inherited from `README/Constitution/Workflow/README.DevelopmentPressure.md`
 
 Door One development must make the system:
 
@@ -252,7 +252,6 @@ The following notes remain important, but are normally secondary lookup surfaces
 - `README.DistortionAuditProtocol.md`
 - `README.StructuralMemoryClosureInvariant.md`
 - `README.WorkflowMechanizationScope.md`
-- `README_DoorOneAcceptanceChecklist.md`
 
 Use them when:
 
@@ -288,3 +287,4 @@ Before accepting a move, ask:
 ## 10. One-line summary
 
 **The Active Law Kernel is the smallest live bundle of constitutional posture, identity law, anti-overclaim law, packet movement law, and current Door One developmental order needed to keep DME reasoning and implementation lawful without loading the full README library every time.**
+

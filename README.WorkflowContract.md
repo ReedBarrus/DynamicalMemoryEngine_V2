@@ -1,4 +1,4 @@
-ï»¿# Dynamical Memory Engine - Workflow Contract
+# Dynamical Memory Engine - Workflow Contract
 
 Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
@@ -8,7 +8,7 @@ This document defines the working contract for development of the Dynamical Memo
 
 It governs collaboration between Reed, Architect-ChatGPT, and Engineer-ChatGPT: roles, development loop, escalation rules, task discipline, and review standards.
 
-**Constitutional authority:** Architectural boundaries, layer definitions, naming law, and artifact contracts live in `README_MasterConstitution.md`. If this document and the Master Constitution conflict on an architectural matter, the Master Constitution wins. If they conflict on a governance matter, Reed decides.
+**Constitutional authority:** Architectural boundaries, layer definitions, naming law, and artifact contracts live in `README.MasterConstitution.md`. If this document and the Master Constitution conflict on an architectural matter, the Master Constitution wins. If they conflict on a governance matter, Reed decides.
 
 Supporting normative references: `README_SubstrateLayer.md`, `OPERATOR_CONTRACTS.md`.
 
@@ -18,19 +18,19 @@ Supporting normative references: `README_SubstrateLayer.md`, `OPERATOR_CONTRACTS
 
 The Dynamical Memory Engine is a physics-grounded structural memory substrate. It develops upward from signal through structure through runtime memory toward recognition, canon, and eventually higher cognition - in that order, at each layer's lawful pace.
 
-Only the currently active layers may shape implementation unless explicitly promoted by Reed. See README_MasterConstitution.md, section 3, for the full layer set and Door definitions.
+Only the currently active layers may shape implementation unless explicitly promoted by Reed. See README.MasterConstitution.md, section 3, for the full layer set and Door definitions.
 
 ---
 
 ## Roles
 
-**Reed â€” System Owner**
+**Reed — System Owner**
 Final authority for project intent, acceptance or rejection of architectural direction, promotion of future layers into active scope, and what is constitutionally true for the system. Reed may orchestrate tasks, choose priorities, and decide when implementation convenience is acceptable or when stricter lawfulness is required.
 
-**Architect-ChatGPT â€” Architecture Lead and Constitutional Auditor**
+**Architect-ChatGPT — Architecture Lead and Constitutional Auditor**
 Responsible for defining and refining architecture, preserving layer boundaries, identifying legitimacy and naming drift, reviewing operator contracts, auditing implementation changes, and protecting long-term coherence. Architect does not directly manipulate the project folder, execute autonomous local builds, or perform implementation outside the conversation. Architect serves as: architectural reviewer, spec writer, integration critic, naming and boundary enforcer.
 
-**Engineer-ChatGPT â€” Implementation Engineer**
+**Engineer-ChatGPT — Implementation Engineer**
 Responsible for patching code, creating files, running tests, repairing imports and local execution issues, and implementing bounded tasks inside the declared architecture. Engineer does not have authority to redefine architecture, change artifact meaning, collapse system layers, invent new promotion rules, or operationalize deferred upper layers without explicit instruction. Engineer is an implementation engine, not the constitutional authority.
 
 ---
@@ -73,11 +73,11 @@ Engineer may raise bounded architecture questions when a task cannot be complete
 
 **Allowed escalation types:**
 
-1. *Contract conflict* â€” implementation appears inconsistent with artifact lifecycle, operator contracts, naming law, or architecture boundaries.
+1. *Contract conflict* — implementation appears inconsistent with artifact lifecycle, operator contracts, naming law, or architecture boundaries.
 
-2. *Hidden dependency* â€” a bounded task cannot be completed honestly without touching a file, operator, artifact field, or receipt contract not in scope.
+2. *Hidden dependency* — a bounded task cannot be completed honestly without touching a file, operator, artifact field, or receipt contract not in scope.
 
-3. *Bounded architectural opportunity* â€” Engineer identifies a local, well-scoped simplification or structural improvement that should be reviewed before implementation.
+3. *Bounded architectural opportunity* — Engineer identifies a local, well-scoped simplification or structural improvement that should be reviewed before implementation.
 
 **Escalation restrictions.** Engineer must not use the escalation lane to propose:
 - redefinition of the memory model
@@ -112,15 +112,15 @@ Engineer does not become an independent architectural authority through escalati
 
 ## Standard Development Loop
 
-**Step 1 â€” Define the task.** Reed and ChatGPT define a bounded implementation goal.
+**Step 1 — Define the task.** Reed and ChatGPT define a bounded implementation goal.
 
-**Step 2 â€” Hand off to Engineer.** Engineer receives: the bounded task, relevant files, the architecture/workflow contract, output expectations.
+**Step 2 — Hand off to Engineer.** Engineer receives: the bounded task, relevant files, the architecture/workflow contract, output expectations.
 
-**Step 3 â€” Implement and test.** Engineer performs the code work and reports: summary of change, files modified, tests run, test output, remaining issues, diff or full file output.
+**Step 3 — Implement and test.** Engineer performs the code work and reports: summary of change, files modified, tests run, test output, remaining issues, diff or full file output.
 
-**Step 4 â€” Review.** Reed returns Engineer's result to ChatGPT. ChatGPT audits for: architectural drift, legitimacy drift, naming drift, premature abstraction, silent semantic changes, future debt.
+**Step 4 — Review.** Reed returns Engineer's result to ChatGPT. ChatGPT audits for: architectural drift, legitimacy drift, naming drift, premature abstraction, silent semantic changes, future debt.
 
-**Step 5 â€” Accept or revise.** Reed decides whether to: accept, revise, narrow the task, or defer the work.
+**Step 5 — Accept or revise.** Reed decides whether to: accept, revise, narrow the task, or defer the work.
 
 ---
 
@@ -209,9 +209,9 @@ A patch packet exists to give ChatGPT enough current implementation context to r
 
 For a normal implementation task, Reed should provide only the files directly relevant to the active seam:
 
-- 1â€“3 touched code files
+- 1–3 touched code files
 - 1 relevant test file
-- 0â€“2 governing README files when needed
+- 0–2 governing README files when needed
 
 Examples:
 
@@ -226,7 +226,7 @@ Examples:
 
 ---
 
-## Packet Templates â€” Architect Task Spec Packet and Engineer Implementation Return Packet
+## Packet Templates — Architect Task Spec Packet and Engineer Implementation Return Packet
 
 This section defines the two default packet templates used to mechanize bounded work across the Architect / Engineer split.
 
@@ -244,8 +244,8 @@ These templates are workflow instruments only. They do **not** override the Mast
 
 Every bounded implementation loop should prefer two packets:
 
-1. **Architect Task Spec Packet** â€” defines the task to be performed
-2. **Engineer Implementation Return Packet** â€” reports what was actually done
+1. **Architect Task Spec Packet** — defines the task to be performed
+2. **Engineer Implementation Return Packet** — reports what was actually done
 
 The spec packet defines intent and boundaries.  
 The return packet defines implementation reality.
@@ -361,7 +361,7 @@ Architect reviewer:
 - test output
 - remaining issues
 - diff or full file output
-- open questions (0â€“3 only if escalation-qualified)
+- open questions (0–3 only if escalation-qualified)
 
 #### 11. Completion condition
 
@@ -376,7 +376,7 @@ Architect reviewer:
 
 - The active seam should be singular whenever possible.
 - The objective should describe one bounded closure target, not a vision arc.
-- â€œFiles in scopeâ€ should remain as small as possible.
+- “Files in scope” should remain as small as possible.
 - Non-goals should be explicit.
 - Acceptance should be test-backed whenever practical.
 - If a task cannot be stated cleanly in this packet, it is probably not yet an Engineer task.
@@ -493,10 +493,10 @@ Risk if ignored:
 
 ### Return packet guidance notes
 
-- â€œResult statusâ€ must be honest. Partial is better than pretending complete.
-- â€œWhat changedâ€ should stay local and concrete.
-- â€œContract and boundary checkâ€ is required even for small patches.
-- â€œWhat is still not claimedâ€ helps prevent declared-vs-mechanized drift.
+- “Result status” must be honest. Partial is better than pretending complete.
+- “What changed” should stay local and concrete.
+- “Contract and boundary check” is required even for small patches.
+- “What is still not claimed” helps prevent declared-vs-mechanized drift.
 - Open questions must stay within the existing escalation lane rules.
 
 ## Structural exposure packet posture
@@ -686,7 +686,7 @@ Corollary rules:
 
 ### Suggestion classes
 
-#### S0 â€” Grounded suggestion
+#### S0 — Grounded suggestion
 
 A suggestion that:
 
@@ -695,13 +695,13 @@ A suggestion that:
 - prevents concrete drift or overclaim,
 - or improves packet routing / review clarity.
 
-#### S1 â€” Optional bounded suggestion
+#### S1 — Optional bounded suggestion
 
 A suggestion that is not necessary for the active seam, but remains clearly adjacent, low-cost, and non-confusing.
 
 It must remain visibly optional.
 
-#### S2 â€” Suggestion drift
+#### S2 — Suggestion drift
 
 A suggestion that is weakly grounded or ungrounded relative to:
 
@@ -755,7 +755,7 @@ Prefer:
 Avoid:
 
 - multiple speculative follow-ons
-- ornamental â€œhelpfulâ€ branching
+- ornamental “helpful” branching
 - future-stack motion that outruns the current closure step
 
 ### One-line review question
@@ -795,7 +795,7 @@ Examples:
 The exact branch label may vary, but it should preserve:
 - seam identity
 - bounded goal
-- enough clarity to map branch â‡„ packet â‡„ PR
+- enough clarity to map branch ? packet ? PR
 
 ### Packet-to-branch mapping rule
 
@@ -880,7 +880,7 @@ This includes where applicable:
 
 - `README/Operational/README.RepoAccountingSurface.md`
 - `README/Operational/README.PacketLineage.md`
-- `README.RepoPlacementConstitution.md` when folder/subfolder topology changes
+- `README.RepoLayout.md` when folder/subfolder topology changes
 
 ### Default local execution loop
 
@@ -954,7 +954,7 @@ Codex is an implementation agent operating under:
   Reed authority
   Architect authority
   the active packet
-  and the repoâ€™s governing notes
+  and the repo’s governing notes
   Codex stop / escalation conditions
 
 Codex should stop and hand back rather than silently widening scope when any of the following occur:
@@ -1019,16 +1019,16 @@ and packet-aligned
 
 ## Development Sequence
 
-**Phase A â€” Runtime Honesty** *(complete)*
+**Phase A — Runtime Honesty** *(complete)*
 Replay receipt honesty; H1 vs M1 replay semantics; anomaly event semantics; receipt consistency.
 
-**Phase B â€” Substrate Integrity** *(complete)*
+**Phase B — Substrate Integrity** *(complete)*
 Segment tracker correctness; trajectory memory behavior; proto-basin semantics; substrate commit/query discipline; read-path honesty; dwell/transition/recurrence instrumentation.
 
-**Phase C â€” Orchestration**
+**Phase C — Orchestration**
 Clean runners; compact summaries; batch and stream workflows; developer tooling.
 
-**Phase D â€” Canon Design**
+**Phase D — Canon Design**
 Formal promotion criteria; canonical state contract; true future promotion operator behavior.
 
 Prediction and all higher layers remain deferred until Phase D is stable.
@@ -1046,12 +1046,12 @@ A change is acceptable only when it is:
 
 ---
 
-*The layer definitions, boundary rules, naming law, and artifact graph that were previously in this document have been consolidated into `README_MasterConstitution.md`. The four predecessor constitutional files (`README_ArchitectureBoundaryContract.md`, `README_NamingConventions.md`, `README.ArtifactLifecycle.md`, and the prior version of this file) may be archived.*
+*The layer definitions, boundary rules, naming law, and artifact graph that were previously in this document have been consolidated into `README.MasterConstitution.md`. The four predecessor constitutional files (`README_ArchitectureBoundaryContract.md`, `README_NamingConventions.md`, `README.ArtifactLifecycle.md`, and the prior version of this file) may be archived.*
 
 
 
 
-## Appendix â€” Task Intent, Composition Lineage, and Authorship Clarity
+## Appendix — Task Intent, Composition Lineage, and Authorship Clarity
 
 This appendix exists to preserve coherence, lineage, and scope clarity in active development flow.
 
@@ -1088,38 +1088,38 @@ The workflow should prefer explicit task intent.
 
 Examples of explicit task intent:
 
-- â€œPlease writeâ€¦â€
-- â€œPlease draftâ€¦â€
-- â€œPlease makeâ€¦â€
-- â€œPlease reviewâ€¦â€
-- â€œPlease reviseâ€¦â€
-- â€œI intend to writeâ€¦â€
-- â€œI intend to editâ€¦â€
-- â€œI intend to createâ€¦â€
+- “Please write…”
+- “Please draft…”
+- “Please make…”
+- “Please review…”
+- “Please revise…”
+- “I intend to write…”
+- “I intend to edit…”
+- “I intend to create…”
 
 These should be treated as materially different signals.
 
 #### 2.1 Assistant action requests
 If the user says:
-- â€œplease writeâ€¦â€
-- â€œplease draftâ€¦â€
-- â€œplease makeâ€¦â€
+- “please write…”
+- “please draft…”
+- “please make…”
 
 the assistant should interpret this as a request to perform the drafting/composition task directly.
 
 #### 2.2 User-intended authorship
 If the user says:
-- â€œI will writeâ€¦â€
-- â€œI intend to draftâ€¦â€
-- â€œI am going to editâ€¦â€
+- “I will write…”
+- “I intend to draft…”
+- “I am going to edit…”
 
 the assistant should not silently recast that action as assistant authorship.
 
 #### 2.3 Collaborative ambiguity
 Phrases such as:
-- â€œletâ€™s do thisâ€
-- â€œletâ€™s make thatâ€
-- â€œwe should writeâ€¦â€
+- “let’s do this”
+- “let’s make that”
+- “we should write…”
 
 may still be used conversationally, but where authorship or execution matters, the workflow should clarify or infer cautiously rather than collapsing direction into user composition.
 
@@ -1131,7 +1131,7 @@ Artifacts should be described according to how they were actually produced.
 If the assistant composes the text, code, memo, contract, README, or patch block, it should be treated as:
 
 - drafted by the assistant
-- at the userâ€™s direction, within the userâ€™s project authority
+- at the user’s direction, within the user’s project authority
 
 It should not be described as though the user personally authored the line-level content unless the user actually did so.
 
@@ -1171,22 +1171,22 @@ The assistant should avoid avoidable projection of user action.
 
 Examples to avoid when inaccurate:
 
-- â€œyou should write this memoâ€  
+- “you should write this memo”  
   when the practical next step is for the assistant to draft it
 
-- â€œyou wrote this artifactâ€  
+- “you wrote this artifact”  
   when the user only requested or approved it
 
-- â€œyou answered this questionâ€  
+- “you answered this question”  
   when the user has not actually supplied the answer
 
 Preferred alternatives:
 
-- â€œI can draft this memo nowâ€
-- â€œThis decision still needs your answerâ€
-- â€œThis artifact was assistant-drafted at your directionâ€
-- â€œThis section appears user-amendedâ€
-- â€œThis remains undecided and needs your explicit callâ€
+- “I can draft this memo now”
+- “This decision still needs your answer”
+- “This artifact was assistant-drafted at your direction”
+- “This section appears user-amended”
+- “This remains undecided and needs your explicit call”
 
 ### 6. Lineage-conserving phrasing
 
@@ -1223,16 +1223,16 @@ This is especially important for:
 
 For this workflow, the following shorthand should be assumed:
 
-- **â€œPlease write / draft / makeâ€¦â€**  
+- **“Please write / draft / make…”**  
   assistant composes the artifact
 
-- **â€œI will write / I intend to editâ€¦â€**  
+- **“I will write / I intend to edit…”**  
   user composes or revises the artifact
 
-- **â€œReview thisâ€¦â€**  
+- **“Review this…”**  
   assistant evaluates without claiming authorship
 
-- **â€œLetâ€™sâ€¦â€**  
+- **“Let’s…”**  
   collaborative direction signal, but not sufficient on its own to assign line-level authorship where lineage matters
 
 ### 9. Why this matters
@@ -1255,7 +1255,7 @@ It also prevents false compression such as:
 In this workflow:
 
 - the user may own, direct, govern, and approve the system
-- the assistant may draft substantial artifacts at the userâ€™s request
+- the assistant may draft substantial artifacts at the user’s request
 - authorship should follow actual composition
 - authority should follow actual project governance
 - and neither should be collapsed into the other
@@ -1303,7 +1303,7 @@ to record:
 
 ### H.3 Placement-constitution append rule
 
-Append `README.RepoPlacementConstitution.md` only when:
+Append `README.RepoLayout.md` only when:
 
 - a new canonical folder class is legitimized
 - a recurring README subzone is legitimized
@@ -1331,3 +1331,5 @@ Engineer Implementation Return Packets should include, when relevant:
 - and unresolved path/reference drift still left open
 
 These receipts exist to keep workflow accounting honest after bounded packets close.
+
+

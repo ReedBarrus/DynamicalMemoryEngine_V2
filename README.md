@@ -65,9 +65,9 @@ How to read the project
 
 Start here:
 
-README_MasterConstitution.md
-README_WorkflowContract.md
-README_RepoPlacementConstitution.md
+README.MasterConstitution.md
+README.WorkflowContract.md
+README.RepoLayout.md
 
 These define:
 
@@ -79,9 +79,9 @@ repo placement/topology
 
 Then read:
 
-README/Core/README.DeclaredVsMechanizedAudit.md
-README/Core/README.DeterministicInvarianceThreshold.md
-README/Core/README.StructuralMemoryClosureInvariant.md
+README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
+README/Constitution/Identity/README.DeterministicInvarianceThreshold.md
+README/Constitution/Identity/README.StructuralMemoryClosureInvariant.md
 
 These define:
 
@@ -95,11 +95,10 @@ memory-bearing closure posture
 
 For bounded development-workflow support:
 
-README/Core/README.AddressRegistryModel.md
-README/WorkflowMechanization/README.WorkflowMechanizationScope.md
-README/WorkflowMechanization/README.PacketWorkflowChain.md
-README/WorkflowMechanization/README.MechanizationClosureGate.md
-README/WorkflowMechanization/README.StructuralIdentityLaw.md
+README/Constitution/Workflow/README.WorkflowMechanizationScope.md
+README/Constitution/Workflow/README.PacketWorkflowChain.md
+README/Constitution/Mechanization/README.MechanizationClosureGate.md
+README/Constitution/Identity/README.StructuralIdentityLaw.md
 
 These govern how DME develops.
 They do not define runtime meaning.
@@ -108,7 +107,7 @@ Current Door One surface posture
 
 For current capability-status posture across active surfaces, see:
 
-README/Core/README.DeclaredVsMechanizedAudit.md
+README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
 
 Generated outputs are never authority surfaces.
 
@@ -127,5 +126,6 @@ Prefer runtime honesty, inspection honesty, provenance, replay support, and real
 ## Project summary
 
 DME is building a lawful memory substrate that can preserve, replay, inspect, compare, and later trust changing structure over time without collapsing runtime output into truth, display into authority, or preservation into canon.
+
 
 

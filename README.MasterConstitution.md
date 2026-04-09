@@ -1,4 +1,4 @@
-# README_MasterConstitution.md
+# README.MasterConstitution.md
 # Dynamical Memory Engine_V2 — Master Constitution
 Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 ---
@@ -7,7 +7,7 @@ Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
 This document is the single constitutional authority for the Dynamical Memory Engine.
 
-The workflow contract (`README_WorkflowContract.md`) governs roles, development loop, and escalation. It is a peer document, not subordinate to this one.
+The workflow contract (`README.WorkflowContract.md`) governs roles, development loop, and escalation. It is a peer document, not subordinate to this one.
 
 **Authority resolution rule:** If any operator doc, README, or JSDoc comment conflicts with this document, this document wins. If this document and the Workflow Contract conflict on a governance matter, Reed decides.
 
@@ -120,3 +120,4 @@ If any answer is unclear, the feature is not yet ready.
 The system must rise from grounded signal reality into cognition — not descend from abstraction into convenience. All higher intelligence must inherit lawfully from lower layers. That is what this architecture protects.
 
 ---
+
