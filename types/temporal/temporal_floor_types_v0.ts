@@ -1,7 +1,8 @@
-// Dynamical Memory Engine — Temporal Floor Types v0
+// Dynamical Memory Engine — Temporal Floor Types v0.1
 //
 // Purpose:
 // - define the trusted TypeScript object families for the TemporalRegime rebuild floor
+// - import shared primitives from temporal_primitives_v0
 // - encode P0–P3 primary artifacts
 // - encode V0–V3, L0–L3, A0–A3, D0–D3 companion families
 // - encode Plane-P0, Plane-P1, Plane-P2, Plane-P3, Plane-D3 read-side projections
@@ -12,15 +13,44 @@
 // - planes are read-side projections, not runtime lanes
 // - T0–T3 remain declared but deferred placeholders
 
+import type {
+    PrimaryHandle,
+    CompanionHandle,
+    AudioSourceKind,
+    AudioModalityRef,
+    AdmissionMode,
+    ValueEncoding,
+    TimestampMode,
+    AlignmentMode,
+    InterpolationMode,
+    GapPolicy,
+    EdgePolicy,
+    GridSource,
+    WindowFunction,
+    WindowBoundaryPolicy,
+    SegmentationMode,
+    TransformKind,
+    TransformDomain,
+    NormalizationMode,
+    NumericPrecision,
+    BinGenerationMode,
+    DeferredTertiaryStatus,
+    A0NonClaims,
+    A1NonClaims,
+    A2NonClaims,
+    A3NonClaims,
+    TemporalXAxis,
+    SignalYAxis,
+    FrequencyXAxis,
+    ComplexComponentYAxis,
+    DerivedDiagnosticYAxis,
+    SpectralBinCartesian,
+    SpectralDiagnosticValue,
+} from "./temporal_primitives_v0";
+
 // -----------------------------------------------------------------------------
 // Shared base families
 // -----------------------------------------------------------------------------
-
-export type Lane = "P" | "V" | "L" | "A" | "D" | "T";
-
-export type PrimaryHandle = string;
-export type CompanionHandle = string;
-export type PlaneHandle = string;
 
 export interface PrimaryBase {
     lane: "P";
@@ -63,50 +93,12 @@ export interface DiagnosticsBase extends CompanionBase {
 export interface DeferredTertiaryBase extends CompanionBase {
     lane: "T";
     tertiary_class: string;
-    status: "declared_but_deferred";
+    status: DeferredTertiaryStatus;
 }
 
 export interface PlaneBase {
     plane_class: string;
     primary_handle: PrimaryHandle;
-}
-
-// -----------------------------------------------------------------------------
-// Shared primitive/support shapes
-// -----------------------------------------------------------------------------
-
-export type AudioSourceKind = "wav" | "live_stream";
-export type AudioModalityRef = "audio";
-export type ValueEncoding = "pcm16" | "float32" | "float64" | "unknown";
-export type TimestampMode = "source_provided" | "capture_assigned";
-
-export type AlignmentMode = "grid_align" | "resample" | "interpolate_resample";
-export type InterpolationMode = "none" | "nearest" | "linear" | "sinc" | "other_declared";
-export type GapPolicy = "none" | "hold" | "linear_fill" | "drop" | "other_declared";
-export type EdgePolicy = "truncate" | "pad" | "hold" | "other_declared";
-export type GridSource = "declared" | "derived_from_p0";
-
-export type WindowFunction = "hann" | "hamming" | "rectangular" | "other_declared";
-export type WindowBoundaryPolicy = "truncate" | "pad" | "drop" | "other_declared";
-export type SegmentationMode = "sliding" | "fixed" | "other_declared";
-
-export type TransformKind = "dft" | "fft" | "rfft" | "other_declared";
-export type TransformDomain = "complex_cartesian";
-export type NormalizationMode = "none" | "unitary" | "forward" | "inverse" | "other_declared";
-export type NumericPrecision = "float32" | "float64" | "other_declared";
-export type BinGenerationMode = "full" | "half_spectrum" | "other_declared";
-
-export interface SpectralBinCartesian {
-    k: number;
-    f: number;
-    re: number;
-    im: number;
-}
-
-export interface SpectralDiagnosticValue {
-    k: number;
-    f: number;
-    value: number;
 }
 
 // -----------------------------------------------------------------------------
@@ -147,10 +139,11 @@ export interface L0_IngestLineage extends LineageBase {
 
 export interface A0_IngestAccounting extends AccountingBase {
     accounting_class: "A0_IngestAccounting";
-    admission_mode: "file_decode" | "stream_capture";
+    admission_mode: AdmissionMode;
     value_encoding: ValueEncoding;
     timestamp_mode: TimestampMode;
     declared_mutation: "none";
+    non_claims: A0NonClaims;
 }
 
 export interface D0_IngestDiagnostics extends DiagnosticsBase {
@@ -171,8 +164,8 @@ export interface T0_Deferred extends DeferredTertiaryBase {
 
 export interface PlaneP0TemporalView extends PlaneBase {
     plane_class: "PlaneP0TemporalView";
-    x_axis: "time";
-    y_axis: "signal";
+    x_axis: TemporalXAxis;
+    y_axis: SignalYAxis;
     t: number[];
     x: number[];
 }
@@ -219,7 +212,7 @@ export interface A1_ClockAlignApplication extends AccountingBase {
     gap_policy: GapPolicy;
     edge_policy: EdgePolicy;
     grid_source: GridSource;
-    non_claims: ["not_raw_source", "not_identity_preserving_by_default"];
+    non_claims: A1NonClaims;
 }
 
 export interface D1_ClockAlignDiagnostics extends DiagnosticsBase {
@@ -241,8 +234,8 @@ export interface T1_Deferred extends DeferredTertiaryBase {
 
 export interface PlaneP1TemporalView extends PlaneBase {
     plane_class: "PlaneP1TemporalView";
-    x_axis: "time";
-    y_axis: "signal";
+    x_axis: TemporalXAxis;
+    y_axis: SignalYAxis;
     grid_t0: number;
     Fs: number;
     n: number;
@@ -292,7 +285,7 @@ export interface A2_WindowApplication extends AccountingBase {
     hop_n: number;
     boundary_policy: WindowBoundaryPolicy;
     segmentation_mode: SegmentationMode;
-    non_claims: ["not_raw_segment", "not_selection_or_quality_by_default"];
+    non_claims: A2NonClaims;
 }
 
 export interface D2_WindowDiagnostics extends DiagnosticsBase {
@@ -310,8 +303,8 @@ export interface T2_Deferred extends DeferredTertiaryBase {
 
 export interface PlaneP2TemporalView extends PlaneBase {
     plane_class: "PlaneP2TemporalView";
-    x_axis: "time";
-    y_axis: "signal";
+    x_axis: TemporalXAxis;
+    y_axis: SignalYAxis;
     grid_t0: number;
     Fs: number;
     n: number;
@@ -340,7 +333,8 @@ export interface V3_TransformValidation extends ValidationBase {
         n_positive: boolean;
         df_positive: boolean;
         bins_present: boolean;
-        bins_numeric: boolean;
+        bins_have_required_fields: boolean;
+        bins_values_numeric: boolean;
         window_id_present: boolean;
         upstream_primary_handle_present: boolean;
     };
@@ -362,7 +356,7 @@ export interface A3_TransformApplication extends AccountingBase {
     normalization_mode: NormalizationMode;
     numeric_precision: NumericPrecision;
     bin_generation_mode: BinGenerationMode;
-    non_claims: ["not_interpretation", "not_quality_by_default", "not_polar_view_by_default"];
+    non_claims: A3NonClaims;
 }
 
 export interface D3_TransformDiagnostics extends DiagnosticsBase {
@@ -386,8 +380,8 @@ export interface T3_Deferred extends DeferredTertiaryBase {
 
 export interface PlaneP3SpectralView extends PlaneBase {
     plane_class: "PlaneP3SpectralView";
-    x_axis: "frequency";
-    y_axis: "complex_component";
+    x_axis: FrequencyXAxis;
+    y_axis: ComplexComponentYAxis;
     Fs: number;
     n: number;
     df: number;
@@ -397,12 +391,52 @@ export interface PlaneP3SpectralView extends PlaneBase {
 export interface PlaneD3DiagnosticView extends PlaneBase {
     plane_class: "PlaneD3DiagnosticView";
     diagnostics_handle: CompanionHandle;
-    x_axis: "frequency";
-    y_axis: "derived_diagnostic_value";
+    x_axis: FrequencyXAxis;
+    y_axis: DerivedDiagnosticYAxis;
     magnitude?: SpectralDiagnosticValue[];
     phase?: SpectralDiagnosticValue[];
     nan_detected?: boolean;
     inf_detected?: boolean;
+}
+
+// -----------------------------------------------------------------------------
+// Shared emission bundles
+// -----------------------------------------------------------------------------
+
+export interface P0EmissionBundle {
+    primary: P0_IngestFrame;
+    validation: V0_IngestValidation;
+    lineage: L0_IngestLineage;
+    accounting: A0_IngestAccounting;
+    diagnostics: D0_IngestDiagnostics;
+    tertiary: T0_Deferred;
+}
+
+export interface P1EmissionBundle {
+    primary: P1_ClockAlignedFrame;
+    validation: V1_ClockAlignValidation;
+    lineage: L1_ClockAlignLineage;
+    accounting: A1_ClockAlignApplication;
+    diagnostics: D1_ClockAlignDiagnostics;
+    tertiary: T1_Deferred;
+}
+
+export interface P2EmissionBundle {
+    primary: P2_WindowFrame;
+    validation: V2_WindowValidation;
+    lineage: L2_WindowLineage;
+    accounting: A2_WindowApplication;
+    diagnostics: D2_WindowDiagnostics;
+    tertiary: T2_Deferred;
+}
+
+export interface P3EmissionBundle {
+    primary: P3_SpectralFrame;
+    validation: V3_TransformValidation;
+    lineage: L3_TransformLineage;
+    accounting: A3_TransformApplication;
+    diagnostics: D3_TransformDiagnostics;
+    tertiary: T3_Deferred;
 }
 
 // -----------------------------------------------------------------------------
@@ -451,6 +485,12 @@ export type TemporalPlane =
     | PlaneP2TemporalView
     | PlaneP3SpectralView
     | PlaneD3DiagnosticView;
+
+export type TemporalEmissionBundle =
+    | P0EmissionBundle
+    | P1EmissionBundle
+    | P2EmissionBundle
+    | P3EmissionBundle;
 
 export type TemporalFloorObject =
     | TemporalPrimary

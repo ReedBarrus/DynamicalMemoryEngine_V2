@@ -12,7 +12,6 @@ It does **not** override:
 - `README.WorkflowContract.md`
 - `README.RebuildPosture.md`
 - the active TemporalRegime floor contracts
-- any later operator or validator contracts
 
 Its purpose is narrower:
 
@@ -44,7 +43,8 @@ Without a simple active layout, implementation helpers may reintroduce drift thr
 - helper sprawl,
 - plane/runtime collapse,
 - validator/operator collapse,
-- or law/runtime cohabitation.
+- law/runtime cohabitation,
+- or inactive regime bleed-through.
 
 This note exists to stop that drift before packetized implementation begins.
 
@@ -79,8 +79,8 @@ The active V2 rebuild layout currently recognizes:
 - `planes/`
 - `types/`
 - `validators/`
-- `README/`
 - `packets/`
+- `README/`
 - `test_signal/`
 
 Additional folders may be introduced later only when a bounded packet justifies them.
@@ -153,7 +153,7 @@ It is where:
 - primary artifact families
 - companion families
 - deferred placeholders
-- primitive enums / unions
+- primitive unions/enums/literals
 - plane types
 
 are defined.
@@ -196,7 +196,26 @@ One-line summary:
 
 ---
 
-### 4.5 `README/`
+### 4.5 `packets/`
+
+Purpose:
+
+bounded implementation movement objects
+
+This folder contains packet specs, packet return records, and related bounded implementation artifacts where needed.
+
+Packets are workflow instruments.
+
+They are not runtime code.
+They are not law by themselves.
+
+One-line summary:
+
+**`packets/` is for packetized development movement.**
+
+---
+
+### 4.6 `README/`
 
 Purpose:
 
@@ -218,25 +237,6 @@ It must not become a runtime code surface.
 One-line summary:
 
 **`README/` is the law bank, not the runtime.**
-
----
-
-### 4.6 `packets/`
-
-Purpose:
-
-bounded implementation movement objects
-
-This folder contains packet specs, packet return records, and related bounded implementation artifacts where needed.
-
-Packets are workflow instruments.
-
-They are not runtime code.
-They are not law by themselves.
-
-One-line summary:
-
-**`packets/` is for packetized development movement.**
 
 ---
 
@@ -264,18 +264,18 @@ One-line summary:
 
 ## 5. Regime subfolder rule
 
-The following subfolder grammar is currently recognized inside the implementation folders:
-
-- `temporal/`
-- `structural/`
-- `symbolic/`
-
-These regime subfolders may appear inside:
+The following subfolder grammar is currently recognized inside:
 
 - `operators/`
 - `planes/`
 - `types/`
 - `validators/`
+
+Recognized regimes:
+
+- `temporal/`
+- `structural/`
+- `symbolic/`
 
 Current active implementation scope is:
 
@@ -334,7 +334,7 @@ Validation logic must remain distinct from diagnostics and distinct from operato
 
 ### Rule 4 — Types stay in `types/`
 
-Shared shapes, literals, enums, and type families belong in `types/`, not scattered across operators.
+Shared shapes, literals, primitives, and type families belong in `types/`, not scattered across operators.
 
 ### Rule 5 — README law stays in `README/`
 
@@ -348,25 +348,14 @@ Implementation movement objects must remain separate from runtime source and sep
 
 ## 8. Initial file placement guidance
 
-The current trusted TemporalRegime floor type file belongs in:
+Current trusted TemporalRegime placement:
 
 - `types/temporal/temporal_floor_types_v0.ts`
-
-If primitives are split, the preferred companion placement is:
-
-- `types/temporal/temporal_primitives_v0.ts`
-
-If validators are introduced next, preferred placement is:
-
-- `validators/temporal/`
-
-If operators are introduced after validators, preferred placement is:
-
-- `operators/temporal/`
-
-If read-side planes are later implemented as code surfaces, preferred placement is:
-
-- `planes/temporal/`
+- `types/temporal/temporal_primitives_v0.ts` if primitives are split
+- `validators/temporal/` for floor validators
+- `operators/temporal/` for runtime operator code
+- `planes/temporal/` for read-side plane code
+- `packets/temporal/` for packet artifacts
 
 ---
 
@@ -394,13 +383,34 @@ The following decisions are currently locked for the first TemporalRegime type s
 3. **`D3.derived_geometry` is hard-gated to `magnitude` and `phase` only**
 4. **planes are typed early and remain read-side only**
 5. **`T0–T3` placeholders remain declared but deferred**
-6. **primitive splitting is allowed and may be preferred where it improves legibility and reduces repeated touch surfaces**
+6. **primitive splitting is allowed and preferred where it improves legibility and reduces repeated touch surfaces**
 
 These decisions should not be re-opened casually during early implementation.
 
 ---
 
-## 11. Non-goals
+## 11. Packet naming pattern
+
+The initial packet naming pattern is:
+
+`packets/<regime>/PKT-<SEAM>-<NNN>.md`
+
+Examples:
+
+- `packets/temporal/PKT-TEMPORAL-TYPES-001.md`
+- `packets/temporal/PKT-TEMPORAL-VALIDATORS-001.md`
+- `packets/temporal/PKT-INGEST-001.md`
+
+If spec/return splitting is introduced later, preferred naming is:
+
+- `PKT-TEMPORAL-TYPES-001.spec.md`
+- `PKT-TEMPORAL-TYPES-001.return.md`
+
+Flat file packet layout is preferred initially.
+
+---
+
+## 12. Non-goals
 
 This note does not yet define:
 
@@ -414,6 +424,6 @@ Those require later bounded packets.
 
 ---
 
-## 12. One-line operational summary
+## 13. One-line operational summary
 
 **Repo Layout v2 defines a simple rebuild placement grammar in which operators, planes, types, validators, packets, and law remain explicitly separate, with active implementation currently limited to the TemporalRegime subtree.**
