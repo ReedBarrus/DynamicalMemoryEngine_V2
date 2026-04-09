@@ -274,14 +274,14 @@ The following subfolder grammar is currently recognized inside:
 Recognized regimes:
 
 - `temporal/`
-- `structural/`
+- `support/`
 - `symbolic/`
 
 Current active implementation scope is:
 
 - `temporal/`
 
-The existence of `structural/` and `symbolic/` does **not** activate those regimes.
+The existence of `support/` and `symbolic/` does **not** activate those regimes.
 They are recognized placement surfaces only.
 
 One-line summary:
@@ -418,7 +418,7 @@ This note does not yet define:
 - product packaging layout,
 - build tooling layout,
 - deployment layout,
-- or DerivedRegime / SymbolicRegime implementation specifics.
+- or SupportRegime / SymbolicRegime implementation specifics.
 
 Those require later bounded packets.
 

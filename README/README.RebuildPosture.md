@@ -162,7 +162,7 @@ Examples:
 - `.wav`
 - sensor output
 
-### B. DerivedRegime
+### B. SupportRegime
 Already-derived but still structural objects.
 
 Examples:

@@ -30,7 +30,7 @@ It does **not** govern:
 
 * runtime truth by itself,
 * canon posture,
-* DerivedRegime activation,
+* SupportRegime activation,
 * SymbolicRegime activation,
 * or full long-run project roadmap authority.
 
@@ -206,7 +206,9 @@ Operator expectations:
 * preserve lane distinction
 * throw only on hard failure or impossible misuse
 * stay below semantic interpretation
-* stay below DerivedRegime and SymbolicRegime pressure
+* stay below SupportRegime and SymbolicRegime pressure
+
+Initial TemporalRegime primary-chain operators consume only the upstream primary artifact. Full floor bundles are emitted outward for inspection and adjacent use, but are not used as the default primary-chain input during the initial mechanization phase
 
 ---
 
@@ -236,7 +238,7 @@ These remain lawful future work, but not first-packet work.
 
 The following items are recognized but explicitly deferred:
 
-### 9.1 DerivedRegime implementation
+### 9.1 SupportRegime implementation
 
 Recognized in layout only.
 Not active implementation scope.
@@ -262,7 +264,7 @@ Possible future planes for:
 
 remain deferred until the primary validator/operator floor is stable.
 
-### 9.5 Post-transform structural regime
+### 9.5 Post-transform support regime
 
 Recognized as the next likely expansion pressure.
 Not active until TemporalRegime operator floor is mechanized and tested.
@@ -279,7 +281,7 @@ Mechanized execution of them remains deferred unless explicitly packeted.
 The first execution packets should **not** attempt to:
 
 * implement multiple operators at once
-* widen into structural regime design
+* widen into support regime design
 * build semantic overlays
 * build broad rendering infrastructure
 * solve all plane implementation
