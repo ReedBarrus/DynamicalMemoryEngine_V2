@@ -78,11 +78,14 @@ If a folder begins answering more than one job, the layout has started drifting.
 
 The active V2 rebuild layout currently recognizes:
 
+- `app/`
 - `operators/`
+- `execution/`
 - `planes/`
 - `types/`
 - `validators/`
 - `packets/`
+- `scripts/`
 - `README/`
 - `test_signal/`
 
@@ -127,7 +130,7 @@ One-line summary:
 
 ---
 
-### 4.11 `execution/`
+### 4.2 `execution/`
 
 Purpose:
 
@@ -158,15 +161,51 @@ This folder must not become:
 
 Expected current internal posture:
 
-- `execution/intake/`
-- `execution/orchestration/`
-- execution-surface implementation files may live directly under `execution/` when they are host surfaces rather than subfamilies
+- `execution/intake/` for bounded source-intake surfaces
+- `execution/orchestration/` for bounded orchestrators and execution coordination
+- execution-surface implementation files may live directly under `execution/` when they are root execution hosts rather than subfamilies
 
 One-line summary:
 
 **`execution/` is for source intake, orchestration, execution hosting, and execution-local routing — not runtime transforms, not validators, and not read-side rendering.**
 
-### 4.2 `planes/`
+---
+
+### 4.3 `app/`
+
+Purpose:
+
+browser-facing application shell implementation only
+
+This folder contains bounded application-shell code such as:
+
+- browser entry surfaces
+- app-shell composition
+- user-facing host wiring
+- and shell-local UI structure that sits above execution and rendering seams
+
+It exists to keep the browser/app shell separate from:
+
+- execution seam implementation
+- runtime transform operators
+- validators
+- README law surfaces
+- and packet workflow artifacts
+
+This folder must not become:
+
+- a second execution substrate
+- a runtime transform folder
+- a semantic authority layer
+- or a mixed archive of unrelated helper code
+
+One-line summary:
+
+**`app/` is for browser-facing app shell code, not intake, not orchestration, and not runtime operator logic.**
+
+---
+
+### 4.4 `planes/`
 
 Purpose:
 
@@ -194,7 +233,7 @@ One-line summary:
 
 ---
 
-### 4.3 `types/`
+### 4.5 `types/`
 
 Purpose:
 
@@ -224,7 +263,7 @@ One-line summary:
 
 ---
 
-### 4.4 `validators/`
+### 4.6 `validators/`
 
 Purpose:
 
@@ -250,7 +289,7 @@ One-line summary:
 
 ---
 
-### 4.5 `packets/`
+### 4.7 `packets/`
 
 Purpose:
 
@@ -270,7 +309,35 @@ One-line summary:
 
 ---
 
-### 4.6 `README/`
+### 4.8 `scripts/`
+
+Purpose:
+
+bounded local runtime and workflow helper scripts
+
+This folder contains narrow local scripts that support the active rebuild.
+
+Examples:
+
+- launch helpers,
+- bounded fixture-prep scripts,
+- local developer utilities,
+- and compact runtime-support scripts that do not belong inside the core execution substrate.
+
+It must not become:
+
+- a second runtime implementation tree,
+- a dumping ground for unrelated experiments,
+- a replacement for `execution/`, `operators/`, or `planes/`,
+- or a hidden documentation bank.
+
+One-line summary:
+
+**`scripts/` is for bounded helper scripts and local utilities, not core runtime seam implementation.**
+
+---
+
+### 4.9 `README/`
 
 Purpose:
 
@@ -292,7 +359,7 @@ One-line summary:
 
 ---
 
-### 4.7 `test_signal/`
+### 4.10 `test_signal/`
 
 Purpose:
 
@@ -573,6 +640,16 @@ Accordingly, the first active implementation surfaces should appear primarily un
 - `planes/temporal/`
 - `packets/temporal/`
 
+and the first active execution-facing implementation surfaces should appear primarily under:
+
+- `execution/intake/`
+- `execution/orchestration/`
+- `execution/` for root execution hosts where a host surface does not belong to a narrower execution subfolder
+
+and the first active browser-facing application shell surfaces should appear primarily under:
+
+- `app/`
+
 and the first active temporal documentation surfaces should appear primarily under:
 
 - `README/Core/Regimes/Temporal/Contracts/`
@@ -607,11 +684,23 @@ Shared shapes, literals, primitives, and type families belong in `types/`, not s
 
 Implementation movement objects must remain separate from runtime source and separate from law.
 
-### Rule 6 - README law stays in `README/`
+### Rule 6 - Execution-facing seams stay in `execution/`
+
+Source intake, orchestration, execution hosting, and execution-local routing should not begin life in `operators/`, `planes/`, `validators/`, or `scripts/`.
+
+### Rule 7 - App shell stays in `app/`
+
+Browser-facing app hosts, UI composition, and shell routing should remain separate from execution seams, operators, validators, and README law.
+
+### Rule 8 - Scripts stay in `scripts/`
+
+Bounded helper scripts and local utilities should remain separate from core runtime seam implementation and separate from README law.
+
+### Rule 9 - README law stays in `README/`
 
 Governance and architecture notes must remain explicit and inspectable, not embedded as runtime comments only.
 
-### Rule 7 - README placement should follow document role first
+### Rule 10 - README placement should follow document role first
 
 A workflow instrument should not be placed under `Core/` merely because it discusses a core seam.
 
@@ -619,7 +708,7 @@ A roadmap note should not be placed under `Constitution/` merely because it soun
 
 A diagnostic or experiment note should not be placed under `Operational/` merely because it is currently useful.
 
-### Rule 8 - Archive is not active authority
+### Rule 11 - Archive is not active authority
 
 If a note is archived or retained only for local/personal/non-active use, it should not remain in an active authority branch.
 
@@ -635,6 +724,11 @@ Current trusted TemporalRegime runtime placement:
 - `operators/temporal/` for runtime operator code
 - `planes/temporal/` for read-side plane code
 - `packets/temporal/` for packet artifacts
+- `execution/intake/` for source-intake implementation
+- `execution/orchestration/` for orchestrator and execution-coordination implementation
+- `execution/` for root execution hosts when they are not a narrower execution subfamily
+- `app/` for browser-facing app-shell code and UI host composition
+- `scripts/` for bounded helper scripts and local runtime-support utilities
 
 Current trusted temporal documentation placement:
 
