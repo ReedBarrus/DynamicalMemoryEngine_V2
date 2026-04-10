@@ -373,88 +373,6 @@ appNode.innerHTML = `
         </div>
       </section>
 
-      <section class="control-region" aria-labelledby="operator-region-title">
-        <div class="control-label">Operator</div>
-        <h2 id="operator-region-title" class="control-title">Operator navigation</h2>
-        <p class="control-copy">
-          Operator selection is shell-local in this packet. The live run path remains fixed to
-          <code>P3 — Transform</code>.
-        </p>
-        <div class="operator-stack" role="list" aria-label="Temporal Operator Exposure" data-operator-stack></div>
-        <div class="operator-note" data-operator-note>
-          Selected operator posture is display-only until operator-aware runtime requests are added lawfully.
-        </div>
-      </section>
-
-      <section class="control-region" aria-labelledby="frame-region-title">
-        <div class="control-label">Frame</div>
-        <h2 id="frame-region-title" class="control-title">Frame navigation</h2>
-        <p class="control-copy">
-          Frame controls stay bounded to the currently exposed local frame subset only. This packet does not fetch
-          additional runtime frames.
-        </p>
-        <div class="frame-nav-row">
-          <button type="button" class="shell-button" data-frame-prev-button disabled>
-            Prev
-          </button>
-          <label class="frame-input-label" for="frame-index-input">Frame Index</label>
-          <input
-            id="frame-index-input"
-            data-frame-input
-            class="frame-input"
-            type="number"
-            min="0"
-            step="1"
-            inputmode="numeric"
-            disabled
-          />
-          <button type="button" class="shell-button" data-frame-next-button disabled>
-            Next
-          </button>
-        </div>
-        <div class="frame-count-row">
-          <span class="frame-count-label">Frame Index / Total</span>
-          <span class="frame-count-value" data-frame-count>-- / --</span>
-        </div>
-        <dl class="detail-list">
-          <div class="detail-item">
-            <dt>Global Context</dt>
-            <dd data-frame-global-context>Fixed run target awaiting run</dd>
-          </div>
-          <div class="detail-item">
-            <dt>Local Context</dt>
-            <dd data-frame-local-context>Awaiting exposed frame context</dd>
-          </div>
-        </dl>
-        <div class="status-card status-card-neutral" data-frame-status>
-          <div class="status-heading">Frame unavailable</div>
-          <p class="status-detail">Run the fixed inspection request to expose a lawful local frame context.</p>
-        </div>
-      </section>
-
-      <section class="control-region" aria-labelledby="plane-mode-region-title">
-        <div class="control-label">Plane Mode</div>
-        <h2 id="plane-mode-region-title" class="control-title">Plane mode navigation</h2>
-        <p class="control-copy">
-          Plane mode selection is operator-dependent and shell-local in this packet. It does not change the fixed
-          runtime plane request.
-        </p>
-        <div class="plane-mode-stack" role="list" aria-label="Plane Mode Exposure" data-plane-mode-stack></div>
-        <dl class="detail-list">
-          <div class="detail-item">
-            <dt>Global Context</dt>
-            <dd data-plane-global-context>Fixed runtime plane awaiting run</dd>
-          </div>
-          <div class="detail-item">
-            <dt>Local Context</dt>
-            <dd data-plane-local-context>Awaiting selected operator plane semantics</dd>
-          </div>
-        </dl>
-        <div class="status-card status-card-neutral" data-plane-status>
-          <div class="status-heading">Plane mode bounded</div>
-          <p class="status-detail">Select an operator to expose the lawful shell-local plane modes for that surface.</p>
-        </div>
-      </section>
     </aside>
 
     <main class="inspection-pane" aria-label="Main Inspection Pane">
@@ -473,31 +391,127 @@ appNode.innerHTML = `
         </div>
         <div class="context-item">
           <span class="context-key">Frame</span>
-          <span class="context-value" data-context-frame>Awaiting run</span>
+          <span class="context-value" data-context-frame>Frame 0 / fixed runtime target</span>
         </div>
         <div class="context-item">
           <span class="context-key">Plane Mode</span>
-          <span class="context-value" data-context-plane>Fixed P3 spectral</span>
+          <span class="context-value" data-context-plane>PlaneP3SpectralView / fixed runtime plane</span>
         </div>
       </header>
 
-      <section class="inspection-stage" aria-labelledby="inspection-stage-title">
-        <div class="inspection-kicker">Main Inspection Pane</div>
-        <h2 id="inspection-stage-title" class="inspection-title">Render-ready inspection response</h2>
-        <p class="inspection-copy" data-inspection-copy>
-          Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. No frame or plane controls
-          are active in this packet.
-        </p>
-        <div class="inspection-status-shell" data-main-status></div>
-        <div class="inspection-result-shell" data-main-result>
-          <div class="inspection-placeholder" aria-hidden="true">
-            <div class="placeholder-grid"></div>
-            <div class="placeholder-frame">
-              <span>Inspection output awaiting run</span>
+      <div class="inspection-body">
+        <section class="inspection-stage" aria-labelledby="inspection-stage-title">
+          <div class="inspection-kicker">Main Inspection Pane</div>
+          <h2 id="inspection-stage-title" class="inspection-title">Render-ready inspection response</h2>
+          <p class="inspection-copy" data-inspection-copy>
+            Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. Shell-local navigation
+            remains adjacent to this pane and does not rewrite runtime targeting.
+          </p>
+          <div class="inspection-status-shell" data-main-status></div>
+          <div class="inspection-result-shell" data-main-result>
+            <div class="inspection-placeholder" aria-hidden="true">
+              <div class="placeholder-grid"></div>
+              <div class="placeholder-frame">
+                <span>Inspection output awaiting run</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <aside class="local-navigation" aria-label="Local Navigation">
+          <div class="local-navigation-header">
+            <div class="inspection-kicker">Shell-Local Navigation</div>
+            <h2 class="local-navigation-title">Operator, frame, and plane posture</h2>
+            <p class="local-navigation-copy">
+              These controls remain visibly local to the inspection pane. They do not change the fixed bridge-routed
+              runtime request in this packet.
+            </p>
+          </div>
+
+          <section class="control-region" aria-labelledby="operator-region-title">
+            <div class="control-label">Operator</div>
+            <h2 id="operator-region-title" class="control-title">Operator navigation</h2>
+            <p class="control-copy">
+              Operator selection is shell-local in this packet. The live run path remains fixed to
+              <code>P3 — Transform</code>.
+            </p>
+            <div class="operator-stack" role="list" aria-label="Temporal Operator Exposure" data-operator-stack></div>
+            <div class="operator-note" data-operator-note>
+              Selected operator posture is display-only until operator-aware runtime requests are added lawfully.
+            </div>
+          </section>
+
+          <section class="control-region" aria-labelledby="frame-region-title">
+            <div class="control-label">Frame</div>
+            <h2 id="frame-region-title" class="control-title">Frame navigation</h2>
+            <p class="control-copy">
+              Frame controls stay bounded to the currently exposed local frame subset only. This packet does not fetch
+              additional runtime frames.
+            </p>
+            <div class="frame-nav-row">
+              <button type="button" class="shell-button" data-frame-prev-button disabled>
+                Prev
+              </button>
+              <label class="frame-input-label" for="frame-index-input">Frame Index</label>
+              <input
+                id="frame-index-input"
+                data-frame-input
+                class="frame-input"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+                disabled
+              />
+              <button type="button" class="shell-button" data-frame-next-button disabled>
+                Next
+              </button>
+            </div>
+            <div class="frame-count-row">
+              <span class="frame-count-label">Frame Index / Total</span>
+              <span class="frame-count-value" data-frame-count>-- / --</span>
+            </div>
+            <dl class="detail-list">
+              <div class="detail-item">
+                <dt>Global Context</dt>
+                <dd data-frame-global-context>Fixed run target awaiting run</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Local Context</dt>
+                <dd data-frame-local-context>Awaiting exposed frame context</dd>
+              </div>
+            </dl>
+            <div class="status-card status-card-neutral" data-frame-status>
+              <div class="status-heading">Frame unavailable</div>
+              <p class="status-detail">Run the fixed inspection request to expose a lawful local frame context.</p>
+            </div>
+          </section>
+
+          <section class="control-region" aria-labelledby="plane-mode-region-title">
+            <div class="control-label">Plane Mode</div>
+            <h2 id="plane-mode-region-title" class="control-title">Plane mode navigation</h2>
+            <p class="control-copy">
+              Plane mode selection is operator-dependent and shell-local in this packet. It does not change the fixed
+              runtime plane request.
+            </p>
+            <div class="plane-mode-stack" role="list" aria-label="Plane Mode Exposure" data-plane-mode-stack></div>
+            <dl class="detail-list">
+              <div class="detail-item">
+                <dt>Global Context</dt>
+                <dd data-plane-global-context>Fixed runtime plane awaiting run</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Local Context</dt>
+                <dd data-plane-local-context>Awaiting selected operator plane semantics</dd>
+              </div>
+            </dl>
+            <div class="status-card status-card-neutral" data-plane-status>
+              <div class="status-heading">Plane mode bounded</div>
+              <p class="status-detail">Select an operator to expose the lawful shell-local plane modes for that surface.</p>
+            </div>
+          </section>
+        </aside>
+      </div>
     </main>
   </div>
 `;
@@ -1320,22 +1334,17 @@ function renderShell(): void {
 
     contextSourceNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
     contextRegimeNode.textContent = `${activeRegime.label} / ${activeRegime.statusLabel.toLowerCase()}`;
-    contextOperatorNode.textContent = `${runtimeOperator.label} / global context`;
-    contextFrameNode.textContent =
-        frameContext.selectedFrameIndex === null || frameContext.exposedFrameCount === null
-            ? "Awaiting local context"
-            : `Frame ${String(frameContext.selectedFrameIndex)} / ${String(frameContext.exposedFrameCount)} exposed / local context`;
-    contextPlaneNode.textContent = `${planeContext.runtimePlaneClass} / ${getSelectedPlaneModeDescriptor(
-        state.selectedOperatorId,
-        state.selectedPlaneModeId
-    ).label} / shell-local mode`;
+    contextOperatorNode.textContent = `${runtimeOperator.label} / fixed runtime target`;
+    contextFrameNode.textContent = `Frame ${String(FIXED_INSPECTION_REQUEST_V0.stage_selection.frame_index)} / fixed runtime target`;
+    contextPlaneNode.textContent = `${planeContext.runtimePlaneClass} / fixed runtime plane`;
 
     inspectionCopyNode.innerHTML =
         state.selectedSource === null
-            ? `Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. No frame or plane controls
-               are active in this packet.`
+            ? `Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. Shell-local navigation
+               stays adjacent to the main pane and does not rewrite runtime targeting.`
             : `Source handoff is ready. Run stays manual and routes through the Local Host Bridge v0, not directly into
-               execution seams from <code>app/</code>.`;
+               execution seams from <code>app/</code>. Local navigation remains display-local unless the current lawful
+               result supports the selected view.`;
 
     renderStatusCard(sourceStatusNode, state.sourceStatus);
     renderStatusCard(runStatusNode, state.runStatus);
