@@ -1,0 +1,232 @@
+:root {
+    color-scheme: light;
+    --shell-bg: #efe8dc;
+    --shell-ink: #201915;
+    --shell-muted: #6e5f54;
+    --shell-border: #c8baa5;
+    --shell-panel: rgba(255, 252, 246, 0.84);
+    --shell-panel-strong: #f8f3ea;
+    --shell-shadow: 0 22px 48px rgba(69, 54, 43, 0.12);
+    --shell-accent: #87684e;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+    min-height: 100%;
+}
+
+body.shell-body {
+    margin: 0;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 38%),
+        linear-gradient(180deg, #f5efe6 0%, var(--shell-bg) 100%);
+    color: var(--shell-ink);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.shell-host {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(270px, 320px) minmax(0, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.control-rail,
+.inspection-pane {
+    border: 1px solid var(--shell-border);
+    background: var(--shell-panel);
+    box-shadow: var(--shell-shadow);
+}
+
+.control-rail {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 18px;
+}
+
+.rail-header {
+    padding: 4px 2px 12px;
+    border-bottom: 1px solid rgba(135, 104, 78, 0.22);
+}
+
+.rail-kicker,
+.control-label,
+.inspection-kicker,
+.context-key {
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--shell-muted);
+}
+
+.rail-title,
+.inspection-title,
+.control-title {
+    margin: 10px 0 0;
+    font-weight: 400;
+}
+
+.rail-title {
+    font-size: 30px;
+    line-height: 1.05;
+}
+
+.rail-copy,
+.control-copy,
+.inspection-copy,
+.context-value {
+    margin: 10px 0 0;
+    color: var(--shell-muted);
+    line-height: 1.5;
+}
+
+.control-region {
+    padding: 14px;
+    border: 1px solid rgba(135, 104, 78, 0.18);
+    background: var(--shell-panel-strong);
+}
+
+.control-title {
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.regime-stack {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.regime-chip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(135, 104, 78, 0.22);
+    font-size: 15px;
+}
+
+.regime-chip span {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.regime-chip-active {
+    background: rgba(135, 104, 78, 0.10);
+    color: var(--shell-ink);
+}
+
+.regime-chip-inactive {
+    background: rgba(110, 95, 84, 0.08);
+    color: var(--shell-muted);
+    opacity: 0.76;
+}
+
+.inspection-pane {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+}
+
+.context-header {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    padding: 18px;
+    border-bottom: 1px solid rgba(135, 104, 78, 0.22);
+    background: rgba(255, 255, 255, 0.52);
+}
+
+.context-item {
+    min-width: 0;
+}
+
+.context-value {
+    display: block;
+    font-size: 15px;
+    color: var(--shell-ink);
+}
+
+.inspection-stage {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    padding: 24px;
+}
+
+.inspection-title {
+    font-size: 34px;
+    line-height: 1.05;
+}
+
+.inspection-placeholder {
+    position: relative;
+    min-height: 420px;
+    border: 1px solid rgba(135, 104, 78, 0.22);
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(245, 239, 230, 0.92));
+}
+
+.placeholder-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(135, 104, 78, 0.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(135, 104, 78, 0.10) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.75;
+}
+
+.placeholder-frame {
+    position: absolute;
+    inset: 18px;
+    display: grid;
+    place-items: center;
+    border: 1px dashed rgba(135, 104, 78, 0.38);
+    color: var(--shell-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.32);
+}
+
+@media (max-width: 980px) {
+    .shell-host {
+        grid-template-columns: 1fr;
+    }
+
+    .context-header {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .shell-host {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .control-rail,
+    .inspection-pane {
+        box-shadow: none;
+    }
+
+    .context-header {
+        grid-template-columns: 1fr;
+    }
+
+    .inspection-title {
+        font-size: 28px;
+    }
+}
