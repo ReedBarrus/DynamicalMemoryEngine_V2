@@ -11,6 +11,8 @@ import {
 
 type SourceInteractionKindV0 = "drag_and_drop" | "file_picker";
 type StatusToneV0 = "neutral" | "busy" | "success" | "failure";
+type RegimeIdV0 = "temporal" | "support" | "symbolic";
+type OperatorIdV0 = "P0" | "P1" | "P2" | "P3" | "D3";
 
 interface ShellStatusCardV0 {
     tone: StatusToneV0;
@@ -21,6 +23,8 @@ interface ShellStatusCardV0 {
 }
 
 interface ShellViewStateV0 {
+    activeRegimeId: RegimeIdV0;
+    selectedOperatorId: OperatorIdV0;
     selectedSource: BrowserFileHandoffSuccessV0 | null;
     sourceInteractionKind: SourceInteractionKindV0 | null;
     sourceStatus: ShellStatusCardV0;
@@ -30,6 +34,21 @@ interface ShellViewStateV0 {
     hasRunAttempted: boolean;
     isUploading: boolean;
     isRunning: boolean;
+}
+
+interface RegimeDescriptorV0 {
+    id: RegimeIdV0;
+    label: string;
+    statusLabel: string;
+    isActive: boolean;
+}
+
+interface OperatorDescriptorV0 {
+    id: OperatorIdV0;
+    label: string;
+    summary: string;
+    stage: "P0" | "P1" | "P2" | "P3" | "D3";
+    isRuntimeTarget: boolean;
 }
 
 const FIXED_INSPECTION_REQUEST_V0 = {
@@ -53,6 +72,50 @@ const FIXED_INSPECTION_REQUEST_V0 = {
         frame_index: 0,
     },
 } as const;
+
+const REGIME_OPTIONS_V0: RegimeDescriptorV0[] = [
+    { id: "temporal", label: "TemporalRegime", statusLabel: "Active", isActive: true },
+    { id: "support", label: "SupportRegime", statusLabel: "Deferred", isActive: false },
+    { id: "symbolic", label: "SymbolicRegime", statusLabel: "Deferred", isActive: false },
+];
+
+const OPERATOR_OPTIONS_V0: OperatorDescriptorV0[] = [
+    {
+        id: "P0",
+        label: "P0 — Ingest",
+        summary: "Source waveform intake into the temporal chain.",
+        stage: "P0",
+        isRuntimeTarget: false,
+    },
+    {
+        id: "P1",
+        label: "P1 — Clock Align",
+        summary: "Clock-aligned primary frame preparation.",
+        stage: "P1",
+        isRuntimeTarget: false,
+    },
+    {
+        id: "P2",
+        label: "P2 — Window",
+        summary: "Sliding primary window emission before transform.",
+        stage: "P2",
+        isRuntimeTarget: false,
+    },
+    {
+        id: "P3",
+        label: "P3 — Transform",
+        summary: "Current fixed runtime target for spectral inspection.",
+        stage: "P3",
+        isRuntimeTarget: true,
+    },
+    {
+        id: "D3",
+        label: "D3 — Transform Diagnostics",
+        summary: "Diagnostic transform residue exposed as a secondary shell surface.",
+        stage: "D3",
+        isRuntimeTarget: false,
+    },
+];
 
 const appNode = document.querySelector<HTMLDivElement>("#app");
 
@@ -139,27 +202,25 @@ appNode.innerHTML = `
 
       <section class="control-region" aria-labelledby="regime-region-title">
         <div class="control-label">Regime</div>
-        <h2 id="regime-region-title" class="control-title">Regime-capable host</h2>
-        <div class="regime-stack" role="list" aria-label="Regime Availability">
-          <div class="regime-chip regime-chip-active" role="listitem" aria-current="true">
-            TemporalRegime
-            <span>Active</span>
-          </div>
-          <div class="regime-chip regime-chip-inactive" role="listitem" aria-disabled="true">
-            SupportRegime
-            <span>Deferred</span>
-          </div>
-          <div class="regime-chip regime-chip-inactive" role="listitem" aria-disabled="true">
-            SymbolicRegime
-            <span>Deferred</span>
-          </div>
+        <h2 id="regime-region-title" class="control-title">Regime navigation</h2>
+        <p class="control-copy">
+          Temporal is the only active path in this shell pass. Deferred regimes stay visible but unavailable.
+        </p>
+        <div class="regime-stack" role="list" aria-label="Regime Availability" data-regime-stack>
         </div>
       </section>
 
       <section class="control-region" aria-labelledby="operator-region-title">
         <div class="control-label">Operator</div>
-        <h2 id="operator-region-title" class="control-title">Operator exposure placeholder</h2>
-        <p class="control-copy">Operator navigation remains deferred. This packet uses one fixed end-to-end run path only.</p>
+        <h2 id="operator-region-title" class="control-title">Operator navigation</h2>
+        <p class="control-copy">
+          Operator selection is shell-local in this packet. The live run path remains fixed to
+          <code>P3 — Transform</code>.
+        </p>
+        <div class="operator-stack" role="list" aria-label="Temporal Operator Exposure" data-operator-stack></div>
+        <div class="operator-note" data-operator-note>
+          Selected operator posture is display-only until operator-aware runtime requests are added lawfully.
+        </div>
       </section>
 
       <section class="control-region" aria-labelledby="frame-region-title">
@@ -183,11 +244,11 @@ appNode.innerHTML = `
         </div>
         <div class="context-item">
           <span class="context-key">Regime</span>
-          <span class="context-value">TemporalRegime</span>
+          <span class="context-value" data-context-regime>TemporalRegime / active</span>
         </div>
         <div class="context-item">
           <span class="context-key">Operator</span>
-          <span class="context-value" data-context-operator>Fixed chain request</span>
+          <span class="context-value" data-context-operator>P3 — Transform / fixed run target</span>
         </div>
         <div class="context-item">
           <span class="context-key">Frame</span>
@@ -231,7 +292,11 @@ const sourceKindNode = appNode.querySelector<HTMLElement>("[data-source-kind]");
 const sourcePathNode = appNode.querySelector<HTMLElement>("[data-source-path]");
 const sourceStatusNode = appNode.querySelector<HTMLElement>("[data-source-status]");
 const runStatusNode = appNode.querySelector<HTMLElement>("[data-run-status]");
+const regimeStackNode = appNode.querySelector<HTMLElement>("[data-regime-stack]");
+const operatorStackNode = appNode.querySelector<HTMLElement>("[data-operator-stack]");
+const operatorNoteNode = appNode.querySelector<HTMLElement>("[data-operator-note]");
 const contextSourceNode = appNode.querySelector<HTMLElement>("[data-context-source]");
+const contextRegimeNode = appNode.querySelector<HTMLElement>("[data-context-regime]");
 const contextOperatorNode = appNode.querySelector<HTMLElement>("[data-context-operator]");
 const contextFrameNode = appNode.querySelector<HTMLElement>("[data-context-frame]");
 const contextPlaneNode = appNode.querySelector<HTMLElement>("[data-context-plane]");
@@ -251,7 +316,11 @@ if (
     sourcePathNode === null ||
     sourceStatusNode === null ||
     runStatusNode === null ||
+    regimeStackNode === null ||
+    operatorStackNode === null ||
+    operatorNoteNode === null ||
     contextSourceNode === null ||
+    contextRegimeNode === null ||
     contextOperatorNode === null ||
     contextFrameNode === null ||
     contextPlaneNode === null ||
@@ -270,6 +339,14 @@ function createStatusCard(
     code?: string
 ): ShellStatusCardV0 {
     return { tone, title, detail, seam, code };
+}
+
+function getActiveRegimeDescriptor(): RegimeDescriptorV0 {
+    return REGIME_OPTIONS_V0.find((regime) => regime.id === state.activeRegimeId) ?? REGIME_OPTIONS_V0[0];
+}
+
+function getSelectedOperatorDescriptor(): OperatorDescriptorV0 {
+    return OPERATOR_OPTIONS_V0.find((operator) => operator.id === state.selectedOperatorId) ?? OPERATOR_OPTIONS_V0[3];
 }
 
 function isFailureResult(
@@ -321,6 +398,8 @@ function getFailureSummary(
 }
 
 const state: ShellViewStateV0 = {
+    activeRegimeId: "temporal",
+    selectedOperatorId: "P3",
     selectedSource: null,
     sourceInteractionKind: null,
     sourceStatus: createStatusCard(
@@ -353,6 +432,43 @@ function renderStatusCard(node: HTMLElement, card: ShellStatusCardV0): void {
       ${metaLine}
       <p class="status-detail">${escapeHtml(card.detail)}</p>
     `;
+}
+
+function renderRegimeRegion(): void {
+    regimeStackNode.innerHTML = REGIME_OPTIONS_V0.map((regime) => `
+      <div
+        class="regime-chip ${regime.isActive ? "regime-chip-active" : "regime-chip-inactive"}"
+        role="listitem"
+        ${regime.isActive ? 'aria-current="true"' : 'aria-disabled="true"'}
+      >
+        <span class="regime-chip-label">${escapeHtml(regime.label)}</span>
+        <span>${escapeHtml(regime.statusLabel)}</span>
+      </div>
+    `).join("");
+}
+
+function renderOperatorRegion(): void {
+    const selectedOperator = getSelectedOperatorDescriptor();
+
+    operatorStackNode.innerHTML = OPERATOR_OPTIONS_V0.map((operator) => `
+      <button
+        type="button"
+        class="operator-chip ${operator.id === state.selectedOperatorId ? "operator-chip-selected" : ""}"
+        data-operator-id="${escapeHtml(operator.id)}"
+        aria-pressed="${operator.id === state.selectedOperatorId ? "true" : "false"}"
+      >
+        <span class="operator-chip-label">${escapeHtml(operator.label)}</span>
+        <span class="operator-chip-copy">${escapeHtml(operator.summary)}</span>
+        <span class="operator-chip-meta">
+          ${operator.isRuntimeTarget ? "Fixed run target" : "Shell-local view only"}
+        </span>
+      </button>
+    `).join("");
+
+    operatorNoteNode.textContent =
+        selectedOperator.isRuntimeTarget
+            ? `${selectedOperator.label} is the current fixed runtime target.`
+            : `${selectedOperator.label} is selected in the shell only; the live run path remains fixed to P3 — Transform.`;
 }
 
 function renderMainPane(): void {
@@ -450,13 +566,18 @@ function renderMainPane(): void {
 }
 
 function renderShell(): void {
+    const activeRegime = getActiveRegimeDescriptor();
+    const selectedOperator = getSelectedOperatorDescriptor();
+
     sourceNameNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
     sourceKindNode.textContent = formatInteractionKind(state.sourceInteractionKind);
     sourcePathNode.textContent = state.selectedSource?.runtime_handoff_relative_path ?? "--";
 
     contextSourceNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
-    contextOperatorNode.textContent =
-        state.lastRunResult === null ? "Fixed chain request" : "P0 -> P3 fixed request";
+    contextRegimeNode.textContent = `${activeRegime.label} / ${activeRegime.statusLabel.toLowerCase()}`;
+    contextOperatorNode.textContent = selectedOperator.isRuntimeTarget
+        ? `${selectedOperator.label} / fixed run target`
+        : `${selectedOperator.label} / shell-local focus`;
     contextFrameNode.textContent =
         state.lastRunResult === null
             ? "Awaiting run"
@@ -477,6 +598,8 @@ function renderShell(): void {
 
     renderStatusCard(sourceStatusNode, state.sourceStatus);
     renderStatusCard(runStatusNode, state.runStatus);
+    renderRegimeRegion();
+    renderOperatorRegion();
 
     runButton.disabled = state.selectedSource === null || state.isUploading || state.isRunning;
     rerunButton.disabled =
@@ -691,6 +814,29 @@ dropzone.addEventListener("keydown", (event) => {
         event.preventDefault();
         fileInput.click();
     }
+});
+
+operatorStackNode.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+
+    const operatorButton = target.closest<HTMLElement>("[data-operator-id]");
+
+    if (operatorButton === null) {
+        return;
+    }
+
+    const operatorId = operatorButton.dataset.operatorId as OperatorIdV0 | undefined;
+
+    if (operatorId === undefined) {
+        return;
+    }
+
+    state.selectedOperatorId = operatorId;
+    renderShell();
 });
 
 runButton.addEventListener("click", () => {
