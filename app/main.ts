@@ -13,6 +13,7 @@ type SourceInteractionKindV0 = "drag_and_drop" | "file_picker";
 type StatusToneV0 = "neutral" | "busy" | "success" | "failure";
 type RegimeIdV0 = "temporal" | "support" | "symbolic";
 type OperatorIdV0 = "P0" | "P1" | "P2" | "P3" | "D3";
+type PlaneModeIdV0 = "direct_temporal" | "re" | "im" | "both" | "magnitude" | "phase";
 
 interface ShellStatusCardV0 {
     tone: StatusToneV0;
@@ -27,6 +28,8 @@ interface ShellViewStateV0 {
     selectedOperatorId: OperatorIdV0;
     selectedFrameIndex: number;
     frameValidationMessage: string | null;
+    selectedPlaneModeId: PlaneModeIdV0;
+    planeValidationMessage: string | null;
     selectedSource: BrowserFileHandoffSuccessV0 | null;
     sourceInteractionKind: SourceInteractionKindV0 | null;
     sourceStatus: ShellStatusCardV0;
@@ -59,6 +62,21 @@ interface FrameExposureContextV0 {
     runtimeFrameIndex: number | null;
     selectedFrameIndex: number | null;
     exposedFrameCount: number | null;
+    globalContext: string;
+    localContext: string;
+    statusCard: ShellStatusCardV0;
+}
+
+interface PlaneModeDescriptorV0 {
+    id: PlaneModeIdV0;
+    label: string;
+    summary: string;
+}
+
+interface PlaneModeExposureContextV0 {
+    selectedModeId: PlaneModeIdV0;
+    availableModes: PlaneModeDescriptorV0[];
+    runtimePlaneClass: string;
     globalContext: string;
     localContext: string;
     statusCard: ShellStatusCardV0;
@@ -127,6 +145,92 @@ const OPERATOR_OPTIONS_V0: OperatorDescriptorV0[] = [
         summary: "Diagnostic transform residue exposed as a secondary shell surface.",
         stage: "D3",
         isRuntimeTarget: false,
+    },
+];
+
+const PLANE_MODE_OPTIONS_V0: Record<OperatorIdV0, PlaneModeDescriptorV0[]> = {
+    P0: [
+        {
+            id: "direct_temporal",
+            label: "direct temporal",
+            summary: "Direct temporal primary view for the current operator surface.",
+        },
+    ],
+    P1: [
+        {
+            id: "direct_temporal",
+            label: "direct temporal",
+            summary: "Direct temporal primary view for the current operator surface.",
+        },
+    ],
+    P2: [
+        {
+            id: "direct_temporal",
+            label: "direct temporal",
+            summary: "Direct temporal primary view for the current operator surface.",
+        },
+    ],
+    P3: [
+        {
+            id: "re",
+            label: "re",
+            summary: "Real Cartesian component emphasis for the P3 shell surface.",
+        },
+        {
+            id: "im",
+            label: "im",
+            summary: "Imaginary Cartesian component emphasis for the P3 shell surface.",
+        },
+        {
+            id: "both",
+            label: "both",
+            summary: "Combined Cartesian component posture for the P3 shell surface.",
+        },
+    ],
+    D3: [
+        {
+            id: "magnitude",
+            label: "magnitude",
+            summary: "Derived diagnostic magnitude series.",
+        },
+        {
+            id: "phase",
+            label: "phase",
+            summary: "Derived diagnostic phase series.",
+        },
+    ],
+};
+
+const ALL_PLANE_MODES_V0: PlaneModeDescriptorV0[] = [
+    {
+        id: "direct_temporal",
+        label: "direct temporal",
+        summary: "Direct temporal primary view for the current operator surface.",
+    },
+    {
+        id: "re",
+        label: "re",
+        summary: "Real Cartesian component emphasis for the P3 shell surface.",
+    },
+    {
+        id: "im",
+        label: "im",
+        summary: "Imaginary Cartesian component emphasis for the P3 shell surface.",
+    },
+    {
+        id: "both",
+        label: "both",
+        summary: "Combined Cartesian component posture for the P3 shell surface.",
+    },
+    {
+        id: "magnitude",
+        label: "magnitude",
+        summary: "Derived diagnostic magnitude series.",
+    },
+    {
+        id: "phase",
+        label: "phase",
+        summary: "Derived diagnostic phase series.",
     },
 ];
 
@@ -284,8 +388,26 @@ appNode.innerHTML = `
 
       <section class="control-region" aria-labelledby="plane-mode-region-title">
         <div class="control-label">Plane Mode</div>
-        <h2 id="plane-mode-region-title" class="control-title">Plane exposure placeholder</h2>
-        <p class="control-copy">Plane mode remains deferred. This packet requests one fixed P3 spectral plane only.</p>
+        <h2 id="plane-mode-region-title" class="control-title">Plane mode navigation</h2>
+        <p class="control-copy">
+          Plane mode selection is operator-dependent and shell-local in this packet. It does not change the fixed
+          runtime plane request.
+        </p>
+        <div class="plane-mode-stack" role="list" aria-label="Plane Mode Exposure" data-plane-mode-stack></div>
+        <dl class="detail-list">
+          <div class="detail-item">
+            <dt>Global Context</dt>
+            <dd data-plane-global-context>Fixed runtime plane awaiting run</dd>
+          </div>
+          <div class="detail-item">
+            <dt>Local Context</dt>
+            <dd data-plane-local-context>Awaiting selected operator plane semantics</dd>
+          </div>
+        </dl>
+        <div class="status-card status-card-neutral" data-plane-status>
+          <div class="status-heading">Plane mode bounded</div>
+          <p class="status-detail">Select an operator to expose the lawful shell-local plane modes for that surface.</p>
+        </div>
       </section>
     </aside>
 
@@ -352,6 +474,10 @@ const frameCountNode = appNode.querySelector<HTMLElement>("[data-frame-count]");
 const frameGlobalContextNode = appNode.querySelector<HTMLElement>("[data-frame-global-context]");
 const frameLocalContextNode = appNode.querySelector<HTMLElement>("[data-frame-local-context]");
 const frameStatusNode = appNode.querySelector<HTMLElement>("[data-frame-status]");
+const planeModeStackNode = appNode.querySelector<HTMLElement>("[data-plane-mode-stack]");
+const planeGlobalContextNode = appNode.querySelector<HTMLElement>("[data-plane-global-context]");
+const planeLocalContextNode = appNode.querySelector<HTMLElement>("[data-plane-local-context]");
+const planeStatusNode = appNode.querySelector<HTMLElement>("[data-plane-status]");
 const regimeStackNode = appNode.querySelector<HTMLElement>("[data-regime-stack]");
 const operatorStackNode = appNode.querySelector<HTMLElement>("[data-operator-stack]");
 const operatorNoteNode = appNode.querySelector<HTMLElement>("[data-operator-note]");
@@ -383,6 +509,10 @@ if (
     frameGlobalContextNode === null ||
     frameLocalContextNode === null ||
     frameStatusNode === null ||
+    planeModeStackNode === null ||
+    planeGlobalContextNode === null ||
+    planeLocalContextNode === null ||
+    planeStatusNode === null ||
     regimeStackNode === null ||
     operatorStackNode === null ||
     operatorNoteNode === null ||
@@ -478,6 +608,66 @@ function getFrameExposureContext(): FrameExposureContextV0 {
     };
 }
 
+function getPlaneModeOptionsForOperator(operatorId: OperatorIdV0): PlaneModeDescriptorV0[] {
+    return PLANE_MODE_OPTIONS_V0[operatorId];
+}
+
+function getDefaultPlaneModeIdForOperator(operatorId: OperatorIdV0): PlaneModeIdV0 {
+    return getPlaneModeOptionsForOperator(operatorId)[0].id;
+}
+
+function getSelectedPlaneModeDescriptor(
+    operatorId: OperatorIdV0,
+    planeModeId: PlaneModeIdV0
+): PlaneModeDescriptorV0 {
+    return (
+        getPlaneModeOptionsForOperator(operatorId).find((mode) => mode.id === planeModeId) ??
+        getPlaneModeOptionsForOperator(operatorId)[0]
+    );
+}
+
+function getRuntimePlaneClassLabel(): string {
+    return FIXED_INSPECTION_REQUEST_V0.plane_selection_request.plane_class;
+}
+
+function getPlaneModeExposureContext(): PlaneModeExposureContextV0 {
+    const selectedOperator = getSelectedOperatorDescriptor();
+    const runtimeOperator = getRuntimeOperatorDescriptor();
+    const runtimePlaneClass = getRuntimePlaneClassLabel();
+    const availableModes = getPlaneModeOptionsForOperator(selectedOperator.id);
+    const selectedMode = getSelectedPlaneModeDescriptor(selectedOperator.id, state.selectedPlaneModeId);
+
+    if (selectedOperator.id !== runtimeOperator.id) {
+        return {
+            selectedModeId: selectedMode.id,
+            availableModes,
+            runtimePlaneClass,
+            globalContext: `${runtimePlaneClass} / fixed runtime plane`,
+            localContext: `${selectedOperator.label} exposes ${availableModes.map((mode) => mode.label).join(", ")} as shell-local plane modes only.`,
+            statusCard: createStatusCard(
+                state.planeValidationMessage === null ? "neutral" : "failure",
+                state.planeValidationMessage === null ? "Shell-local plane modes only" : "Plane mode request rejected",
+                state.planeValidationMessage ??
+                    `${selectedOperator.label} does not have live runtime plane switching in this packet.`
+            ),
+        };
+    }
+
+    return {
+        selectedModeId: selectedMode.id,
+        availableModes,
+        runtimePlaneClass,
+        globalContext: `${runtimePlaneClass} / fixed runtime plane`,
+        localContext: `${selectedOperator.label} exposes ${selectedMode.label} as a shell-local mode over one fixed runtime plane.`,
+        statusCard: createStatusCard(
+            state.planeValidationMessage === null ? "success" : "failure",
+            state.planeValidationMessage === null ? "Fixed runtime plane, shell-local mode" : "Plane mode request rejected",
+            state.planeValidationMessage ??
+                `${selectedMode.label} is selected in the shell. The runtime plane remains ${runtimePlaneClass}.`
+        ),
+    };
+}
+
 function isFailureResult(
     result: unknown
 ): result is RoutedBridgeFailureV0 | ShellBridgeCallFailureV0 {
@@ -531,6 +721,8 @@ const state: ShellViewStateV0 = {
     selectedOperatorId: "P3",
     selectedFrameIndex: 0,
     frameValidationMessage: null,
+    selectedPlaneModeId: "both",
+    planeValidationMessage: null,
     selectedSource: null,
     sourceInteractionKind: null,
     sourceStatus: createStatusCard(
@@ -638,6 +830,28 @@ function renderFrameRegion(): void {
     renderStatusCard(frameStatusNode, frameContext.statusCard);
 }
 
+function renderPlaneModeRegion(): void {
+    const planeContext = getPlaneModeExposureContext();
+    const availableModeIds = new Set(planeContext.availableModes.map((mode) => mode.id));
+
+    planeModeStackNode.innerHTML = ALL_PLANE_MODES_V0.map((mode) => `
+      <button
+        type="button"
+        class="plane-mode-chip ${mode.id === planeContext.selectedModeId ? "plane-mode-chip-selected" : ""} ${availableModeIds.has(mode.id) ? "" : "plane-mode-chip-disabled"}"
+        data-plane-mode-id="${escapeHtml(mode.id)}"
+        ${availableModeIds.has(mode.id) ? "" : "disabled"}
+        aria-pressed="${mode.id === planeContext.selectedModeId ? "true" : "false"}"
+      >
+        <span class="plane-mode-chip-label">${escapeHtml(mode.label)}</span>
+        <span class="plane-mode-chip-copy">${escapeHtml(mode.summary)}</span>
+      </button>
+    `).join("");
+
+    planeGlobalContextNode.textContent = planeContext.globalContext;
+    planeLocalContextNode.textContent = planeContext.localContext;
+    renderStatusCard(planeStatusNode, planeContext.statusCard);
+}
+
 function renderMainPane(): void {
     if (state.latestFailure !== null) {
         const failureSummary = getFailureSummary(state.latestFailure);
@@ -736,6 +950,7 @@ function renderShell(): void {
     const activeRegime = getActiveRegimeDescriptor();
     const runtimeOperator = getRuntimeOperatorDescriptor();
     const frameContext = getFrameExposureContext();
+    const planeContext = getPlaneModeExposureContext();
 
     sourceNameNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
     sourceKindNode.textContent = formatInteractionKind(state.sourceInteractionKind);
@@ -748,10 +963,10 @@ function renderShell(): void {
         frameContext.selectedFrameIndex === null || frameContext.exposedFrameCount === null
             ? "Awaiting local context"
             : `Frame ${String(frameContext.selectedFrameIndex)} / ${String(frameContext.exposedFrameCount)} exposed / local context`;
-    contextPlaneNode.textContent =
-        state.lastRunResult === null
-            ? "Fixed P3 spectral"
-            : state.lastRunResult.plane_selection_request.plane_class;
+    contextPlaneNode.textContent = `${planeContext.runtimePlaneClass} / ${getSelectedPlaneModeDescriptor(
+        state.selectedOperatorId,
+        state.selectedPlaneModeId
+    ).label} / shell-local mode`;
 
     inspectionCopyNode.innerHTML =
         state.selectedSource === null
@@ -765,6 +980,7 @@ function renderShell(): void {
     renderRegimeRegion();
     renderOperatorRegion();
     renderFrameRegion();
+    renderPlaneModeRegion();
 
     runButton.disabled = state.selectedSource === null || state.isUploading || state.isRunning;
     rerunButton.disabled =
@@ -823,6 +1039,7 @@ async function handoffFileV0(
     state.isUploading = true;
     state.selectedFrameIndex = 0;
     state.frameValidationMessage = null;
+    state.planeValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
     state.hasRunAttempted = false;
@@ -880,6 +1097,7 @@ async function runSelectedSourceV0(): Promise<void> {
 
     state.isRunning = true;
     state.frameValidationMessage = null;
+    state.planeValidationMessage = null;
     state.latestFailure = null;
     state.lastRunResult = null;
     state.runStatus = createStatusCard(
@@ -920,6 +1138,7 @@ function clearShellStateV0(): void {
     state.sourceInteractionKind = null;
     state.selectedFrameIndex = 0;
     state.frameValidationMessage = null;
+    state.planeValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
     state.hasRunAttempted = false;
@@ -1058,6 +1277,40 @@ frameInput.addEventListener("blur", () => {
     applyFrameIndexInputV0(parsed);
 });
 
+planeModeStackNode.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+
+    const planeModeButton = target.closest<HTMLButtonElement>("[data-plane-mode-id]");
+
+    if (planeModeButton === null || planeModeButton.disabled) {
+        return;
+    }
+
+    const planeModeId = planeModeButton.dataset.planeModeId as PlaneModeIdV0 | undefined;
+
+    if (planeModeId === undefined) {
+        return;
+    }
+
+    const availableModeIds = new Set(
+        getPlaneModeOptionsForOperator(state.selectedOperatorId).map((mode) => mode.id)
+    );
+
+    if (!availableModeIds.has(planeModeId)) {
+        state.planeValidationMessage = `${planeModeId} is unavailable for ${getSelectedOperatorDescriptor().label}.`;
+        renderShell();
+        return;
+    }
+
+    state.selectedPlaneModeId = planeModeId;
+    state.planeValidationMessage = null;
+    renderShell();
+});
+
 operatorStackNode.addEventListener("click", (event) => {
     const target = event.target;
 
@@ -1079,6 +1332,8 @@ operatorStackNode.addEventListener("click", (event) => {
 
     state.selectedOperatorId = operatorId;
     state.frameValidationMessage = null;
+    state.planeValidationMessage = null;
+    state.selectedPlaneModeId = getDefaultPlaneModeIdForOperator(operatorId);
     renderShell();
 });
 
