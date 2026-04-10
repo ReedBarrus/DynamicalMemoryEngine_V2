@@ -5,6 +5,7 @@
     "version": "0.0.1",
     "scripts": {
         "dev": "vite",
+        "dev:host-bridge": "node --experimental-strip-types scripts/local_host_bridge_v0.mjs",
         "build": "vite build",
         "preview": "vite preview",
         "test:intake": "node --experimental-strip-types execution/intake/source_intake_v0.ts",
