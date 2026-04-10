@@ -82,6 +82,42 @@ interface PlaneModeExposureContextV0 {
     statusCard: ShellStatusCardV0;
 }
 
+interface SpectralBinPointV0 {
+    frequency: number;
+    re: number;
+    im: number;
+}
+
+interface SpectralSeriesViewV0 {
+    id: "re" | "im";
+    label: "re" | "im";
+    colorClass: "spectral-series-re" | "spectral-series-im";
+    path: string;
+}
+
+type InspectionPaneViewModelV0 =
+    | {
+          kind: "awaiting_run";
+          title: string;
+          detail: string;
+      }
+    | {
+          kind: "unavailable";
+          title: string;
+          detail: string;
+          meta: string[];
+      }
+    | {
+          kind: "spectral_supported";
+          title: string;
+          detail: string;
+          meta: string[];
+          modeLabel: string;
+          runtimePlaneClass: string;
+          series: SpectralSeriesViewV0[];
+          previewBins: SpectralBinPointV0[];
+      };
+
 const FIXED_INSPECTION_REQUEST_V0 = {
     execution_mode: "run_now",
     run_options: {
@@ -668,6 +704,160 @@ function getPlaneModeExposureContext(): PlaneModeExposureContextV0 {
     };
 }
 
+function isFiniteNumber(value: unknown): value is number {
+    return typeof value === "number" && Number.isFinite(value);
+}
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+    return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function getRenderedOutputRecord(): Record<string, unknown> | null {
+    if (state.lastRunResult === null || !isObjectRecord(state.lastRunResult.rendered_output)) {
+        return null;
+    }
+
+    return state.lastRunResult.rendered_output;
+}
+
+function getRuntimeRenderClassLabel(): string {
+    const renderedOutput = getRenderedOutputRecord();
+
+    if (renderedOutput !== null && typeof renderedOutput.render_class === "string") {
+        return renderedOutput.render_class;
+    }
+
+    return "unknown_render_class";
+}
+
+function getSpectralBinsFromRunResult(): SpectralBinPointV0[] | null {
+    const renderedOutput = getRenderedOutputRecord();
+
+    if (renderedOutput === null || !Array.isArray(renderedOutput.bins)) {
+        return null;
+    }
+
+    const bins = renderedOutput.bins
+        .map((bin) => {
+            if (!isObjectRecord(bin)) {
+                return null;
+            }
+
+            const frequency = bin.frequency;
+            const re = bin.re;
+            const im = bin.im;
+
+            if (!isFiniteNumber(frequency) || !isFiniteNumber(re) || !isFiniteNumber(im)) {
+                return null;
+            }
+
+            return {
+                frequency,
+                re,
+                im,
+            };
+        })
+        .filter((bin): bin is SpectralBinPointV0 => bin !== null);
+
+    return bins.length > 0 ? bins : null;
+}
+
+function createSeriesPathV0(values: number[]): string {
+    if (values.length === 0) {
+        return "";
+    }
+
+    const width = 560;
+    const height = 180;
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const span = maxValue - minValue || 1;
+
+    return values.map((value, index) => {
+        const x = values.length === 1 ? width / 2 : (index / (values.length - 1)) * width;
+        const y = height - (((value - minValue) / span) * height);
+        return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    }).join(" ");
+}
+
+function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
+    if (state.lastRunResult === null) {
+        return {
+            kind: "awaiting_run",
+            title: "Inspection output awaiting run",
+            detail: "Run the fixed bridge-routed inspection request to expose one lawful render payload.",
+        };
+    }
+
+    const selectedOperator = getSelectedOperatorDescriptor();
+    const planeContext = getPlaneModeExposureContext();
+
+    if (selectedOperator.id !== "P3") {
+        return {
+            kind: "unavailable",
+            title: `${selectedOperator.label} is not currently render-backed`,
+            detail: "The current run result exposes one fixed P3 spectral render only. This operator selection remains shell-local.",
+            meta: [
+                `Selected operator: ${selectedOperator.label}`,
+                `Selected mode: ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
+                `Runtime plane: ${planeContext.runtimePlaneClass}`,
+            ],
+        };
+    }
+
+    const spectralBins = getSpectralBinsFromRunResult();
+
+    if (spectralBins === null) {
+        return {
+            kind: "unavailable",
+            title: "Fixed run result is not shell-renderable here",
+            detail: "The shell expected Cartesian P3 bins for shell-local plane-mode presentation, but they were not present in the current result.",
+            meta: [
+                `Selected operator: ${selectedOperator.label}`,
+                `Selected mode: ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
+                `Runtime render: ${getRuntimeRenderClassLabel()}`,
+            ],
+        };
+    }
+
+    const selectedMode = getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId);
+    const previewBins = spectralBins.slice(0, 32);
+    const series: SpectralSeriesViewV0[] = [];
+
+    if (selectedMode.id === "re" || selectedMode.id === "both") {
+        series.push({
+            id: "re",
+            label: "re",
+            colorClass: "spectral-series-re",
+            path: createSeriesPathV0(previewBins.map((bin) => bin.re)),
+        });
+    }
+
+    if (selectedMode.id === "im" || selectedMode.id === "both") {
+        series.push({
+            id: "im",
+            label: "im",
+            colorClass: "spectral-series-im",
+            path: createSeriesPathV0(previewBins.map((bin) => bin.im)),
+        });
+    }
+
+    return {
+        kind: "spectral_supported",
+        title: `${selectedMode.label} shell view over fixed P3 render`,
+        detail: "Shell-local plane mode is changing presentation of the current P3 Cartesian result only. No runtime re-run or plane remap occurred.",
+        meta: [
+            `Selected operator: ${selectedOperator.label}`,
+            `Selected frame: ${String(state.selectedFrameIndex)}`,
+            `Runtime plane: ${planeContext.runtimePlaneClass}`,
+        ],
+        modeLabel: selectedMode.label,
+        runtimePlaneClass: planeContext.runtimePlaneClass,
+        series,
+        previewBins: previewBins.slice(0, 8),
+    };
+}
+
 function isFailureResult(
     result: unknown
 ): result is RoutedBridgeFailureV0 | ShellBridgeCallFailureV0 {
@@ -867,50 +1057,110 @@ function renderMainPane(): void {
             </div>
           </div>
         `;
-    } else if (state.lastRunResult !== null) {
-        mainStatusNode.innerHTML = `
-          <div class="main-callout main-callout-success">
-            <div class="main-callout-label">Latest Run</div>
-            <h3>Render-ready inspection returned</h3>
-            <p>
-              The shell is showing the bounded render-ready output returned through the Local Host Bridge v0.
-            </p>
-            <div class="main-callout-meta">
-              <span>Stage: ${escapeHtml(state.lastRunResult.stage_selection.stage)}</span>
-              <span>Plane: ${escapeHtml(state.lastRunResult.plane_selection_request.plane_class)}</span>
-              <span>Render Type: ${escapeHtml(state.lastRunResult.rendered_output.render_type)}</span>
-            </div>
-          </div>
-        `;
     } else {
-        mainStatusNode.innerHTML = `
-          <div class="main-callout main-callout-neutral">
-            <div class="main-callout-label">Current Path</div>
-            <h3>Manual bridge-routed inspection only</h3>
-            <p>
-              This shell packet wires browser file input and run control only. Operator, frame, and plane navigation
-              stay deferred.
-            </p>
-          </div>
-        `;
+        const paneView = getInspectionPaneViewModel();
+
+        if (paneView.kind === "awaiting_run") {
+            mainStatusNode.innerHTML = `
+              <div class="main-callout main-callout-neutral">
+                <div class="main-callout-label">Current Path</div>
+                <h3>${escapeHtml(paneView.title)}</h3>
+                <p>${escapeHtml(paneView.detail)}</p>
+              </div>
+            `;
+        } else if (paneView.kind === "unavailable") {
+            mainStatusNode.innerHTML = `
+              <div class="main-callout main-callout-neutral">
+                <div class="main-callout-label">Shell Navigation</div>
+                <h3>${escapeHtml(paneView.title)}</h3>
+                <p>${escapeHtml(paneView.detail)}</p>
+                <div class="main-callout-meta">
+                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+                </div>
+              </div>
+            `;
+        } else {
+            mainStatusNode.innerHTML = `
+              <div class="main-callout main-callout-success">
+                <div class="main-callout-label">Shell Render Wiring</div>
+                <h3>${escapeHtml(paneView.title)}</h3>
+                <p>${escapeHtml(paneView.detail)}</p>
+                <div class="main-callout-meta">
+                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+                </div>
+              </div>
+            `;
+        }
     }
 
-    if (state.lastRunResult !== null) {
-        const renderedJson = JSON.stringify(state.lastRunResult.rendered_output, null, 2);
+    const paneView = getInspectionPaneViewModel();
 
+    if (paneView.kind === "spectral_supported") {
         mainResultNode.innerHTML = `
-          <div class="result-panel">
-            <div class="result-summary">
-              <div class="result-key">Selected Source</div>
-              <div class="result-value">${escapeHtml(
-                  state.lastRunResult.selected_source_reference?.display_name ?? state.selectedSource?.original_file_name ?? "--"
-              )}</div>
+          <div class="result-panel result-panel-live">
+            <div class="result-summary-grid">
+              <div class="result-summary">
+                <div class="result-key">Selected Source</div>
+                <div class="result-value">${escapeHtml(
+                    state.lastRunResult?.selected_source_reference?.display_name ?? state.selectedSource?.original_file_name ?? "--"
+                )}</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Runtime Render</div>
+                <div class="result-value">${escapeHtml(getRuntimeRenderClassLabel())}</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Plane Mode</div>
+                <div class="result-value">${escapeHtml(paneView.modeLabel)}</div>
+              </div>
+            </div>
+            <div class="spectral-panel">
+              <div class="spectral-panel-header">
+                <div class="result-key">Shell-Local P3 Preview</div>
+                <div class="spectral-legend">
+                  ${paneView.series.map((series) => `
+                    <span class="spectral-legend-item">
+                      <span class="spectral-swatch ${series.colorClass}"></span>
+                      ${escapeHtml(series.label)}
+                    </span>
+                  `).join("")}
+                </div>
+              </div>
+              <svg class="spectral-chart" viewBox="0 0 560 180" role="img" aria-label="Shell-local spectral preview">
+                <rect x="0" y="0" width="560" height="180" class="spectral-chart-bg"></rect>
+                ${paneView.series.map((series) => `
+                  <path class="spectral-path ${series.colorClass}" d="${series.path}"></path>
+                `).join("")}
+              </svg>
             </div>
             <div class="result-summary">
-              <div class="result-key">Render Output</div>
-              <div class="result-value">${escapeHtml(state.lastRunResult.rendered_output.render_type)}</div>
+              <div class="result-key">Preview Bins</div>
+              <div class="bin-preview-grid">
+                ${paneView.previewBins.map((bin) => `
+                  <div class="bin-preview-card">
+                    <div class="bin-preview-frequency">${escapeHtml(bin.frequency.toFixed(2))} Hz</div>
+                    <div class="bin-preview-values">re ${escapeHtml(bin.re.toFixed(4))}</div>
+                    <div class="bin-preview-values">im ${escapeHtml(bin.im.toFixed(4))}</div>
+                  </div>
+                `).join("")}
+              </div>
             </div>
-            <pre class="result-code">${escapeHtml(renderedJson)}</pre>
+          </div>
+        `;
+        return;
+    }
+
+    if (paneView.kind === "unavailable") {
+        mainResultNode.innerHTML = `
+          <div class="result-panel result-panel-unavailable">
+            <div class="result-summary">
+              <div class="result-key">Unavailable Shell View</div>
+              <div class="result-value">${escapeHtml(paneView.title)}</div>
+            </div>
+            <p class="result-note">${escapeHtml(paneView.detail)}</p>
+            <div class="main-callout-meta">
+              ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+            </div>
           </div>
         `;
         return;

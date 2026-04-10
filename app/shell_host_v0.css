@@ -576,9 +576,128 @@ code {
     background: rgba(255, 255, 255, 0.68);
 }
 
+.result-panel-live {
+    gap: 16px;
+}
+
+.result-panel-unavailable {
+    background: rgba(255, 250, 242, 0.82);
+}
+
+.result-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
 .result-summary {
     display: grid;
     gap: 4px;
+}
+
+.result-note {
+    margin: 0;
+    color: var(--shell-muted);
+    line-height: 1.5;
+}
+
+.spectral-panel {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(135, 104, 78, 0.18);
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.spectral-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.spectral-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.spectral-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--shell-muted);
+    font-size: 14px;
+}
+
+.spectral-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.spectral-series-re {
+    color: #8a5132;
+    background: #8a5132;
+}
+
+.spectral-series-im {
+    color: #3f667b;
+    background: #3f667b;
+}
+
+.spectral-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid rgba(135, 104, 78, 0.16);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(245, 239, 230, 0.86));
+}
+
+.spectral-chart-bg {
+    fill: transparent;
+}
+
+.spectral-path {
+    fill: none;
+    stroke-width: 2.25;
+    vector-effect: non-scaling-stroke;
+}
+
+.spectral-path.spectral-series-re {
+    stroke: #8a5132;
+}
+
+.spectral-path.spectral-series-im {
+    stroke: #3f667b;
+}
+
+.bin-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.bin-preview-card {
+    display: grid;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid rgba(135, 104, 78, 0.16);
+    background: rgba(255, 255, 255, 0.74);
+}
+
+.bin-preview-frequency {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--shell-muted);
+}
+
+.bin-preview-values {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
 }
 
 .result-code {
@@ -644,6 +763,10 @@ code {
 
     .context-header {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .result-summary-grid {
+        grid-template-columns: 1fr;
     }
 }
 
