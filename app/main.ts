@@ -25,6 +25,8 @@ interface ShellStatusCardV0 {
 interface ShellViewStateV0 {
     activeRegimeId: RegimeIdV0;
     selectedOperatorId: OperatorIdV0;
+    selectedFrameIndex: number;
+    frameValidationMessage: string | null;
     selectedSource: BrowserFileHandoffSuccessV0 | null;
     sourceInteractionKind: SourceInteractionKindV0 | null;
     sourceStatus: ShellStatusCardV0;
@@ -49,6 +51,17 @@ interface OperatorDescriptorV0 {
     summary: string;
     stage: "P0" | "P1" | "P2" | "P3" | "D3";
     isRuntimeTarget: boolean;
+}
+
+interface FrameExposureContextV0 {
+    isAvailable: boolean;
+    runtimeOperatorId: OperatorIdV0;
+    runtimeFrameIndex: number | null;
+    selectedFrameIndex: number | null;
+    exposedFrameCount: number | null;
+    globalContext: string;
+    localContext: string;
+    statusCard: ShellStatusCardV0;
 }
 
 const FIXED_INSPECTION_REQUEST_V0 = {
@@ -225,8 +238,48 @@ appNode.innerHTML = `
 
       <section class="control-region" aria-labelledby="frame-region-title">
         <div class="control-label">Frame</div>
-        <h2 id="frame-region-title" class="control-title">Frame context placeholder</h2>
-        <p class="control-copy">Frame navigation remains deferred. This packet requests frame 0 only.</p>
+        <h2 id="frame-region-title" class="control-title">Frame navigation</h2>
+        <p class="control-copy">
+          Frame controls stay bounded to the currently exposed local frame subset only. This packet does not fetch
+          additional runtime frames.
+        </p>
+        <div class="frame-nav-row">
+          <button type="button" class="shell-button" data-frame-prev-button disabled>
+            Prev
+          </button>
+          <label class="frame-input-label" for="frame-index-input">Frame Index</label>
+          <input
+            id="frame-index-input"
+            data-frame-input
+            class="frame-input"
+            type="number"
+            min="0"
+            step="1"
+            inputmode="numeric"
+            disabled
+          />
+          <button type="button" class="shell-button" data-frame-next-button disabled>
+            Next
+          </button>
+        </div>
+        <div class="frame-count-row">
+          <span class="frame-count-label">Frame Index / Total</span>
+          <span class="frame-count-value" data-frame-count>-- / --</span>
+        </div>
+        <dl class="detail-list">
+          <div class="detail-item">
+            <dt>Global Context</dt>
+            <dd data-frame-global-context>Fixed run target awaiting run</dd>
+          </div>
+          <div class="detail-item">
+            <dt>Local Context</dt>
+            <dd data-frame-local-context>Awaiting exposed frame context</dd>
+          </div>
+        </dl>
+        <div class="status-card status-card-neutral" data-frame-status>
+          <div class="status-heading">Frame unavailable</div>
+          <p class="status-detail">Run the fixed inspection request to expose a lawful local frame context.</p>
+        </div>
       </section>
 
       <section class="control-region" aria-labelledby="plane-mode-region-title">
@@ -287,11 +340,18 @@ const fileInput = appNode.querySelector<HTMLInputElement>("[data-file-input]");
 const runButton = appNode.querySelector<HTMLButtonElement>("[data-run-button]");
 const rerunButton = appNode.querySelector<HTMLButtonElement>("[data-rerun-button]");
 const clearButton = appNode.querySelector<HTMLButtonElement>("[data-clear-button]");
+const framePrevButton = appNode.querySelector<HTMLButtonElement>("[data-frame-prev-button]");
+const frameNextButton = appNode.querySelector<HTMLButtonElement>("[data-frame-next-button]");
+const frameInput = appNode.querySelector<HTMLInputElement>("[data-frame-input]");
 const sourceNameNode = appNode.querySelector<HTMLElement>("[data-source-name]");
 const sourceKindNode = appNode.querySelector<HTMLElement>("[data-source-kind]");
 const sourcePathNode = appNode.querySelector<HTMLElement>("[data-source-path]");
 const sourceStatusNode = appNode.querySelector<HTMLElement>("[data-source-status]");
 const runStatusNode = appNode.querySelector<HTMLElement>("[data-run-status]");
+const frameCountNode = appNode.querySelector<HTMLElement>("[data-frame-count]");
+const frameGlobalContextNode = appNode.querySelector<HTMLElement>("[data-frame-global-context]");
+const frameLocalContextNode = appNode.querySelector<HTMLElement>("[data-frame-local-context]");
+const frameStatusNode = appNode.querySelector<HTMLElement>("[data-frame-status]");
 const regimeStackNode = appNode.querySelector<HTMLElement>("[data-regime-stack]");
 const operatorStackNode = appNode.querySelector<HTMLElement>("[data-operator-stack]");
 const operatorNoteNode = appNode.querySelector<HTMLElement>("[data-operator-note]");
@@ -311,11 +371,18 @@ if (
     runButton === null ||
     rerunButton === null ||
     clearButton === null ||
+    framePrevButton === null ||
+    frameNextButton === null ||
+    frameInput === null ||
     sourceNameNode === null ||
     sourceKindNode === null ||
     sourcePathNode === null ||
     sourceStatusNode === null ||
     runStatusNode === null ||
+    frameCountNode === null ||
+    frameGlobalContextNode === null ||
+    frameLocalContextNode === null ||
+    frameStatusNode === null ||
     regimeStackNode === null ||
     operatorStackNode === null ||
     operatorNoteNode === null ||
@@ -347,6 +414,68 @@ function getActiveRegimeDescriptor(): RegimeDescriptorV0 {
 
 function getSelectedOperatorDescriptor(): OperatorDescriptorV0 {
     return OPERATOR_OPTIONS_V0.find((operator) => operator.id === state.selectedOperatorId) ?? OPERATOR_OPTIONS_V0[3];
+}
+
+function getRuntimeOperatorDescriptor(): OperatorDescriptorV0 {
+    return OPERATOR_OPTIONS_V0.find((operator) => operator.id === FIXED_INSPECTION_REQUEST_V0.stage_selection.stage) ?? OPERATOR_OPTIONS_V0[3];
+}
+
+function getFrameExposureContext(): FrameExposureContextV0 {
+    const runtimeOperator = getRuntimeOperatorDescriptor();
+    const selectedOperator = getSelectedOperatorDescriptor();
+
+    if (state.lastRunResult === null) {
+        return {
+            isAvailable: false,
+            runtimeOperatorId: runtimeOperator.id,
+            runtimeFrameIndex: null,
+            selectedFrameIndex: null,
+            exposedFrameCount: null,
+            globalContext: `${runtimeOperator.label} / global context`,
+            localContext: "Awaiting exposed frame context",
+            statusCard: createStatusCard(
+                "neutral",
+                "Frame unavailable",
+                "Run the fixed inspection request to expose a lawful local frame context."
+            ),
+        };
+    }
+
+    const runtimeFrameIndex = state.lastRunResult.stage_selection.frame_index ?? 0;
+
+    if (selectedOperator.id !== runtimeOperator.id) {
+        return {
+            isAvailable: false,
+            runtimeOperatorId: runtimeOperator.id,
+            runtimeFrameIndex,
+            selectedFrameIndex: null,
+            exposedFrameCount: null,
+            globalContext: `${runtimeOperator.label} / global context`,
+            localContext: `${selectedOperator.label} has no local frame exposure in the current fixed run.`,
+            statusCard: createStatusCard(
+                state.frameValidationMessage === null ? "neutral" : "failure",
+                state.frameValidationMessage === null ? "No local frame exposure" : "Frame request rejected",
+                state.frameValidationMessage ??
+                    `${selectedOperator.label} is shell-local only here. The current run exposes ${runtimeOperator.label} frame ${String(runtimeFrameIndex)} only.`
+            ),
+        };
+    }
+
+    return {
+        isAvailable: true,
+        runtimeOperatorId: runtimeOperator.id,
+        runtimeFrameIndex,
+        selectedFrameIndex: state.selectedFrameIndex,
+        exposedFrameCount: 1,
+        globalContext: `${runtimeOperator.label} / global context`,
+        localContext: `Frame ${String(state.selectedFrameIndex)} of 1 exposed / local context`,
+        statusCard: createStatusCard(
+            state.frameValidationMessage === null ? "success" : "failure",
+            state.frameValidationMessage === null ? "Single exposed frame" : "Frame request rejected",
+            state.frameValidationMessage ??
+                `The current run exposes one local frame only: ${runtimeOperator.label} frame ${String(runtimeFrameIndex)}.`
+        ),
+    };
 }
 
 function isFailureResult(
@@ -400,6 +529,8 @@ function getFailureSummary(
 const state: ShellViewStateV0 = {
     activeRegimeId: "temporal",
     selectedOperatorId: "P3",
+    selectedFrameIndex: 0,
+    frameValidationMessage: null,
     selectedSource: null,
     sourceInteractionKind: null,
     sourceStatus: createStatusCard(
@@ -469,6 +600,42 @@ function renderOperatorRegion(): void {
         selectedOperator.isRuntimeTarget
             ? `${selectedOperator.label} is the current fixed runtime target.`
             : `${selectedOperator.label} is selected in the shell only; the live run path remains fixed to P3 — Transform.`;
+}
+
+function renderFrameRegion(): void {
+    const frameContext = getFrameExposureContext();
+    const canStepBackward =
+        frameContext.isAvailable &&
+        frameContext.selectedFrameIndex !== null &&
+        frameContext.runtimeFrameIndex !== null &&
+        frameContext.selectedFrameIndex > frameContext.runtimeFrameIndex;
+    const canStepForward =
+        frameContext.isAvailable &&
+        frameContext.selectedFrameIndex !== null &&
+        frameContext.runtimeFrameIndex !== null &&
+        frameContext.selectedFrameIndex < frameContext.runtimeFrameIndex;
+
+    framePrevButton.disabled = !canStepBackward || state.isUploading || state.isRunning;
+    frameNextButton.disabled = !canStepForward || state.isUploading || state.isRunning;
+    frameInput.disabled = !frameContext.isAvailable || state.isUploading || state.isRunning;
+    frameInput.value =
+        frameContext.selectedFrameIndex === null ? "" : String(frameContext.selectedFrameIndex);
+    frameCountNode.textContent =
+        frameContext.selectedFrameIndex === null || frameContext.exposedFrameCount === null
+            ? "-- / --"
+            : `${String(frameContext.selectedFrameIndex)} / ${String(frameContext.exposedFrameCount)}`;
+    frameGlobalContextNode.textContent = frameContext.globalContext;
+    frameLocalContextNode.textContent = frameContext.localContext;
+
+    if (frameContext.runtimeFrameIndex !== null) {
+        frameInput.min = String(frameContext.runtimeFrameIndex);
+        frameInput.max = String(frameContext.runtimeFrameIndex);
+    } else {
+        frameInput.min = "0";
+        frameInput.max = "0";
+    }
+
+    renderStatusCard(frameStatusNode, frameContext.statusCard);
 }
 
 function renderMainPane(): void {
@@ -567,7 +734,8 @@ function renderMainPane(): void {
 
 function renderShell(): void {
     const activeRegime = getActiveRegimeDescriptor();
-    const selectedOperator = getSelectedOperatorDescriptor();
+    const runtimeOperator = getRuntimeOperatorDescriptor();
+    const frameContext = getFrameExposureContext();
 
     sourceNameNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
     sourceKindNode.textContent = formatInteractionKind(state.sourceInteractionKind);
@@ -575,15 +743,11 @@ function renderShell(): void {
 
     contextSourceNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
     contextRegimeNode.textContent = `${activeRegime.label} / ${activeRegime.statusLabel.toLowerCase()}`;
-    contextOperatorNode.textContent = selectedOperator.isRuntimeTarget
-        ? `${selectedOperator.label} / fixed run target`
-        : `${selectedOperator.label} / shell-local focus`;
+    contextOperatorNode.textContent = `${runtimeOperator.label} / global context`;
     contextFrameNode.textContent =
-        state.lastRunResult === null
-            ? "Awaiting run"
-            : `${state.lastRunResult.stage_selection.stage} / ${String(
-                  state.lastRunResult.stage_selection.frame_index ?? 0
-              )}`;
+        frameContext.selectedFrameIndex === null || frameContext.exposedFrameCount === null
+            ? "Awaiting local context"
+            : `Frame ${String(frameContext.selectedFrameIndex)} / ${String(frameContext.exposedFrameCount)} exposed / local context`;
     contextPlaneNode.textContent =
         state.lastRunResult === null
             ? "Fixed P3 spectral"
@@ -600,6 +764,7 @@ function renderShell(): void {
     renderStatusCard(runStatusNode, state.runStatus);
     renderRegimeRegion();
     renderOperatorRegion();
+    renderFrameRegion();
 
     runButton.disabled = state.selectedSource === null || state.isUploading || state.isRunning;
     rerunButton.disabled =
@@ -656,6 +821,8 @@ async function handoffFileV0(
     interactionKind: SourceInteractionKindV0
 ): Promise<void> {
     state.isUploading = true;
+    state.selectedFrameIndex = 0;
+    state.frameValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
     state.hasRunAttempted = false;
@@ -712,6 +879,7 @@ async function runSelectedSourceV0(): Promise<void> {
     }
 
     state.isRunning = true;
+    state.frameValidationMessage = null;
     state.latestFailure = null;
     state.lastRunResult = null;
     state.runStatus = createStatusCard(
@@ -735,6 +903,8 @@ async function runSelectedSourceV0(): Promise<void> {
 
     state.isRunning = false;
     state.hasRunAttempted = true;
+    state.selectedFrameIndex = result.stage_selection.frame_index ?? 0;
+    state.frameValidationMessage = null;
     state.lastRunResult = result;
     state.latestFailure = null;
     state.runStatus = createStatusCard(
@@ -748,6 +918,8 @@ async function runSelectedSourceV0(): Promise<void> {
 function clearShellStateV0(): void {
     state.selectedSource = null;
     state.sourceInteractionKind = null;
+    state.selectedFrameIndex = 0;
+    state.frameValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
     state.hasRunAttempted = false;
@@ -778,6 +950,43 @@ function handleFileSelectionV0(fileList: FileList | null, interactionKind: Sourc
     }
 
     void handoffFileV0(firstFile, interactionKind);
+}
+
+function applyFrameIndexInputV0(nextFrameIndex: number): void {
+    const frameContext = getFrameExposureContext();
+
+    if (!frameContext.isAvailable || frameContext.runtimeFrameIndex === null) {
+        state.frameValidationMessage = "Frame navigation is unavailable until a lawful local frame is exposed.";
+        renderShell();
+        return;
+    }
+
+    if (!Number.isInteger(nextFrameIndex)) {
+        state.frameValidationMessage = "Frame index must be an integer.";
+        renderShell();
+        return;
+    }
+
+    if (nextFrameIndex !== frameContext.runtimeFrameIndex) {
+        state.frameValidationMessage =
+            `Frame index ${String(nextFrameIndex)} is out of range. The current run exposes ${String(frameContext.runtimeFrameIndex)} only.`;
+        renderShell();
+        return;
+    }
+
+    state.selectedFrameIndex = nextFrameIndex;
+    state.frameValidationMessage = null;
+    renderShell();
+}
+
+function stepFrameSelectionV0(direction: -1 | 1): void {
+    const frameContext = getFrameExposureContext();
+
+    if (!frameContext.isAvailable || frameContext.selectedFrameIndex === null) {
+        return;
+    }
+
+    applyFrameIndexInputV0(frameContext.selectedFrameIndex + direction);
 }
 
 pickButton.addEventListener("click", () => {
@@ -816,6 +1025,39 @@ dropzone.addEventListener("keydown", (event) => {
     }
 });
 
+framePrevButton.addEventListener("click", () => {
+    stepFrameSelectionV0(-1);
+});
+
+frameNextButton.addEventListener("click", () => {
+    stepFrameSelectionV0(1);
+});
+
+frameInput.addEventListener("change", () => {
+    const parsed = Number(frameInput.value);
+    applyFrameIndexInputV0(parsed);
+});
+
+frameInput.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    event.preventDefault();
+    const parsed = Number(frameInput.value);
+    applyFrameIndexInputV0(parsed);
+});
+
+frameInput.addEventListener("blur", () => {
+    if (frameInput.value.trim().length === 0) {
+        renderShell();
+        return;
+    }
+
+    const parsed = Number(frameInput.value);
+    applyFrameIndexInputV0(parsed);
+});
+
 operatorStackNode.addEventListener("click", (event) => {
     const target = event.target;
 
@@ -836,6 +1078,7 @@ operatorStackNode.addEventListener("click", (event) => {
     }
 
     state.selectedOperatorId = operatorId;
+    state.frameValidationMessage = null;
     renderShell();
 });
 

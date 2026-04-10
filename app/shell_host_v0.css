@@ -122,6 +122,58 @@ code {
     margin-top: 12px;
 }
 
+.frame-nav-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.frame-input-label,
+.frame-count-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--shell-muted);
+}
+
+.frame-input {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid rgba(135, 104, 78, 0.28);
+    background: #fffaf2;
+    color: var(--shell-ink);
+    padding: 9px 10px;
+    font: inherit;
+}
+
+.frame-input:focus-visible {
+    outline: 2px solid rgba(135, 104, 78, 0.28);
+    outline-offset: 2px;
+}
+
+.frame-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.frame-count-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(135, 104, 78, 0.18);
+    background: rgba(255, 255, 255, 0.52);
+}
+
+.frame-count-value {
+    font-size: 15px;
+    color: var(--shell-ink);
+}
+
 .dropzone {
     display: grid;
     gap: 6px;
@@ -556,5 +608,9 @@ code {
 
     .inspection-title {
         font-size: 28px;
+    }
+
+    .frame-nav-row {
+        grid-template-columns: 1fr 1fr;
     }
 }
