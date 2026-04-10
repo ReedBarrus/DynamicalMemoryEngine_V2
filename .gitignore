@@ -10,6 +10,8 @@ __pycache__/
 
 # Logs
 *.log
+.local/logs/*
+!.local/logs/.gitkeep
 
 # OS junk
 .DS_Store
