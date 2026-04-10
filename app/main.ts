@@ -14,6 +14,7 @@ type StatusToneV0 = "neutral" | "busy" | "success" | "failure";
 type RegimeIdV0 = "temporal" | "support" | "symbolic";
 type OperatorIdV0 = "P0" | "P1" | "P2" | "P3" | "D3";
 type PlaneModeIdV0 = "direct_temporal" | "re" | "im" | "both" | "magnitude" | "phase";
+type FailureScopeV0 = "source" | "run";
 
 interface ShellStatusCardV0 {
     tone: StatusToneV0;
@@ -36,6 +37,7 @@ interface ShellViewStateV0 {
     runStatus: ShellStatusCardV0;
     lastRunResult: LocalHostBridgeRunSuccessV0 | null;
     latestFailure: RoutedBridgeFailureV0 | ShellBridgeCallFailureV0 | null;
+    latestFailureScope: FailureScopeV0 | null;
     hasRunAttempted: boolean;
     isUploading: boolean;
     isRunning: boolean;
@@ -106,6 +108,14 @@ type InspectionPaneViewModelV0 =
           title: string;
           detail: string;
           meta: string[];
+      }
+    | {
+          kind: "pane_failure";
+          title: string;
+          detail: string;
+          meta: string[];
+          seam: string;
+          code: string;
       }
     | {
           kind: "spectral_supported";
@@ -809,14 +819,16 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
 
     if (spectralBins === null) {
         return {
-            kind: "unavailable",
-            title: "Fixed run result is not shell-renderable here",
-            detail: "The shell expected Cartesian P3 bins for shell-local plane-mode presentation, but they were not present in the current result.",
+            kind: "pane_failure",
+            title: "Fixed P3 render could not be surfaced in the pane",
+            detail: "The shell expected Cartesian P3 bins for shell-local plane-mode presentation, but they were not present in the current run result.",
             meta: [
                 `Selected operator: ${selectedOperator.label}`,
                 `Selected mode: ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
                 `Runtime render: ${getRuntimeRenderClassLabel()}`,
             ],
+            seam: "app_shell",
+            code: "missing_shell_render_bins",
         };
     }
 
@@ -906,6 +918,26 @@ function getFailureSummary(
     };
 }
 
+function getFailureScopeCopy(scope: FailureScopeV0): {
+    label: string;
+    regionTitle: string;
+    panelDetail: string;
+} {
+    if (scope === "source") {
+        return {
+            label: "Source Failure",
+            regionTitle: "Source handoff did not complete",
+            panelDetail: "The Source region failed before a lawful run-ready selection was available.",
+        };
+    }
+
+    return {
+        label: "Run Failure",
+        regionTitle: "Run request did not return inspection output",
+        panelDetail: "The Run region failed while sending the fixed inspection request through the host bridge.",
+    };
+}
+
 const state: ShellViewStateV0 = {
     activeRegimeId: "temporal",
     selectedOperatorId: "P3",
@@ -927,6 +959,7 @@ const state: ShellViewStateV0 = {
     ),
     lastRunResult: null,
     latestFailure: null,
+    latestFailureScope: null,
     hasRunAttempted: false,
     isUploading: false,
     isRunning: false,
@@ -1043,15 +1076,17 @@ function renderPlaneModeRegion(): void {
 }
 
 function renderMainPane(): void {
-    if (state.latestFailure !== null) {
+    if (state.latestFailure !== null && state.latestFailureScope !== null) {
         const failureSummary = getFailureSummary(state.latestFailure);
+        const failureScope = getFailureScopeCopy(state.latestFailureScope);
 
         mainStatusNode.innerHTML = `
           <div class="main-callout main-callout-failure">
-            <div class="main-callout-label">Latest Failure</div>
-            <h3>${escapeHtml(failureSummary.title)}</h3>
+            <div class="main-callout-label">${escapeHtml(failureScope.label)}</div>
+            <h3>${escapeHtml(failureScope.regionTitle)}</h3>
             <p>${escapeHtml(failureSummary.detail)}</p>
             <div class="main-callout-meta">
+              <span>Region: ${escapeHtml(failureScope.label.replace(" Failure", ""))}</span>
               <span>Seam: ${escapeHtml(failureSummary.seam ?? "app_shell")}</span>
               <span>Code: ${escapeHtml(failureSummary.code ?? "none")}</span>
             </div>
@@ -1079,6 +1114,19 @@ function renderMainPane(): void {
                 </div>
               </div>
             `;
+        } else if (paneView.kind === "pane_failure") {
+            mainStatusNode.innerHTML = `
+              <div class="main-callout main-callout-failure">
+                <div class="main-callout-label">Pane Failure</div>
+                <h3>${escapeHtml(paneView.title)}</h3>
+                <p>${escapeHtml(paneView.detail)}</p>
+                <div class="main-callout-meta">
+                  <span>Seam: ${escapeHtml(paneView.seam)}</span>
+                  <span>Code: ${escapeHtml(paneView.code)}</span>
+                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+                </div>
+              </div>
+            `;
         } else {
             mainStatusNode.innerHTML = `
               <div class="main-callout main-callout-success">
@@ -1094,6 +1142,44 @@ function renderMainPane(): void {
     }
 
     const paneView = getInspectionPaneViewModel();
+
+    if (state.latestFailure !== null && state.latestFailureScope !== null) {
+        const failureSummary = getFailureSummary(state.latestFailure);
+        const failureScope = getFailureScopeCopy(state.latestFailureScope);
+
+        mainResultNode.innerHTML = `
+          <div class="result-panel result-panel-failure">
+            <div class="result-summary-grid">
+              <div class="result-summary">
+                <div class="result-key">Failure Region</div>
+                <div class="result-value">${escapeHtml(failureScope.label.replace(" Failure", ""))}</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Failure Seam</div>
+                <div class="result-value">${escapeHtml(failureSummary.seam ?? "app_shell")}</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Failure Code</div>
+                <div class="result-value">${escapeHtml(failureSummary.code ?? "none")}</div>
+              </div>
+            </div>
+            <p class="result-note">${escapeHtml(failureScope.panelDetail)}</p>
+            <div class="failure-detail-grid">
+              <div class="failure-detail-card">
+                <div class="result-key">Failure Detail</div>
+                <div class="failure-detail-value">${escapeHtml(failureSummary.detail)}</div>
+              </div>
+              <div class="failure-detail-card">
+                <div class="result-key">Selected Source</div>
+                <div class="failure-detail-value">${escapeHtml(
+                    state.selectedSource?.original_file_name ?? "No source selected"
+                )}</div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+    }
 
     if (paneView.kind === "spectral_supported") {
         mainResultNode.innerHTML = `
@@ -1144,6 +1230,32 @@ function renderMainPane(): void {
                   </div>
                 `).join("")}
               </div>
+            </div>
+          </div>
+        `;
+        return;
+    }
+
+    if (paneView.kind === "pane_failure") {
+        mainResultNode.innerHTML = `
+          <div class="result-panel result-panel-failure">
+            <div class="result-summary-grid">
+              <div class="result-summary">
+                <div class="result-key">Pane State</div>
+                <div class="result-value">failure</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Failure Seam</div>
+                <div class="result-value">${escapeHtml(paneView.seam)}</div>
+              </div>
+              <div class="result-summary">
+                <div class="result-key">Failure Code</div>
+                <div class="result-value">${escapeHtml(paneView.code)}</div>
+              </div>
+            </div>
+            <p class="result-note">${escapeHtml(paneView.detail)}</p>
+            <div class="main-callout-meta">
+              ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
             </div>
           </div>
         `;
@@ -1256,6 +1368,7 @@ function applyFailureToSourceRegion(
 
     state.isUploading = false;
     state.latestFailure = failure;
+    state.latestFailureScope = "source";
     state.sourceStatus = createStatusCard(
         "failure",
         summary.title,
@@ -1272,6 +1385,7 @@ function applyFailureToRunRegion(
 
     state.isRunning = false;
     state.latestFailure = failure;
+    state.latestFailureScope = "run";
     state.hasRunAttempted = true;
     state.runStatus = createStatusCard(
         "failure",
@@ -1292,6 +1406,7 @@ async function handoffFileV0(
     state.planeValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
+    state.latestFailureScope = null;
     state.hasRunAttempted = false;
     state.sourceStatus = createStatusCard(
         "busy",
@@ -1317,6 +1432,7 @@ async function handoffFileV0(
     state.selectedSource = result;
     state.sourceInteractionKind = interactionKind;
     state.latestFailure = null;
+    state.latestFailureScope = null;
     state.sourceStatus = createStatusCard(
         "success",
         "Source ready",
@@ -1349,6 +1465,7 @@ async function runSelectedSourceV0(): Promise<void> {
     state.frameValidationMessage = null;
     state.planeValidationMessage = null;
     state.latestFailure = null;
+    state.latestFailureScope = null;
     state.lastRunResult = null;
     state.runStatus = createStatusCard(
         "busy",
@@ -1375,6 +1492,7 @@ async function runSelectedSourceV0(): Promise<void> {
     state.frameValidationMessage = null;
     state.lastRunResult = result;
     state.latestFailure = null;
+    state.latestFailureScope = null;
     state.runStatus = createStatusCard(
         "success",
         "Run completed",
@@ -1391,6 +1509,7 @@ function clearShellStateV0(): void {
     state.planeValidationMessage = null;
     state.lastRunResult = null;
     state.latestFailure = null;
+    state.latestFailureScope = null;
     state.hasRunAttempted = false;
     state.isUploading = false;
     state.isRunning = false;

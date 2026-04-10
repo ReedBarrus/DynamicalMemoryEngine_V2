@@ -566,6 +566,7 @@ code {
 
 .main-callout-failure {
     background: rgba(135, 63, 48, 0.08);
+    border-color: rgba(135, 63, 48, 0.18);
 }
 
 .result-panel {
@@ -584,6 +585,11 @@ code {
     background: rgba(255, 250, 242, 0.82);
 }
 
+.result-panel-failure {
+    background: rgba(255, 245, 242, 0.86);
+    border-color: rgba(135, 63, 48, 0.24);
+}
+
 .result-summary-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -599,6 +605,26 @@ code {
     margin: 0;
     color: var(--shell-muted);
     line-height: 1.5;
+}
+
+.failure-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.failure-detail-card {
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid rgba(135, 63, 48, 0.16);
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.failure-detail-value {
+    color: var(--shell-copy);
+    line-height: 1.5;
+    word-break: break-word;
 }
 
 .spectral-panel {
