@@ -19,7 +19,7 @@ type FailureScopeV0 = "source" | "run";
 interface ShellStatusCardV0 {
     tone: StatusToneV0;
     title: string;
-    detail: string;
+    detail?: string;
     seam?: string;
     code?: string;
 }
@@ -125,6 +125,8 @@ interface SpectralChartViewV0 {
     plotTop: number;
     plotWidth: number;
     plotHeight: number;
+    minFrequencyHz: number;
+    maxFrequencyHz: number;
     minValue: number;
     maxValue: number;
     xTicks: SpectralAxisTickV0[];
@@ -333,25 +335,11 @@ document.body.className = "shell-body";
 appNode.innerHTML = `
   <div class="shell-host" data-shell-host="v0">
     <aside class="control-rail" aria-label="Control Rail">
-      <div class="rail-header">
-        <div class="rail-kicker">Inspection Shell v0</div>
-        <h1 class="rail-title">Dynamical Memory Engine</h1>
-        <p class="rail-copy">
-          Local Source and Run controls are now live through the Local Host Bridge v0. Execution remains outside
-          <code>app/</code>.
-        </p>
-      </div>
-
-      <section class="control-region" aria-labelledby="source-region-title">
+      <section class="control-region" aria-label="Source">
         <div class="control-label">Source</div>
-        <h2 id="source-region-title" class="control-title">Local .wav handoff</h2>
-        <p class="control-copy">
-          Drag/drop or pick one <code>.wav</code>. Browser file bytes route through
-          <code>POST /api/source/handoff</code> at ${LOCAL_HOST_BRIDGE_BASE_URL}.
-        </p>
         <div class="dropzone" data-dropzone tabindex="0" aria-label="Drop a wav file here">
-          <div class="dropzone-title">Drop one .wav here</div>
-          <div class="dropzone-copy">No auto-run. The first dropped file becomes the next explicit handoff request.</div>
+          <div class="dropzone-title">.wav</div>
+          <div class="dropzone-copy">drag / drop</div>
         </div>
         <div class="button-row">
           <button type="button" class="shell-button shell-button-primary" data-pick-button>
@@ -362,7 +350,7 @@ appNode.innerHTML = `
         <dl class="detail-list">
           <div class="detail-item">
             <dt>Selected Source</dt>
-            <dd data-source-name>No source selected</dd>
+            <dd data-source-name>--</dd>
           </div>
           <div class="detail-item">
             <dt>Interaction</dt>
@@ -374,17 +362,12 @@ appNode.innerHTML = `
           </div>
         </dl>
         <div class="status-card status-card-neutral" data-source-status>
-          <div class="status-heading">Awaiting source</div>
-          <p class="status-detail">Select a <code>.wav</code> to prepare a local runtime handoff.</p>
+          <div class="status-heading">awaiting</div>
         </div>
       </section>
 
-      <section class="control-region" aria-labelledby="run-region-title">
+      <section class="control-region" aria-label="Run">
         <div class="control-label">Run</div>
-        <h2 id="run-region-title" class="control-title">Fixed inspection request</h2>
-        <p class="control-copy">
-          Manual only. Run and rerun send one explicit request through <code>POST /api/run</code>.
-        </p>
         <div class="request-chip">
           P3 / PlaneP3SpectralView / frame 0 / Fs 2000 Hz / window 64 / hop 64
         </div>
@@ -400,17 +383,12 @@ appNode.innerHTML = `
           </button>
         </div>
         <div class="status-card status-card-neutral" data-run-status>
-          <div class="status-heading">Run idle</div>
-          <p class="status-detail">Run remains manual after source handoff. Clear / Reset only clears shell-local state.</p>
+          <div class="status-heading">idle</div>
         </div>
       </section>
 
-      <section class="control-region" aria-labelledby="regime-region-title">
+      <section class="control-region" aria-label="Regime">
         <div class="control-label">Regime</div>
-        <h2 id="regime-region-title" class="control-title">Regime navigation</h2>
-        <p class="control-copy">
-          Temporal is the only active path in this shell pass. Deferred regimes stay visible but unavailable.
-        </p>
         <div class="regime-stack" role="list" aria-label="Regime Availability" data-regime-stack>
         </div>
       </section>
@@ -421,7 +399,7 @@ appNode.innerHTML = `
       <header class="context-header">
         <div class="context-item">
           <span class="context-key">Source</span>
-          <span class="context-value" data-context-source>No source selected</span>
+          <span class="context-value" data-context-source>--</span>
         </div>
         <div class="context-item">
           <span class="context-key">Regime</span>
@@ -429,67 +407,39 @@ appNode.innerHTML = `
         </div>
         <div class="context-item">
           <span class="context-key">Operator</span>
-          <span class="context-value" data-context-operator>P3 — Transform / fixed run target</span>
+          <span class="context-value" data-context-operator>P3 — Transform / fixed</span>
         </div>
         <div class="context-item">
           <span class="context-key">Frame</span>
-          <span class="context-value" data-context-frame>Frame 0 / fixed runtime target</span>
+          <span class="context-value" data-context-frame>0 / fixed</span>
         </div>
         <div class="context-item">
           <span class="context-key">Plane Mode</span>
-          <span class="context-value" data-context-plane>PlaneP3SpectralView / fixed runtime plane</span>
+          <span class="context-value" data-context-plane>PlaneP3SpectralView / fixed</span>
         </div>
       </header>
 
       <div class="inspection-body">
-        <section class="inspection-stage" aria-labelledby="inspection-stage-title">
-          <div class="inspection-kicker">Main Inspection Pane</div>
-          <h2 id="inspection-stage-title" class="inspection-title">Render-ready inspection response</h2>
-          <p class="inspection-copy" data-inspection-copy>
-            Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. Shell-local navigation
-            remains adjacent to this pane and does not rewrite runtime targeting.
-          </p>
+        <section class="inspection-stage" aria-label="Plane">
           <div class="inspection-status-shell" data-main-status></div>
           <div class="inspection-result-shell" data-main-result>
             <div class="inspection-placeholder" aria-hidden="true">
               <div class="placeholder-grid"></div>
               <div class="placeholder-frame">
-                <span>Inspection output awaiting run</span>
+                <span>awaiting_run</span>
               </div>
             </div>
           </div>
         </section>
 
         <aside class="local-navigation" aria-label="Local Navigation">
-          <div class="local-navigation-header">
-            <div class="inspection-kicker">Shell-Local Navigation</div>
-            <h2 class="local-navigation-title">Operator, frame, and plane posture</h2>
-            <p class="local-navigation-copy">
-              These controls remain visibly local to the inspection pane. They do not change the fixed bridge-routed
-              runtime request in this packet.
-            </p>
-          </div>
-
-          <section class="control-region" aria-labelledby="operator-region-title">
+          <section class="control-region" aria-label="Operator">
             <div class="control-label">Operator</div>
-            <h2 id="operator-region-title" class="control-title">Operator navigation</h2>
-            <p class="control-copy">
-              Operator selection is shell-local in this packet. The live run path remains fixed to
-              <code>P3 — Transform</code>.
-            </p>
             <div class="operator-stack" role="list" aria-label="Temporal Operator Exposure" data-operator-stack></div>
-            <div class="operator-note" data-operator-note>
-              Selected operator posture is display-only until operator-aware runtime requests are added lawfully.
-            </div>
           </section>
 
-          <section class="control-region" aria-labelledby="frame-region-title">
+          <section class="control-region" aria-label="Frame">
             <div class="control-label">Frame</div>
-            <h2 id="frame-region-title" class="control-title">Frame navigation</h2>
-            <p class="control-copy">
-              Frame controls stay bounded to the currently exposed local frame subset only. This packet does not fetch
-              additional runtime frames.
-            </p>
             <div class="frame-nav-row">
               <button type="button" class="shell-button" data-frame-prev-button disabled>
                 Prev
@@ -513,43 +463,16 @@ appNode.innerHTML = `
               <span class="frame-count-label">Frame Index / Total</span>
               <span class="frame-count-value" data-frame-count>-- / --</span>
             </div>
-            <dl class="detail-list">
-              <div class="detail-item">
-                <dt>Global Context</dt>
-                <dd data-frame-global-context>Fixed run target awaiting run</dd>
-              </div>
-              <div class="detail-item">
-                <dt>Local Context</dt>
-                <dd data-frame-local-context>Awaiting exposed frame context</dd>
-              </div>
-            </dl>
             <div class="status-card status-card-neutral" data-frame-status>
-              <div class="status-heading">Frame unavailable</div>
-              <p class="status-detail">Run the fixed inspection request to expose a lawful local frame context.</p>
+              <div class="status-heading">unavailable</div>
             </div>
           </section>
 
-          <section class="control-region" aria-labelledby="plane-mode-region-title">
+          <section class="control-region" aria-label="Plane Mode">
             <div class="control-label">Plane Mode</div>
-            <h2 id="plane-mode-region-title" class="control-title">Plane mode navigation</h2>
-            <p class="control-copy">
-              Plane mode selection is operator-dependent and shell-local in this packet. It does not change the fixed
-              runtime plane request.
-            </p>
             <div class="plane-mode-stack" role="list" aria-label="Plane Mode Exposure" data-plane-mode-stack></div>
-            <dl class="detail-list">
-              <div class="detail-item">
-                <dt>Global Context</dt>
-                <dd data-plane-global-context>Fixed runtime plane awaiting run</dd>
-              </div>
-              <div class="detail-item">
-                <dt>Local Context</dt>
-                <dd data-plane-local-context>Awaiting selected operator plane semantics</dd>
-              </div>
-            </dl>
             <div class="status-card status-card-neutral" data-plane-status>
-              <div class="status-heading">Plane mode bounded</div>
-              <p class="status-detail">Select an operator to expose the lawful shell-local plane modes for that surface.</p>
+              <div class="status-heading">bounded</div>
             </div>
           </section>
         </aside>
@@ -573,22 +496,16 @@ const sourcePathNode = appNode.querySelector<HTMLElement>("[data-source-path]");
 const sourceStatusNode = appNode.querySelector<HTMLElement>("[data-source-status]");
 const runStatusNode = appNode.querySelector<HTMLElement>("[data-run-status]");
 const frameCountNode = appNode.querySelector<HTMLElement>("[data-frame-count]");
-const frameGlobalContextNode = appNode.querySelector<HTMLElement>("[data-frame-global-context]");
-const frameLocalContextNode = appNode.querySelector<HTMLElement>("[data-frame-local-context]");
 const frameStatusNode = appNode.querySelector<HTMLElement>("[data-frame-status]");
 const planeModeStackNode = appNode.querySelector<HTMLElement>("[data-plane-mode-stack]");
-const planeGlobalContextNode = appNode.querySelector<HTMLElement>("[data-plane-global-context]");
-const planeLocalContextNode = appNode.querySelector<HTMLElement>("[data-plane-local-context]");
 const planeStatusNode = appNode.querySelector<HTMLElement>("[data-plane-status]");
 const regimeStackNode = appNode.querySelector<HTMLElement>("[data-regime-stack]");
 const operatorStackNode = appNode.querySelector<HTMLElement>("[data-operator-stack]");
-const operatorNoteNode = appNode.querySelector<HTMLElement>("[data-operator-note]");
 const contextSourceNode = appNode.querySelector<HTMLElement>("[data-context-source]");
 const contextRegimeNode = appNode.querySelector<HTMLElement>("[data-context-regime]");
 const contextOperatorNode = appNode.querySelector<HTMLElement>("[data-context-operator]");
 const contextFrameNode = appNode.querySelector<HTMLElement>("[data-context-frame]");
 const contextPlaneNode = appNode.querySelector<HTMLElement>("[data-context-plane]");
-const inspectionCopyNode = appNode.querySelector<HTMLElement>("[data-inspection-copy]");
 const mainStatusNode = appNode.querySelector<HTMLElement>("[data-main-status]");
 const mainResultNode = appNode.querySelector<HTMLElement>("[data-main-result]");
 
@@ -608,22 +525,16 @@ if (
     sourceStatusNode === null ||
     runStatusNode === null ||
     frameCountNode === null ||
-    frameGlobalContextNode === null ||
-    frameLocalContextNode === null ||
     frameStatusNode === null ||
     planeModeStackNode === null ||
-    planeGlobalContextNode === null ||
-    planeLocalContextNode === null ||
     planeStatusNode === null ||
     regimeStackNode === null ||
     operatorStackNode === null ||
-    operatorNoteNode === null ||
     contextSourceNode === null ||
     contextRegimeNode === null ||
     contextOperatorNode === null ||
     contextFrameNode === null ||
     contextPlaneNode === null ||
-    inspectionCopyNode === null ||
     mainStatusNode === null ||
     mainResultNode === null
 ) {
@@ -664,12 +575,8 @@ function getFrameExposureContext(): FrameExposureContextV0 {
             selectedFrameIndex: null,
             exposedFrameCount: null,
             globalContext: `${runtimeOperator.label} / global context`,
-            localContext: "Awaiting exposed frame context",
-            statusCard: createStatusCard(
-                "neutral",
-                "Frame unavailable",
-                "Run the fixed inspection request to expose a lawful local frame context."
-            ),
+            localContext: "awaiting",
+            statusCard: createStatusCard("neutral", "unavailable"),
         };
     }
 
@@ -683,12 +590,11 @@ function getFrameExposureContext(): FrameExposureContextV0 {
             selectedFrameIndex: null,
             exposedFrameCount: null,
             globalContext: `${runtimeOperator.label} / global context`,
-            localContext: `${selectedOperator.label} has no local frame exposure in the current fixed run.`,
+            localContext: "unavailable",
             statusCard: createStatusCard(
                 state.frameValidationMessage === null ? "neutral" : "failure",
-                state.frameValidationMessage === null ? "No local frame exposure" : "Frame request rejected",
-                state.frameValidationMessage ??
-                    `${selectedOperator.label} is shell-local only here. The current run exposes ${runtimeOperator.label} frame ${String(runtimeFrameIndex)} only.`
+                state.frameValidationMessage === null ? "unavailable" : "rejected",
+                state.frameValidationMessage ?? "runtime_only"
             ),
         };
     }
@@ -700,12 +606,11 @@ function getFrameExposureContext(): FrameExposureContextV0 {
         selectedFrameIndex: state.selectedFrameIndex,
         exposedFrameCount: 1,
         globalContext: `${runtimeOperator.label} / global context`,
-        localContext: `Frame ${String(state.selectedFrameIndex)} of 1 exposed / local context`,
+        localContext: `${String(state.selectedFrameIndex)} / 1`,
         statusCard: createStatusCard(
             state.frameValidationMessage === null ? "success" : "failure",
-            state.frameValidationMessage === null ? "Single exposed frame" : "Frame request rejected",
-            state.frameValidationMessage ??
-                `The current run exposes one local frame only: ${runtimeOperator.label} frame ${String(runtimeFrameIndex)}.`
+            state.frameValidationMessage === null ? "ready" : "rejected",
+            state.frameValidationMessage ?? `frame_${String(runtimeFrameIndex)}`
         ),
     };
 }
@@ -745,12 +650,11 @@ function getPlaneModeExposureContext(): PlaneModeExposureContextV0 {
             availableModes,
             runtimePlaneClass,
             globalContext: `${runtimePlaneClass} / fixed runtime plane`,
-            localContext: `${selectedOperator.label} exposes ${availableModes.map((mode) => mode.label).join(", ")} as shell-local plane modes only.`,
+            localContext: availableModes.map((mode) => mode.label).join(" / "),
             statusCard: createStatusCard(
                 state.planeValidationMessage === null ? "neutral" : "failure",
-                state.planeValidationMessage === null ? "Shell-local plane modes only" : "Plane mode request rejected",
-                state.planeValidationMessage ??
-                    `${selectedOperator.label} does not have live runtime plane switching in this packet.`
+                state.planeValidationMessage === null ? "local_only" : "rejected",
+                state.planeValidationMessage ?? "runtime_fixed"
             ),
         };
     }
@@ -760,12 +664,11 @@ function getPlaneModeExposureContext(): PlaneModeExposureContextV0 {
         availableModes,
         runtimePlaneClass,
         globalContext: `${runtimePlaneClass} / fixed runtime plane`,
-        localContext: `${selectedOperator.label} exposes ${selectedMode.label} as a shell-local mode over one fixed runtime plane.`,
+        localContext: selectedMode.label,
         statusCard: createStatusCard(
             state.planeValidationMessage === null ? "success" : "failure",
-            state.planeValidationMessage === null ? "Fixed runtime plane, shell-local mode" : "Plane mode request rejected",
-            state.planeValidationMessage ??
-                `${selectedMode.label} is selected in the shell. The runtime plane remains ${runtimePlaneClass}.`
+            state.planeValidationMessage === null ? "ready" : "rejected",
+            state.planeValidationMessage ?? runtimePlaneClass
         ),
     };
 }
@@ -854,27 +757,6 @@ function formatSpectralFrequencyTickV0(value: number): string {
     return `${value.toFixed(2)} Hz`;
 }
 
-function getSpectralDisplayedPeakV0(
-    previewBins: SpectralBinPointV0[],
-    selectedModeId: PlaneModeIdV0
-): number {
-    const displayedValues = previewBins.flatMap((bin) => {
-        if (selectedModeId === "re") {
-            return [bin.re];
-        }
-
-        if (selectedModeId === "im") {
-            return [bin.im];
-        }
-
-        return [bin.re, bin.im];
-    });
-
-    return displayedValues.length === 0
-        ? 1
-        : Math.max(...displayedValues.map((value) => Math.abs(value))) || 1;
-}
-
 function createSeriesPathFromMappedPointsV0(
     bins: SpectralBinPointV0[],
     valueSelector: (bin: SpectralBinPointV0) => number,
@@ -883,6 +765,8 @@ function createSeriesPathFromMappedPointsV0(
         plotTop: number;
         plotWidth: number;
         plotHeight: number;
+        minFrequencyHz: number;
+        maxFrequencyHz: number;
         minValue: number;
         maxValue: number;
     }
@@ -892,12 +776,13 @@ function createSeriesPathFromMappedPointsV0(
     }
 
     const span = chart.maxValue - chart.minValue || 1;
+    const frequencySpan = chart.maxFrequencyHz - chart.minFrequencyHz || 1;
 
     return bins.map((bin, index) => {
         const x =
-            bins.length === 1
+            bins.length === 1 || frequencySpan === 0
                 ? chart.plotLeft + (chart.plotWidth / 2)
-                : chart.plotLeft + ((index / (bins.length - 1)) * chart.plotWidth);
+                : chart.plotLeft + (((bin.frequency - chart.minFrequencyHz) / frequencySpan) * chart.plotWidth);
         const value = valueSelector(bin);
         const y =
             chart.plotTop +
@@ -923,23 +808,37 @@ function buildSpectralChartViewV0(
     selectedMeasurementIndex: number
 ): SpectralChartViewV0 {
     const viewBoxWidth = 640;
-    const viewBoxHeight = 260;
-    const plotLeft = 58;
-    const plotTop = 18;
-    const plotWidth = 540;
-    const plotHeight = 164;
+    const viewBoxHeight = 232;
+    const plotLeft = 52;
+    const plotTop = 10;
+    const plotWidth = 576;
+    const plotHeight = 176;
 
-    const absolutePeak = getSpectralDisplayedPeakV0(previewBins, selectedModeId);
-    const minValue = -absolutePeak;
-    const maxValue = absolutePeak;
+    const displayedValues = previewBins.flatMap((bin) => {
+        if (selectedModeId === "re") {
+            return [bin.re];
+        }
+
+        if (selectedModeId === "im") {
+            return [bin.im];
+        }
+
+        return [bin.re, bin.im];
+    });
+    const minValue = Math.min(...displayedValues, 0);
+    const maxValue = Math.max(...displayedValues, 0);
     const span = maxValue - minValue || 1;
+    const frequencies = previewBins.map((bin) => bin.frequency);
+    const minFrequencyHz = Math.min(...frequencies);
+    const maxFrequencyHz = Math.max(...frequencies);
+    const frequencySpan = maxFrequencyHz - minFrequencyHz || 1;
 
     const xTickIndices = getSpectralTickIndicesV0(previewBins.length);
     const xTicks = xTickIndices.map((index) => ({
         position:
-            previewBins.length === 1
+            previewBins.length === 1 || frequencySpan === 0
                 ? plotLeft + (plotWidth / 2)
-                : plotLeft + ((index / (previewBins.length - 1)) * plotWidth),
+                : plotLeft + (((previewBins[index]?.frequency ?? minFrequencyHz) - minFrequencyHz) / frequencySpan) * plotWidth,
         label: formatSpectralFrequencyTickV0(previewBins[index]?.frequency ?? 0),
     }));
 
@@ -950,9 +849,9 @@ function buildSpectralChartViewV0(
     }));
 
     const selectedBinX =
-        previewBins.length === 1
+        previewBins.length === 1 || frequencySpan === 0
             ? plotLeft + (plotWidth / 2)
-            : plotLeft + ((selectedMeasurementIndex / (previewBins.length - 1)) * plotWidth);
+            : plotLeft + ((((previewBins[selectedMeasurementIndex]?.frequency ?? minFrequencyHz) - minFrequencyHz) / frequencySpan) * plotWidth);
     const selectedBin = previewBins[selectedMeasurementIndex];
 
     const mapValueToY = (value: number): number =>
@@ -985,6 +884,8 @@ function buildSpectralChartViewV0(
         plotTop,
         plotWidth,
         plotHeight,
+        minFrequencyHz,
+        maxFrequencyHz,
         minValue,
         maxValue,
         xTicks,
@@ -993,8 +894,8 @@ function buildSpectralChartViewV0(
         selectedBinX,
         selectedBinLabel: `Preview Bin ${String(selectedMeasurementIndex)}`,
         selectedMarkers,
-        yAxisTitle: "Cartesian value",
-        xAxisTitle: "Frequency (Hz)",
+        yAxisTitle: selectedModeId === "re" ? "re" : selectedModeId === "im" ? "im" : "re/im",
+        xAxisTitle: "Hz",
     };
 }
 
@@ -1028,22 +929,22 @@ function getDefaultPreviewBinIndexV0(
 
 function getMeasurementEmphasisLabelV0(selectedModeId: PlaneModeIdV0): string {
     if (selectedModeId === "re") {
-        return "re emphasis";
+        return "re";
     }
 
     if (selectedModeId === "im") {
-        return "im emphasis";
+        return "im";
     }
 
-    return "both over Cartesian components";
+    return "both";
 }
 
 function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
     if (state.lastRunResult === null) {
         return {
             kind: "awaiting_run",
-            title: "Inspection output awaiting run",
-            detail: "Run the fixed bridge-routed inspection request to expose one lawful render payload.",
+            title: "awaiting_run",
+            detail: "",
         };
     }
 
@@ -1053,12 +954,12 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
     if (selectedOperator.id !== "P3") {
         return {
             kind: "unavailable",
-            title: `${selectedOperator.label} is not currently render-backed`,
-            detail: "The current run result exposes one fixed P3 spectral render only. This operator selection remains shell-local.",
+            title: "unavailable",
+            detail: "",
             meta: [
-                `Selected operator: ${selectedOperator.label}`,
-                `Selected mode: ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
-                `Runtime plane: ${planeContext.runtimePlaneClass}`,
+                `operator / ${selectedOperator.label}`,
+                `mode / ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
+                `plane / ${planeContext.runtimePlaneClass}`,
             ],
         };
     }
@@ -1068,12 +969,12 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
     if (spectralBins === null) {
         return {
             kind: "pane_failure",
-            title: "Fixed P3 render could not be surfaced in the pane",
-            detail: "The shell expected Cartesian P3 bins for shell-local plane-mode presentation, but they were not present in the current run result.",
+            title: "failure",
+            detail: "",
             meta: [
-                `Selected operator: ${selectedOperator.label}`,
-                `Selected mode: ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
-                `Runtime render: ${getRuntimeRenderClassLabel()}`,
+                `operator / ${selectedOperator.label}`,
+                `mode / ${getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId).label}`,
+                `render / ${getRuntimeRenderClassLabel()}`,
             ],
             seam: "app_shell",
             code: "missing_shell_render_bins",
@@ -1105,6 +1006,8 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
                 plotTop: chart.plotTop,
                 plotWidth: chart.plotWidth,
                 plotHeight: chart.plotHeight,
+                minFrequencyHz: chart.minFrequencyHz,
+                maxFrequencyHz: chart.maxFrequencyHz,
                 minValue: chart.minValue,
                 maxValue: chart.maxValue,
             }),
@@ -1121,6 +1024,8 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
                 plotTop: chart.plotTop,
                 plotWidth: chart.plotWidth,
                 plotHeight: chart.plotHeight,
+                minFrequencyHz: chart.minFrequencyHz,
+                maxFrequencyHz: chart.maxFrequencyHz,
                 minValue: chart.minValue,
                 maxValue: chart.maxValue,
             }),
@@ -1129,20 +1034,20 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
 
     return {
         kind: "spectral_supported",
-        title: `${selectedMode.label} shell view over fixed P3 render`,
-        detail: "Shell-local plane mode is changing presentation of the current P3 Cartesian result only. No runtime re-run or plane remap occurred.",
+        title: selectedMode.label,
+        detail: "",
         meta: [
-            `Selected operator: ${selectedOperator.label}`,
-            `Selected frame: ${String(state.selectedFrameIndex)}`,
-            `Runtime plane: ${planeContext.runtimePlaneClass}`,
+            `operator / ${selectedOperator.label}`,
+            `frame / ${String(state.selectedFrameIndex)}`,
+            `plane / ${planeContext.runtimePlaneClass}`,
         ],
         modeLabel: selectedMode.label,
         runtimePlaneClass: planeContext.runtimePlaneClass,
         series,
-        previewBins: previewMeasurementBins,
-        measurement: {
-            previewBinIndex: selectedMeasurementIndex,
-            frequencyHz: selectedMeasurementBin.frequency,
+            previewBins: previewMeasurementBins,
+            measurement: {
+                previewBinIndex: selectedMeasurementIndex,
+                frequencyHz: selectedMeasurementBin.frequency,
             re: selectedMeasurementBin.re,
             im: selectedMeasurementBin.im,
             emphasisLabel: getMeasurementEmphasisLabelV0(selectedMode.id),
@@ -1169,7 +1074,7 @@ function formatInteractionKind(kind: SourceInteractionKindV0 | null): string {
         return "--";
     }
 
-    return kind === "drag_and_drop" ? "Drag / Drop" : "File Picker";
+    return kind === "drag_and_drop" ? "drag_drop" : "picker";
 }
 
 function escapeHtml(value: string): string {
@@ -1187,13 +1092,9 @@ function getFailureSummary(
         "failure_code" in failure && typeof failure.failure_code === "string"
             ? failure.failure_code
             : undefined;
-    const message = "message" in failure && typeof failure.message === "string"
-        ? failure.message
-        : "The shell received an unspecified failure.";
-
     return {
-        title: seam === undefined ? "Failure surfaced" : `${seam} failure surfaced`,
-        detail: message,
+        title: "failure",
+        detail: code ?? "failure",
         seam,
         code,
     };
@@ -1206,16 +1107,16 @@ function getFailureScopeCopy(scope: FailureScopeV0): {
 } {
     if (scope === "source") {
         return {
-            label: "Source Failure",
-            regionTitle: "Source handoff did not complete",
-            panelDetail: "The Source region failed before a lawful run-ready selection was available.",
+            label: "source",
+            regionTitle: "failure",
+            panelDetail: "source",
         };
     }
 
     return {
-        label: "Run Failure",
-        regionTitle: "Run request did not return inspection output",
-        panelDetail: "The Run region failed while sending the fixed inspection request through the host bridge.",
+        label: "run",
+        regionTitle: "failure",
+        panelDetail: "run",
     };
 }
 
@@ -1229,16 +1130,8 @@ const state: ShellViewStateV0 = {
     planeValidationMessage: null,
     selectedSource: null,
     sourceInteractionKind: null,
-    sourceStatus: createStatusCard(
-        "neutral",
-        "Awaiting source",
-        "Select a .wav to prepare a local runtime handoff."
-    ),
-    runStatus: createStatusCard(
-        "neutral",
-        "Run idle",
-        "Run remains manual after source handoff. Clear / Reset only clears shell-local state."
-    ),
+    sourceStatus: createStatusCard("neutral", "awaiting"),
+    runStatus: createStatusCard("neutral", "idle"),
     lastRunResult: null,
     latestFailure: null,
     latestFailureScope: null,
@@ -1254,11 +1147,15 @@ function renderStatusCard(node: HTMLElement, card: ShellStatusCardV0): void {
         card.seam === undefined && card.code === undefined
             ? ""
             : `<div class="status-meta">${card.seam ?? "shell"}${card.code === undefined ? "" : ` / ${card.code}`}</div>`;
+    const detailLine =
+        card.detail === undefined || card.detail.length === 0
+            ? ""
+            : `<div class="status-detail">${escapeHtml(card.detail)}</div>`;
 
     node.innerHTML = `
       <div class="status-heading">${escapeHtml(card.title)}</div>
       ${metaLine}
-      <p class="status-detail">${escapeHtml(card.detail)}</p>
+      ${detailLine}
     `;
 }
 
@@ -1276,8 +1173,6 @@ function renderRegimeRegion(): void {
 }
 
 function renderOperatorRegion(): void {
-    const selectedOperator = getSelectedOperatorDescriptor();
-
     operatorStackNode.innerHTML = OPERATOR_OPTIONS_V0.map((operator) => `
       <button
         type="button"
@@ -1286,17 +1181,11 @@ function renderOperatorRegion(): void {
         aria-pressed="${operator.id === state.selectedOperatorId ? "true" : "false"}"
       >
         <span class="operator-chip-label">${escapeHtml(operator.label)}</span>
-        <span class="operator-chip-copy">${escapeHtml(operator.summary)}</span>
         <span class="operator-chip-meta">
-          ${operator.isRuntimeTarget ? "Fixed run target" : "Shell-local view only"}
+          ${operator.isRuntimeTarget ? "fixed" : "local"}
         </span>
       </button>
     `).join("");
-
-    operatorNoteNode.textContent =
-        selectedOperator.isRuntimeTarget
-            ? `${selectedOperator.label} is the current fixed runtime target.`
-            : `${selectedOperator.label} is selected in the shell only; the live run path remains fixed to P3 — Transform.`;
 }
 
 function renderFrameRegion(): void {
@@ -1321,8 +1210,6 @@ function renderFrameRegion(): void {
         frameContext.selectedFrameIndex === null || frameContext.exposedFrameCount === null
             ? "-- / --"
             : `${String(frameContext.selectedFrameIndex)} / ${String(frameContext.exposedFrameCount)}`;
-    frameGlobalContextNode.textContent = frameContext.globalContext;
-    frameLocalContextNode.textContent = frameContext.localContext;
 
     if (frameContext.runtimeFrameIndex !== null) {
         frameInput.min = String(frameContext.runtimeFrameIndex);
@@ -1348,12 +1235,8 @@ function renderPlaneModeRegion(): void {
         aria-pressed="${mode.id === planeContext.selectedModeId ? "true" : "false"}"
       >
         <span class="plane-mode-chip-label">${escapeHtml(mode.label)}</span>
-        <span class="plane-mode-chip-copy">${escapeHtml(mode.summary)}</span>
       </button>
     `).join("");
-
-    planeGlobalContextNode.textContent = planeContext.globalContext;
-    planeLocalContextNode.textContent = planeContext.localContext;
     renderStatusCard(planeStatusNode, planeContext.statusCard);
 }
 
@@ -1364,63 +1247,41 @@ function renderMainPane(): void {
 
         mainStatusNode.innerHTML = `
           <div class="main-callout main-callout-failure">
-            <div class="main-callout-label">${escapeHtml(failureScope.label)}</div>
-            <h3>${escapeHtml(failureScope.regionTitle)}</h3>
-            <p>${escapeHtml(failureSummary.detail)}</p>
+            <div class="main-callout-label">failure</div>
             <div class="main-callout-meta">
-              <span>Region: ${escapeHtml(failureScope.label.replace(" Failure", ""))}</span>
-              <span>Seam: ${escapeHtml(failureSummary.seam ?? "app_shell")}</span>
-              <span>Code: ${escapeHtml(failureSummary.code ?? "none")}</span>
+              <span>region / ${escapeHtml(failureScope.label)}</span>
+              <span>seam / ${escapeHtml(failureSummary.seam ?? "app_shell")}</span>
+              <span>code / ${escapeHtml(failureSummary.code ?? "none")}</span>
             </div>
           </div>
         `;
     } else {
         const paneView = getInspectionPaneViewModel();
 
-        if (paneView.kind === "awaiting_run") {
-            mainStatusNode.innerHTML = `
-              <div class="main-callout main-callout-neutral">
-                <div class="main-callout-label">Current Path</div>
-                <h3>${escapeHtml(paneView.title)}</h3>
-                <p>${escapeHtml(paneView.detail)}</p>
-              </div>
-            `;
-        } else if (paneView.kind === "unavailable") {
-            mainStatusNode.innerHTML = `
-              <div class="main-callout main-callout-neutral">
-                <div class="main-callout-label">Shell Navigation</div>
-                <h3>${escapeHtml(paneView.title)}</h3>
-                <p>${escapeHtml(paneView.detail)}</p>
-                <div class="main-callout-meta">
-                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-                </div>
-              </div>
-            `;
-        } else if (paneView.kind === "pane_failure") {
-            mainStatusNode.innerHTML = `
-              <div class="main-callout main-callout-failure">
-                <div class="main-callout-label">Pane Failure</div>
-                <h3>${escapeHtml(paneView.title)}</h3>
-                <p>${escapeHtml(paneView.detail)}</p>
-                <div class="main-callout-meta">
-                  <span>Seam: ${escapeHtml(paneView.seam)}</span>
-                  <span>Code: ${escapeHtml(paneView.code)}</span>
-                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-                </div>
-              </div>
-            `;
-        } else {
-            mainStatusNode.innerHTML = `
-              <div class="main-callout main-callout-success">
-                <div class="main-callout-label">Shell Render Wiring</div>
-                <h3>${escapeHtml(paneView.title)}</h3>
-                <p>${escapeHtml(paneView.detail)}</p>
-                <div class="main-callout-meta">
-                  ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-                </div>
-              </div>
-            `;
-        }
+        const toneClass =
+            paneView.kind === "pane_failure"
+                ? "main-callout-failure"
+                : paneView.kind === "spectral_supported"
+                ? "main-callout-success"
+                : "main-callout-neutral";
+        const label =
+            paneView.kind === "spectral_supported"
+                ? "live"
+                : paneView.kind === "pane_failure"
+                ? "failure"
+                : paneView.kind;
+
+        mainStatusNode.innerHTML = `
+          <div class="main-callout ${toneClass}">
+            <div class="main-callout-label">${escapeHtml(label)}</div>
+            <div class="main-callout-meta">
+              ${paneView.kind === "pane_failure"
+                    ? `<span>seam / ${escapeHtml(paneView.seam)}</span><span>code / ${escapeHtml(paneView.code)}</span>`
+                    : ""}
+              ${"meta" in paneView ? paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("") : ""}
+            </div>
+          </div>
+        `;
     }
 
     const paneView = getInspectionPaneViewModel();
@@ -1433,29 +1294,20 @@ function renderMainPane(): void {
           <div class="result-panel result-panel-failure">
             <div class="result-summary-grid">
               <div class="result-summary">
-                <div class="result-key">Failure Region</div>
-                <div class="result-value">${escapeHtml(failureScope.label.replace(" Failure", ""))}</div>
+                <div class="result-key">Region</div>
+                <div class="result-value">${escapeHtml(failureScope.label)}</div>
               </div>
               <div class="result-summary">
-                <div class="result-key">Failure Seam</div>
+                <div class="result-key">Seam</div>
                 <div class="result-value">${escapeHtml(failureSummary.seam ?? "app_shell")}</div>
               </div>
               <div class="result-summary">
-                <div class="result-key">Failure Code</div>
+                <div class="result-key">Code</div>
                 <div class="result-value">${escapeHtml(failureSummary.code ?? "none")}</div>
               </div>
-            </div>
-            <p class="result-note">${escapeHtml(failureScope.panelDetail)}</p>
-            <div class="failure-detail-grid">
               <div class="failure-detail-card">
-                <div class="result-key">Failure Detail</div>
+                <div class="result-key">State</div>
                 <div class="failure-detail-value">${escapeHtml(failureSummary.detail)}</div>
-              </div>
-              <div class="failure-detail-card">
-                <div class="result-key">Selected Source</div>
-                <div class="failure-detail-value">${escapeHtml(
-                    state.selectedSource?.original_file_name ?? "No source selected"
-                )}</div>
               </div>
             </div>
           </div>
@@ -1484,10 +1336,7 @@ function renderMainPane(): void {
             </div>
             <div class="measurement-panel">
               <div class="measurement-panel-header">
-                <div>
-                  <div class="result-key">Measurement Readout</div>
-                  <div class="measurement-panel-copy">Active preview-bin readout over the current visible P3 render only.</div>
-                </div>
+                <div class="result-key">Readout</div>
                 <div class="measurement-chip">Preview Bin ${escapeHtml(String(paneView.measurement.previewBinIndex))}</div>
               </div>
               <div class="measurement-grid">
@@ -1504,14 +1353,14 @@ function renderMainPane(): void {
                   <div class="measurement-value">${escapeHtml(paneView.measurement.im.toFixed(6))}</div>
                 </div>
                 <div class="measurement-card">
-                  <div class="result-key">Mode Emphasis</div>
+                  <div class="result-key">Mode</div>
                   <div class="measurement-value">${escapeHtml(paneView.measurement.emphasisLabel)}</div>
                 </div>
               </div>
             </div>
             <div class="spectral-panel">
               <div class="spectral-panel-header">
-                <div class="result-key">Shell-Local P3 Preview</div>
+                <div class="result-key">P3</div>
                 <div class="spectral-legend">
                   ${paneView.series.map((series) => `
                     <span class="spectral-legend-item">
@@ -1573,13 +1422,6 @@ function renderMainPane(): void {
                   x2="${(paneView.chart.plotLeft + paneView.chart.plotWidth).toFixed(2)}"
                   y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
                 ></line>
-                <line
-                  class="spectral-selected-line"
-                  x1="${paneView.chart.selectedBinX.toFixed(2)}"
-                  y1="${paneView.chart.plotTop.toFixed(2)}"
-                  x2="${paneView.chart.selectedBinX.toFixed(2)}"
-                  y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
-                ></line>
                 ${paneView.series.map((series) => `
                   <path class="spectral-path ${series.colorClass}" d="${series.path}"></path>
                 `).join("")}
@@ -1639,8 +1481,7 @@ function renderMainPane(): void {
               </svg>
             </div>
             <div class="result-summary">
-              <div class="result-key">Preview Bin Grid</div>
-              <p class="result-note">Select one visible preview bin to update the measurement readout. No hidden refetch or recomputation occurs.</p>
+              <div class="result-key">Bins</div>
               <div class="bin-preview-grid">
                 ${paneView.previewBins.map((bin, index) => `
                   <button
@@ -1667,19 +1508,18 @@ function renderMainPane(): void {
           <div class="result-panel result-panel-failure">
             <div class="result-summary-grid">
               <div class="result-summary">
-                <div class="result-key">Pane State</div>
+                <div class="result-key">Pane</div>
                 <div class="result-value">failure</div>
               </div>
               <div class="result-summary">
-                <div class="result-key">Failure Seam</div>
+                <div class="result-key">Seam</div>
                 <div class="result-value">${escapeHtml(paneView.seam)}</div>
               </div>
               <div class="result-summary">
-                <div class="result-key">Failure Code</div>
+                <div class="result-key">Code</div>
                 <div class="result-value">${escapeHtml(paneView.code)}</div>
               </div>
             </div>
-            <p class="result-note">${escapeHtml(paneView.detail)}</p>
             <div class="main-callout-meta">
               ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
             </div>
@@ -1692,10 +1532,9 @@ function renderMainPane(): void {
         mainResultNode.innerHTML = `
           <div class="result-panel result-panel-unavailable">
             <div class="result-summary">
-              <div class="result-key">Unavailable Shell View</div>
+              <div class="result-key">Pane</div>
               <div class="result-value">${escapeHtml(paneView.title)}</div>
             </div>
-            <p class="result-note">${escapeHtml(paneView.detail)}</p>
             <div class="main-callout-meta">
               ${paneView.meta.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
             </div>
@@ -1716,7 +1555,7 @@ function renderMainPane(): void {
               <div class="result-value">P3 / PlaneP3SpectralView / frame 0</div>
             </div>
             <div class="result-summary">
-              <div class="result-key">Run Policy</div>
+              <div class="result-key">Runtime</div>
               <div class="result-value">Fs 2000 Hz / window 64 / hop 64</div>
             </div>
           </div>
@@ -1728,7 +1567,7 @@ function renderMainPane(): void {
       <div class="inspection-placeholder" aria-hidden="true">
         <div class="placeholder-grid"></div>
         <div class="placeholder-frame">
-          <span>Inspection output awaiting run</span>
+          <span>awaiting_run</span>
         </div>
       </div>
     `;
@@ -1740,23 +1579,15 @@ function renderShell(): void {
     const frameContext = getFrameExposureContext();
     const planeContext = getPlaneModeExposureContext();
 
-    sourceNameNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
+    sourceNameNode.textContent = state.selectedSource?.original_file_name ?? "--";
     sourceKindNode.textContent = formatInteractionKind(state.sourceInteractionKind);
     sourcePathNode.textContent = state.selectedSource?.runtime_handoff_relative_path ?? "--";
 
-    contextSourceNode.textContent = state.selectedSource?.original_file_name ?? "No source selected";
+    contextSourceNode.textContent = state.selectedSource?.original_file_name ?? "--";
     contextRegimeNode.textContent = `${activeRegime.label} / ${activeRegime.statusLabel.toLowerCase()}`;
-    contextOperatorNode.textContent = `${runtimeOperator.label} / fixed runtime target`;
-    contextFrameNode.textContent = `Frame ${String(FIXED_INSPECTION_REQUEST_V0.stage_selection.frame_index)} / fixed runtime target`;
-    contextPlaneNode.textContent = `${planeContext.runtimePlaneClass} / fixed runtime plane`;
-
-    inspectionCopyNode.innerHTML =
-        state.selectedSource === null
-            ? `Select a local <code>.wav</code>, then run the fixed bridge-routed inspection request. Shell-local navigation
-               stays adjacent to the main pane and does not rewrite runtime targeting.`
-            : `Source handoff is ready. Run stays manual and routes through the Local Host Bridge v0, not directly into
-               execution seams from <code>app/</code>. Local navigation remains display-local unless the current lawful
-               result supports the selected view.`;
+    contextOperatorNode.textContent = `${runtimeOperator.label} / fixed`;
+    contextFrameNode.textContent = `${String(FIXED_INSPECTION_REQUEST_V0.stage_selection.frame_index)} / fixed`;
+    contextPlaneNode.textContent = `${planeContext.runtimePlaneClass} / fixed`;
 
     renderStatusCard(sourceStatusNode, state.sourceStatus);
     renderStatusCard(runStatusNode, state.runStatus);
@@ -1830,16 +1661,8 @@ async function handoffFileV0(
     state.latestFailure = null;
     state.latestFailureScope = null;
     state.hasRunAttempted = false;
-    state.sourceStatus = createStatusCard(
-        "busy",
-        "Handoff in progress",
-        `Sending ${file.name} through the Local Host Bridge v0.`
-    );
-    state.runStatus = createStatusCard(
-        "neutral",
-        "Run idle",
-        "Run remains manual after source handoff."
-    );
+    state.sourceStatus = createStatusCard("busy", "uploading", file.name);
+    state.runStatus = createStatusCard("neutral", "idle");
     renderShell();
 
     const result = await handoffBrowserFileThroughHostBridgeV0(file);
@@ -1855,16 +1678,8 @@ async function handoffFileV0(
     state.sourceInteractionKind = interactionKind;
     state.latestFailure = null;
     state.latestFailureScope = null;
-    state.sourceStatus = createStatusCard(
-        "success",
-        "Source ready",
-        `${result.original_file_name} is available for manual run through the host bridge.`
-    );
-    state.runStatus = createStatusCard(
-        "neutral",
-        "Run ready",
-        "Run is now available. Rerun stays disabled until one run has completed or failed."
-    );
+    state.sourceStatus = createStatusCard("success", "ready", result.original_file_name);
+    state.runStatus = createStatusCard("neutral", "ready");
     renderShell();
 }
 
@@ -1890,11 +1705,7 @@ async function runSelectedSourceV0(): Promise<void> {
     state.latestFailure = null;
     state.latestFailureScope = null;
     state.lastRunResult = null;
-    state.runStatus = createStatusCard(
-        "busy",
-        "Run in progress",
-        "Sending the fixed inspection request through the Local Host Bridge v0."
-    );
+    state.runStatus = createStatusCard("busy", "running");
     renderShell();
 
     const result = await runThroughHostBridgeV0({
@@ -1917,11 +1728,7 @@ async function runSelectedSourceV0(): Promise<void> {
     state.lastRunResult = result;
     state.latestFailure = null;
     state.latestFailureScope = null;
-    state.runStatus = createStatusCard(
-        "success",
-        "Run completed",
-        `${result.stage_selection.stage} inspection output returned from the Local Host Bridge v0.`
-    );
+    state.runStatus = createStatusCard("success", "completed", result.stage_selection.stage);
     renderShell();
 }
 
@@ -1938,16 +1745,8 @@ function clearShellStateV0(): void {
     state.hasRunAttempted = false;
     state.isUploading = false;
     state.isRunning = false;
-    state.sourceStatus = createStatusCard(
-        "neutral",
-        "Source cleared",
-        "Clear / Reset removed shell-local source state only."
-    );
-    state.runStatus = createStatusCard(
-        "neutral",
-        "Run state cleared",
-        "Clear / Reset removed shell-local run state only. Runtime handoff files are not deleted here."
-    );
+    state.sourceStatus = createStatusCard("neutral", "cleared");
+    state.runStatus = createStatusCard("neutral", "cleared");
     renderShell();
 }
 
@@ -1969,20 +1768,19 @@ function applyFrameIndexInputV0(nextFrameIndex: number): void {
     const frameContext = getFrameExposureContext();
 
     if (!frameContext.isAvailable || frameContext.runtimeFrameIndex === null) {
-        state.frameValidationMessage = "Frame navigation is unavailable until a lawful local frame is exposed.";
+        state.frameValidationMessage = "unavailable";
         renderShell();
         return;
     }
 
     if (!Number.isInteger(nextFrameIndex)) {
-        state.frameValidationMessage = "Frame index must be an integer.";
+        state.frameValidationMessage = "integer_only";
         renderShell();
         return;
     }
 
     if (nextFrameIndex !== frameContext.runtimeFrameIndex) {
-        state.frameValidationMessage =
-            `Frame index ${String(nextFrameIndex)} is out of range. The current run exposes ${String(frameContext.runtimeFrameIndex)} only.`;
+        state.frameValidationMessage = `out_of_range / ${String(frameContext.runtimeFrameIndex)}`;
         renderShell();
         return;
     }
@@ -2095,7 +1893,7 @@ planeModeStackNode.addEventListener("click", (event) => {
     );
 
     if (!availableModeIds.has(planeModeId)) {
-        state.planeValidationMessage = `${planeModeId} is unavailable for ${getSelectedOperatorDescriptor().label}.`;
+        state.planeValidationMessage = `${planeModeId} / unavailable`;
         renderShell();
         return;
     }

@@ -43,9 +43,9 @@ code {
 .shell-host {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: minmax(248px, 292px) minmax(0, 1fr);
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: minmax(212px, 248px) minmax(0, 1fr);
+    gap: 16px;
+    padding: 16px;
 }
 
 .control-rail,
@@ -58,8 +58,8 @@ code {
 .control-rail {
     display: grid;
     align-content: start;
-    gap: 12px;
-    padding: 18px;
+    gap: 10px;
+    padding: 12px;
 }
 
 .rail-header {
@@ -100,9 +100,9 @@ code {
 }
 
 .control-region {
-    padding: 14px;
+    padding: 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
-    background: var(--shell-panel-strong);
+    background: rgba(248, 243, 234, 0.72);
 }
 
 .control-title {
@@ -125,9 +125,9 @@ code {
 .frame-nav-row {
     display: grid;
     grid-template-columns: auto auto minmax(0, 1fr) auto;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
 .frame-input-label,
@@ -163,8 +163,8 @@ code {
     justify-content: space-between;
     gap: 12px;
     align-items: center;
-    margin-top: 12px;
-    padding: 10px 12px;
+    margin-top: 10px;
+    padding: 8px 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
     background: rgba(255, 255, 255, 0.52);
 }
@@ -177,8 +177,8 @@ code {
 .dropzone {
     display: grid;
     gap: 6px;
-    margin-top: 12px;
-    padding: 16px;
+    margin-top: 10px;
+    padding: 12px;
     border: 1px dashed rgba(135, 104, 78, 0.42);
     background: rgba(255, 255, 255, 0.48);
     cursor: pointer;
@@ -202,12 +202,12 @@ code {
 }
 
 .dropzone-title {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .dropzone-copy {
     color: var(--shell-muted);
-    line-height: 1.4;
+    line-height: 1.2;
 }
 
 .button-row {
@@ -261,7 +261,7 @@ code {
 .detail-list {
     display: grid;
     gap: 8px;
-    margin: 14px 0 0;
+    margin: 10px 0 0;
 }
 
 .detail-item {
@@ -286,8 +286,8 @@ code {
 .status-card {
     display: grid;
     gap: 6px;
-    margin-top: 14px;
-    padding: 12px;
+    margin-top: 10px;
+    padding: 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
 }
 
@@ -310,8 +310,10 @@ code {
 }
 
 .status-heading {
-    font-size: 17px;
-    line-height: 1.2;
+    font-size: 13px;
+    line-height: 1.1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .status-meta {
@@ -328,11 +330,12 @@ code {
 }
 
 .request-chip {
-    margin-top: 12px;
-    padding: 10px 12px;
+    margin-top: 10px;
+    padding: 8px 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
     background: rgba(255, 255, 255, 0.52);
-    line-height: 1.4;
+    line-height: 1.3;
+    font-size: 13px;
 }
 
 .regime-chip {
@@ -371,7 +374,7 @@ code {
 .operator-chip {
     appearance: none;
     display: grid;
-    gap: 5px;
+    gap: 3px;
     width: 100%;
     padding: 11px 12px;
     border: 1px solid rgba(135, 104, 78, 0.22);
@@ -434,7 +437,7 @@ code {
 .plane-mode-chip {
     appearance: none;
     display: grid;
-    gap: 5px;
+    gap: 3px;
     width: 100%;
     padding: 11px 12px;
     border: 1px solid rgba(135, 104, 78, 0.22);
@@ -489,44 +492,26 @@ code {
 
 .inspection-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(216px, 252px);
+    gap: 16px;
     align-items: start;
-    padding: 24px;
+    padding: 16px;
 }
 
 .local-navigation {
     display: grid;
     align-content: start;
-    gap: 12px;
-    padding: 18px;
+    gap: 10px;
+    padding: 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
-    background: rgba(248, 243, 234, 0.86);
-}
-
-.local-navigation-header {
-    padding: 4px 2px 12px;
-    border-bottom: 1px solid rgba(135, 104, 78, 0.18);
-}
-
-.local-navigation-title {
-    margin: 10px 0 0;
-    font-size: 26px;
-    line-height: 1.08;
-    font-weight: 400;
-}
-
-.local-navigation-copy {
-    margin: 10px 0 0;
-    color: var(--shell-muted);
-    line-height: 1.5;
+    background: rgba(248, 243, 234, 0.66);
 }
 
 .context-header {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px;
-    padding: 18px;
+    gap: 10px;
+    padding: 12px 16px;
     border-bottom: 1px solid rgba(135, 104, 78, 0.22);
     background: rgba(255, 255, 255, 0.52);
 }
@@ -537,19 +522,14 @@ code {
 
 .context-value {
     display: block;
-    font-size: 15px;
+    font-size: 13px;
     color: var(--shell-ink);
 }
 
 .inspection-stage {
     display: grid;
     align-content: start;
-    gap: 14px;
-}
-
-.inspection-title {
-    font-size: 34px;
-    line-height: 1.05;
+    gap: 10px;
 }
 
 .inspection-status-shell,
@@ -560,22 +540,15 @@ code {
 
 .main-callout {
     display: grid;
-    gap: 8px;
-    padding: 16px;
+    gap: 6px;
+    padding: 10px 12px;
     border: 1px solid rgba(135, 104, 78, 0.18);
     background: rgba(255, 255, 255, 0.54);
 }
 
-.main-callout h3,
 .result-value {
     margin: 0;
     font-weight: 400;
-}
-
-.main-callout p {
-    margin: 0;
-    color: var(--shell-muted);
-    line-height: 1.5;
 }
 
 .main-callout-label,
@@ -589,9 +562,9 @@ code {
 .main-callout-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     color: var(--shell-muted);
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .main-callout-success {
@@ -606,9 +579,9 @@ code {
 .result-panel {
     display: grid;
     gap: 12px;
-    padding: 16px;
+    padding: 12px;
     border: 1px solid rgba(135, 104, 78, 0.18);
-    background: rgba(255, 255, 255, 0.68);
+    background: rgba(255, 255, 255, 0.74);
 }
 
 .result-panel-live {
@@ -643,8 +616,8 @@ code {
 
 .measurement-panel {
     display: grid;
-    gap: 12px;
-    padding: 14px;
+    gap: 10px;
+    padding: 10px;
     border: 1px solid rgba(135, 104, 78, 0.18);
     background: rgba(255, 255, 255, 0.76);
 }
@@ -655,12 +628,6 @@ code {
     gap: 12px;
     align-items: start;
     flex-wrap: wrap;
-}
-
-.measurement-panel-copy {
-    margin-top: 6px;
-    color: var(--shell-muted);
-    line-height: 1.45;
 }
 
 .measurement-chip {
@@ -678,7 +645,7 @@ code {
 
 .measurement-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
     gap: 10px;
 }
 
@@ -822,12 +789,6 @@ code {
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-}
-
-.spectral-selected-line {
-    stroke: rgba(135, 104, 78, 0.44);
-    stroke-width: 1;
-    stroke-dasharray: 3 5;
 }
 
 .spectral-path {

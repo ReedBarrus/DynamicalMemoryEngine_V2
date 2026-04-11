@@ -1,123 +1,137 @@
-# README.MasterConstitution.md
-# Dynamical Memory Engine_V2 — Master Constitution
-Live Reference: https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
----
+# Dynamical Memory Engine — Master Constitution
 
-## 1. Purpose and Authority Order
+Live Repo State: 
+https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
-This document is the single constitutional authority for the Dynamical Memory Engine.
+## Status
 
-The workflow contract (`README.WorkflowContract.md`) governs roles, development loop, and escalation. It is a peer document, not subordinate to this one.
+This document is the top boundary authority for DME.
 
-**Authority resolution rule:** If any operator doc, README, or JSDoc comment conflicts with this document, this document wins. If this document and the Workflow Contract conflict on a governance matter, Reed decides.
+It governs only:
 
----
+- authority order
+- active layer order
+- scope
+- hard boundary rules
 
-## 2. Core Principle
+It does not govern:
 
-The system must develop upward from grounded signal interaction. The lawful order is:
-
-```
-measurement → structure → runtime memory → recognition
-→ canon → prediction → agency → ecology → symbolic → meta
-```
-
-Each higher layer must inherit from stable lower layers. No layer may be projected downward as premature abstraction. Higher-layer language may appear in roadmap discussion but must not silently shape active code.
+- workflow procedure
+- repo placement
+- operator-local contracts
+- implementation details
 
 ---
 
-## 3. Canonical Layer Definitions
+## 1. Authority order
 
-### Active Layers (Door One scope)
+Authority resolves in this order:
 
+1. `README.MasterConstitution.md`
+2. `README.WorkflowContract.md`
+3. `README.RepoLayout.md`
+4. seam-local contracts and notes
+5. implementation files
 
+If two lower surfaces conflict, the higher surface wins.
 
-### Deferred Layers (Door Two / Door Three)
-
-
-
-## 4. Door Definitions
-
-**Door One — Deterministic structural memory and recognition runtime**
-Includes: Signal, Structural, Runtime Memory, Perception, Substrate.
-Produces: lawful replayable structural memory objects, recognition capability, organized runtime memory ecology.
-Does not include: active canon as system truth, prediction, agency, symbolic abstraction, meta-cognition.
-
-**Door Two — Trusted temporal cognition stack**
-Includes: Canon Space (active), Prediction Space.
-Produces: trusted promoted memory, state transition intelligence, temporal inference over canon and stable memory.
-Does not yet include: full autonomous agency, symbolic cognition, self-governance.
-
-**Door Three — Participatory intelligence ecology**
-Includes: Agency, Ecology, Symbolic, Meta.
-Produces: intervention capacity, agent interaction, symbolic abstraction, reflective/self-governing behavior.
+If a lower surface needs an exception, the exception must be explicit.
 
 ---
 
-## 5. Boundary Rules
+## 2. Active layer order
 
-These rules are non-negotiable. No implementation convenience justifies crossing them.
+DME develops in this order:
 
-**Rule 1 — Runtime is not canon.**
-No runtime artifact becomes canon merely because it is stable, merged, or frequently queried.
+`measurement -> structure -> runtime memory -> recognition -> canon -> prediction -> agency -> ecology -> symbolic -> meta`
 
-**Rule 2 — Query is not truth.**
-Similarity and recognition are perception. They are not trusted knowledge and do not imply canonical authority.
-
-**Rule 3 — Substrate is not ontology.**
-Basins, trajectories, and segment structures are runtime organizational constructs. Proto-basin proximity does not prove dynamical basin membership. True dynamical basin detection is deferred to future trajectory-convergence, dwell, and transition analysis.
-
-**Rule 4 — Replay is lens-bound.**
-All replay must declare its lens. Replay is not raw restoration unless explicitly defined as such. No denoising, beautification, or enhancement unless the lens permits it and the receipt says so.
-
-**Rule 5 — Consensus is promotion-only.**
-The future promotion operator is not a standard data transform. It is a promotion boundary and must remain separate from runtime pipeline operation.
-
-**Rule 6 — Deferred layers stay deferred.**
-Prediction, agency, ecology, symbolic, and meta layers may appear in roadmap discussion but must not silently reshape active code until explicitly authorized.
-
-**Rule 7 — Lowest lawful layer.**
-When implementing anything, default to the lowest lawful layer that honestly resolves the problem. Do not jump upward into symbolic interpretation, prediction logic, ontology building, or autonomous policy unless explicitly authorized.
+No higher layer may define a lower layer before that higher layer is explicitly admitted.
 
 ---
 
-## 6. Canonical Naming Law
+## 3. Active scope
 
-**Precision outranks poetic convenience** in constitutional documentation.
+Current active scope is Door One only.
 
-## Special Meaning Terms
+Door One includes only:
 
-Refer to README/DynamicalTaxonomy/... taxonomies for vocabulary usage.
+- measurement
+- structure
+- runtime memory
+- recognition
 
-### Project identity
+Door One does not include active:
 
-Core docs describe the Dynamical Memory Engine on its own terms. External systems (Resonance, Ultralife, etc.) may be referenced as inspiration, comparison, or adjacent work only. They must not define the project's core architectural language.
+- canon as trusted truth
+- prediction
+- agency
+- ecology
+- symbolic
+- meta
 
-### Name introduction rule
-
-Before introducing a new term, ask: what layer? is there already a canonical term? does this blur runtime/substrate/canon? will it be misread? does it preserve the Door staircase? If unclear, do not introduce the term yet.
-
----
-
-
-### Key artifact contracts (summary)
-
-
----
-
-## 8. Implementation Litmus
-
-Before adding any feature, answer:
-
-1. What layer does this belong to?
-2. Does it violate a lower-layer boundary?
-3. Is it runtime memory, canon, or deferred cognition?
-4. Is it honest about what it claims to know?
-5. Is it being added too early?
-
-If any answer is unclear, the feature is not yet ready.
-
-The system must rise from grounded signal reality into cognition — not descend from abstraction into convenience. All higher intelligence must inherit lawfully from lower layers. That is what this architecture protects.
+These may be discussed, but they may not shape active implementation unless explicitly admitted.
 
 ---
 
+## 4. Core boundary rules
+
+### Rule 1 — Runtime is not canon
+
+No runtime artifact becomes canon by stability, reuse, frequency, or convenience.
+
+### Rule 2 — Query is not truth
+
+Recognition, similarity, and retrieval do not by themselves establish truth.
+
+### Rule 3 — Substrate is not ontology
+
+Runtime structures and memory structures are implementation constructs, not metaphysical proof.
+
+### Rule 4 — Replay is lens-bound
+
+Replay must declare its lens.
+Replay is not raw restoration unless explicitly defined as such.
+
+### Rule 5 — Promotion is separate
+
+Promotion, trust uplift, or canon admission must remain separate from runtime operation.
+
+### Rule 6 — Deferred layers stay deferred
+
+Prediction, agency, ecology, symbolic, and meta may not silently shape active code or active artifact meaning.
+
+### Rule 7 — Lowest lawful layer
+
+Any implementation should resolve the problem at the lowest lawful active layer.
+
+---
+
+## 5. Scope test
+
+Before adding or changing anything, ask:
+
+1. what layer does this belong to?
+2. is that layer active?
+3. does this cross a boundary downward?
+4. is this trying to import deferred meaning into active scope?
+
+If any answer is unclear, the move is not yet lawful.
+
+---
+
+## 6. Constitutional function
+
+This document exists only to:
+
+- define what is active
+- define what is deferred
+- define what is forbidden
+- define what outranks what
+
+Nothing else belongs here.
+
+---
+
+## 7. One-line summary
+
+DME develops upward in declared layer order, inside current active scope only, with deferred layers prevented from silently shaping lower active layers.
