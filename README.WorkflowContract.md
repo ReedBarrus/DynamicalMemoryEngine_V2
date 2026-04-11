@@ -30,10 +30,31 @@ If workflow and constitution conflict on boundary posture, constitution wins.
 
 ---
 
+### Repo-current-reality rule
+
+The live repo is upstream of all workflow roles for current file and code reality.
+
+Workflow begins only after current repo reality is read.
+
+Role order for workflow execution is therefore:
+
+1. repo current reality
+2. Reed
+3. Control
+4. Audit
+5. Compression
+6. Implementation
+
+`repo current reality` is not a collaborator role.
+It is the grounding input to the workflow loop.
+
+If declared workflow state and live repo state conflict about what currently exists, live repo state wins.
+
+If a packet has not checked current repo reality for the active seam, the packet is not ready.
+
 ## 1. Role order
 
 Roles are:
-
 1. Reed
 2. Control
 3. Audit
