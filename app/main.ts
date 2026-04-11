@@ -106,6 +106,37 @@ interface SpectralMeasurementReadoutV0 {
     emphasisLabel: string;
 }
 
+interface SpectralAxisTickV0 {
+    position: number;
+    label: string;
+}
+
+interface SpectralChartMarkerV0 {
+    x: number;
+    y: number;
+    colorClass: "spectral-series-re" | "spectral-series-im";
+    label: "re" | "im";
+}
+
+interface SpectralChartViewV0 {
+    viewBoxWidth: number;
+    viewBoxHeight: number;
+    plotLeft: number;
+    plotTop: number;
+    plotWidth: number;
+    plotHeight: number;
+    minValue: number;
+    maxValue: number;
+    xTicks: SpectralAxisTickV0[];
+    yTicks: SpectralAxisTickV0[];
+    zeroLineY: number;
+    selectedBinX: number;
+    selectedBinLabel: string;
+    selectedMarkers: SpectralChartMarkerV0[];
+    yAxisTitle: string;
+    xAxisTitle: string;
+}
+
 type InspectionPaneViewModelV0 =
     | {
           kind: "awaiting_run";
@@ -136,6 +167,7 @@ type InspectionPaneViewModelV0 =
           series: SpectralSeriesViewV0[];
           previewBins: SpectralBinPointV0[];
           measurement: SpectralMeasurementReadoutV0;
+          chart: SpectralChartViewV0;
       };
 
 const FIXED_INSPECTION_REQUEST_V0 = {
@@ -814,6 +846,158 @@ function createSeriesPathV0(values: number[]): string {
     }).join(" ");
 }
 
+function formatSpectralAxisValueV0(value: number): string {
+    return value.toFixed(4);
+}
+
+function formatSpectralFrequencyTickV0(value: number): string {
+    return `${value.toFixed(2)} Hz`;
+}
+
+function getSpectralDisplayedPeakV0(
+    previewBins: SpectralBinPointV0[],
+    selectedModeId: PlaneModeIdV0
+): number {
+    const displayedValues = previewBins.flatMap((bin) => {
+        if (selectedModeId === "re") {
+            return [bin.re];
+        }
+
+        if (selectedModeId === "im") {
+            return [bin.im];
+        }
+
+        return [bin.re, bin.im];
+    });
+
+    return displayedValues.length === 0
+        ? 1
+        : Math.max(...displayedValues.map((value) => Math.abs(value))) || 1;
+}
+
+function createSeriesPathFromMappedPointsV0(
+    bins: SpectralBinPointV0[],
+    valueSelector: (bin: SpectralBinPointV0) => number,
+    chart: {
+        plotLeft: number;
+        plotTop: number;
+        plotWidth: number;
+        plotHeight: number;
+        minValue: number;
+        maxValue: number;
+    }
+): string {
+    if (bins.length === 0) {
+        return "";
+    }
+
+    const span = chart.maxValue - chart.minValue || 1;
+
+    return bins.map((bin, index) => {
+        const x =
+            bins.length === 1
+                ? chart.plotLeft + (chart.plotWidth / 2)
+                : chart.plotLeft + ((index / (bins.length - 1)) * chart.plotWidth);
+        const value = valueSelector(bin);
+        const y =
+            chart.plotTop +
+            chart.plotHeight -
+            (((value - chart.minValue) / span) * chart.plotHeight);
+
+        return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    }).join(" ");
+}
+
+function getSpectralTickIndicesV0(length: number): number[] {
+    if (length <= 1) {
+        return [0];
+    }
+
+    const candidateIndices = [0, Math.floor((length - 1) / 3), Math.floor(((length - 1) * 2) / 3), length - 1];
+    return [...new Set(candidateIndices)];
+}
+
+function buildSpectralChartViewV0(
+    previewBins: SpectralBinPointV0[],
+    selectedModeId: PlaneModeIdV0,
+    selectedMeasurementIndex: number
+): SpectralChartViewV0 {
+    const viewBoxWidth = 640;
+    const viewBoxHeight = 260;
+    const plotLeft = 58;
+    const plotTop = 18;
+    const plotWidth = 540;
+    const plotHeight = 164;
+
+    const absolutePeak = getSpectralDisplayedPeakV0(previewBins, selectedModeId);
+    const minValue = -absolutePeak;
+    const maxValue = absolutePeak;
+    const span = maxValue - minValue || 1;
+
+    const xTickIndices = getSpectralTickIndicesV0(previewBins.length);
+    const xTicks = xTickIndices.map((index) => ({
+        position:
+            previewBins.length === 1
+                ? plotLeft + (plotWidth / 2)
+                : plotLeft + ((index / (previewBins.length - 1)) * plotWidth),
+        label: formatSpectralFrequencyTickV0(previewBins[index]?.frequency ?? 0),
+    }));
+
+    const yTickValues = [maxValue, maxValue / 2, 0, minValue / 2, minValue];
+    const yTicks = yTickValues.map((value) => ({
+        position: plotTop + plotHeight - (((value - minValue) / span) * plotHeight),
+        label: formatSpectralAxisValueV0(value),
+    }));
+
+    const selectedBinX =
+        previewBins.length === 1
+            ? plotLeft + (plotWidth / 2)
+            : plotLeft + ((selectedMeasurementIndex / (previewBins.length - 1)) * plotWidth);
+    const selectedBin = previewBins[selectedMeasurementIndex];
+
+    const mapValueToY = (value: number): number =>
+        plotTop + plotHeight - (((value - minValue) / span) * plotHeight);
+
+    const selectedMarkers: SpectralChartMarkerV0[] = [];
+
+    if (selectedBin !== undefined && (selectedModeId === "re" || selectedModeId === "both")) {
+        selectedMarkers.push({
+            x: selectedBinX,
+            y: mapValueToY(selectedBin.re),
+            colorClass: "spectral-series-re",
+            label: "re",
+        });
+    }
+
+    if (selectedBin !== undefined && (selectedModeId === "im" || selectedModeId === "both")) {
+        selectedMarkers.push({
+            x: selectedBinX,
+            y: mapValueToY(selectedBin.im),
+            colorClass: "spectral-series-im",
+            label: "im",
+        });
+    }
+
+    return {
+        viewBoxWidth,
+        viewBoxHeight,
+        plotLeft,
+        plotTop,
+        plotWidth,
+        plotHeight,
+        minValue,
+        maxValue,
+        xTicks,
+        yTicks,
+        zeroLineY: mapValueToY(0),
+        selectedBinX,
+        selectedBinLabel: `Preview Bin ${String(selectedMeasurementIndex)}`,
+        selectedMarkers,
+        yAxisTitle: "Cartesian value",
+        xAxisTitle: "Frequency (Hz)",
+    };
+}
+
 function getDefaultPreviewBinIndexV0(
     previewBins: SpectralBinPointV0[],
     selectedModeId: PlaneModeIdV0
@@ -898,27 +1082,9 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
 
     const selectedMode = getSelectedPlaneModeDescriptor(state.selectedOperatorId, state.selectedPlaneModeId);
     const previewBins = spectralBins.slice(0, 32);
+    const previewMeasurementBins = previewBins.slice(0, 8);
     const series: SpectralSeriesViewV0[] = [];
 
-    if (selectedMode.id === "re" || selectedMode.id === "both") {
-        series.push({
-            id: "re",
-            label: "re",
-            colorClass: "spectral-series-re",
-            path: createSeriesPathV0(previewBins.map((bin) => bin.re)),
-        });
-    }
-
-    if (selectedMode.id === "im" || selectedMode.id === "both") {
-        series.push({
-            id: "im",
-            label: "im",
-            colorClass: "spectral-series-im",
-            path: createSeriesPathV0(previewBins.map((bin) => bin.im)),
-        });
-    }
-
-    const previewMeasurementBins = previewBins.slice(0, 8);
     const defaultMeasurementIndex = getDefaultPreviewBinIndexV0(previewMeasurementBins, selectedMode.id);
     const selectedMeasurementIndex =
         state.selectedSpectralBinIndex !== null &&
@@ -927,6 +1093,39 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
             ? state.selectedSpectralBinIndex
             : defaultMeasurementIndex;
     const selectedMeasurementBin = previewMeasurementBins[selectedMeasurementIndex];
+    const chart = buildSpectralChartViewV0(previewMeasurementBins, selectedMode.id, selectedMeasurementIndex);
+
+    if (selectedMode.id === "re" || selectedMode.id === "both") {
+        series.push({
+            id: "re",
+            label: "re",
+            colorClass: "spectral-series-re",
+            path: createSeriesPathFromMappedPointsV0(previewMeasurementBins, (bin) => bin.re, {
+                plotLeft: chart.plotLeft,
+                plotTop: chart.plotTop,
+                plotWidth: chart.plotWidth,
+                plotHeight: chart.plotHeight,
+                minValue: chart.minValue,
+                maxValue: chart.maxValue,
+            }),
+        });
+    }
+
+    if (selectedMode.id === "im" || selectedMode.id === "both") {
+        series.push({
+            id: "im",
+            label: "im",
+            colorClass: "spectral-series-im",
+            path: createSeriesPathFromMappedPointsV0(previewMeasurementBins, (bin) => bin.im, {
+                plotLeft: chart.plotLeft,
+                plotTop: chart.plotTop,
+                plotWidth: chart.plotWidth,
+                plotHeight: chart.plotHeight,
+                minValue: chart.minValue,
+                maxValue: chart.maxValue,
+            }),
+        });
+    }
 
     return {
         kind: "spectral_supported",
@@ -948,6 +1147,7 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
             im: selectedMeasurementBin.im,
             emphasisLabel: getMeasurementEmphasisLabelV0(selectedMode.id),
         },
+        chart,
     };
 }
 
@@ -1321,11 +1521,121 @@ function renderMainPane(): void {
                   `).join("")}
                 </div>
               </div>
-              <svg class="spectral-chart" viewBox="0 0 560 180" role="img" aria-label="Shell-local spectral preview">
-                <rect x="0" y="0" width="560" height="180" class="spectral-chart-bg"></rect>
+              <svg
+                class="spectral-chart"
+                viewBox="0 0 ${String(paneView.chart.viewBoxWidth)} ${String(paneView.chart.viewBoxHeight)}"
+                role="img"
+                aria-label="Shell-local spectral preview with coordinate grid"
+              >
+                <rect
+                  x="0"
+                  y="0"
+                  width="${String(paneView.chart.viewBoxWidth)}"
+                  height="${String(paneView.chart.viewBoxHeight)}"
+                  class="spectral-chart-bg"
+                ></rect>
+                ${paneView.chart.xTicks.map((tick) => `
+                  <line
+                    class="spectral-grid-line"
+                    x1="${tick.position.toFixed(2)}"
+                    y1="${paneView.chart.plotTop.toFixed(2)}"
+                    x2="${tick.position.toFixed(2)}"
+                    y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                  ></line>
+                `).join("")}
+                ${paneView.chart.yTicks.map((tick) => `
+                  <line
+                    class="spectral-grid-line"
+                    x1="${paneView.chart.plotLeft.toFixed(2)}"
+                    y1="${tick.position.toFixed(2)}"
+                    x2="${(paneView.chart.plotLeft + paneView.chart.plotWidth).toFixed(2)}"
+                    y2="${tick.position.toFixed(2)}"
+                  ></line>
+                `).join("")}
+                <line
+                  class="spectral-zero-line"
+                  x1="${paneView.chart.plotLeft.toFixed(2)}"
+                  y1="${paneView.chart.zeroLineY.toFixed(2)}"
+                  x2="${(paneView.chart.plotLeft + paneView.chart.plotWidth).toFixed(2)}"
+                  y2="${paneView.chart.zeroLineY.toFixed(2)}"
+                ></line>
+                <line
+                  class="spectral-axis-line"
+                  x1="${paneView.chart.plotLeft.toFixed(2)}"
+                  y1="${paneView.chart.plotTop.toFixed(2)}"
+                  x2="${paneView.chart.plotLeft.toFixed(2)}"
+                  y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                ></line>
+                <line
+                  class="spectral-axis-line"
+                  x1="${paneView.chart.plotLeft.toFixed(2)}"
+                  y1="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                  x2="${(paneView.chart.plotLeft + paneView.chart.plotWidth).toFixed(2)}"
+                  y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                ></line>
+                <line
+                  class="spectral-selected-line"
+                  x1="${paneView.chart.selectedBinX.toFixed(2)}"
+                  y1="${paneView.chart.plotTop.toFixed(2)}"
+                  x2="${paneView.chart.selectedBinX.toFixed(2)}"
+                  y2="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                ></line>
                 ${paneView.series.map((series) => `
                   <path class="spectral-path ${series.colorClass}" d="${series.path}"></path>
                 `).join("")}
+                ${paneView.chart.selectedMarkers.map((marker) => `
+                  <g class="spectral-marker-group">
+                    <circle
+                      class="spectral-marker ${marker.colorClass}"
+                      cx="${marker.x.toFixed(2)}"
+                      cy="${marker.y.toFixed(2)}"
+                      r="4.5"
+                    ></circle>
+                  </g>
+                `).join("")}
+                ${paneView.chart.yTicks.map((tick) => `
+                  <g class="spectral-axis-label-group">
+                    <line
+                      class="spectral-axis-tick"
+                      x1="${(paneView.chart.plotLeft - 6).toFixed(2)}"
+                      y1="${tick.position.toFixed(2)}"
+                      x2="${paneView.chart.plotLeft.toFixed(2)}"
+                      y2="${tick.position.toFixed(2)}"
+                    ></line>
+                    <text
+                      class="spectral-axis-label spectral-axis-label-y"
+                      x="${(paneView.chart.plotLeft - 10).toFixed(2)}"
+                      y="${(tick.position + 4).toFixed(2)}"
+                    >${escapeHtml(tick.label)}</text>
+                  </g>
+                `).join("")}
+                ${paneView.chart.xTicks.map((tick) => `
+                  <g class="spectral-axis-label-group">
+                    <line
+                      class="spectral-axis-tick"
+                      x1="${tick.position.toFixed(2)}"
+                      y1="${(paneView.chart.plotTop + paneView.chart.plotHeight).toFixed(2)}"
+                      x2="${tick.position.toFixed(2)}"
+                      y2="${(paneView.chart.plotTop + paneView.chart.plotHeight + 6).toFixed(2)}"
+                    ></line>
+                    <text
+                      class="spectral-axis-label spectral-axis-label-x"
+                      x="${tick.position.toFixed(2)}"
+                      y="${(paneView.chart.plotTop + paneView.chart.plotHeight + 20).toFixed(2)}"
+                    >${escapeHtml(tick.label)}</text>
+                  </g>
+                `).join("")}
+                <text
+                  class="spectral-axis-title spectral-axis-title-x"
+                  x="${(paneView.chart.plotLeft + (paneView.chart.plotWidth / 2)).toFixed(2)}"
+                  y="${(paneView.chart.viewBoxHeight - 10).toFixed(2)}"
+                >${escapeHtml(paneView.chart.xAxisTitle)}</text>
+                <text
+                  class="spectral-axis-title spectral-axis-title-y"
+                  x="18"
+                  y="${(paneView.chart.plotTop + (paneView.chart.plotHeight / 2)).toFixed(2)}"
+                  transform="rotate(-90 18 ${(paneView.chart.plotTop + (paneView.chart.plotHeight / 2)).toFixed(2)})"
+                >${escapeHtml(paneView.chart.yAxisTitle)}</text>
               </svg>
             </div>
             <div class="result-summary">
@@ -1791,6 +2101,7 @@ planeModeStackNode.addEventListener("click", (event) => {
     }
 
     state.selectedPlaneModeId = planeModeId;
+    state.selectedSpectralBinIndex = null;
     state.planeValidationMessage = null;
     renderShell();
 });
@@ -1838,6 +2149,7 @@ operatorStackNode.addEventListener("click", (event) => {
     }
 
     state.selectedOperatorId = operatorId;
+    state.selectedSpectralBinIndex = null;
     state.frameValidationMessage = null;
     state.planeValidationMessage = null;
     state.selectedPlaneModeId = getDefaultPlaneModeIdForOperator(operatorId);

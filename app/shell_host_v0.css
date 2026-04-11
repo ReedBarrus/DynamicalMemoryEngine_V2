@@ -777,6 +777,59 @@ code {
     fill: transparent;
 }
 
+.spectral-grid-line {
+    stroke: rgba(135, 104, 78, 0.14);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.spectral-zero-line {
+    stroke: rgba(32, 25, 21, 0.34);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+    shape-rendering: crispEdges;
+}
+
+.spectral-axis-line {
+    stroke: rgba(135, 104, 78, 0.38);
+    stroke-width: 1.1;
+    shape-rendering: crispEdges;
+}
+
+.spectral-axis-tick {
+    stroke: rgba(135, 104, 78, 0.38);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.spectral-axis-label {
+    fill: var(--shell-muted);
+    font-size: 11px;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.spectral-axis-label-y {
+    text-anchor: end;
+}
+
+.spectral-axis-label-x,
+.spectral-axis-title {
+    text-anchor: middle;
+}
+
+.spectral-axis-title {
+    fill: var(--shell-muted);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.spectral-selected-line {
+    stroke: rgba(135, 104, 78, 0.44);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+}
+
 .spectral-path {
     fill: none;
     stroke-width: 2.25;
@@ -789,6 +842,19 @@ code {
 
 .spectral-path.spectral-series-im {
     stroke: #3f667b;
+}
+
+.spectral-marker {
+    stroke: rgba(255, 252, 246, 0.96);
+    stroke-width: 1.8;
+}
+
+.spectral-marker.spectral-series-re {
+    fill: #8a5132;
+}
+
+.spectral-marker.spectral-series-im {
+    fill: #3f667b;
 }
 
 .bin-preview-grid {
@@ -830,6 +896,7 @@ code {
 .bin-preview-card-active {
     border-color: var(--shell-accent);
     background: rgba(135, 104, 78, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(135, 104, 78, 0.12);
 }
 
 .bin-preview-frequency {
