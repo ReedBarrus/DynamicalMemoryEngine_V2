@@ -1,104 +1,69 @@
-# Dynamical Memory Engine — Workflow Contract
+# Dynamical Memory Engine — Decision Matrix
+
+Live Repo State:
+https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
 ## Status
 
-This document is the movement authority for DME.
+This document is the movement and decision authority for DME.
 
 It governs only:
 
-* roles
-* thread roles
-* bounded workflow loop
-* packet procedure
-* escalation
-* completion and checkpoint posture
+- workflow roles
+- thread roles
+- macro-verb movement law
+- downward recruitment
+- packet completion
+- checkpoint posture
 
 It does not govern:
 
-* constitutional boundaries
-* repo placement
-* operator-local semantics
-* implementation meaning by itself
+- constitutional boundaries
+- formation / placement law
+- evaluation law by itself
+- operator-local semantics
+- implementation meaning by itself
 
 The live repo is the authority for current code and current file state.
 
-https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
+If this document and live repo state conflict about what currently exists, live repo state wins.
 
-The root authority docs govern meaning and procedure.
-If repo state and memory conflict, repo state wins.
-If workflow and constitution conflict on boundary posture, constitution wins.
+If decision and constraint conflict on boundary posture, constraint wins.
+
+If decision and formation conflict on structure or placement, formation wins.
+
+If decision and evaluation conflict on judgment or outcome routing, evaluation wins.
 
 ---
 
-### Repo-current-reality rule and Role Order
+## 1. Decision function
+
+This document exists only to answer:
+
+- how work moves
+- who does what
+- how a workflow pass progresses
+- when a pass recruits downward
+- when a pass is complete
+- how repo state becomes the next starting point
+
+Nothing else belongs here.
+
+---
+
+## 2. Repo-current-reality rule
 
 The live repo is upstream of all workflow roles for current file and code reality.
 
 Workflow begins only after current repo reality is read.
 
-Role order for workflow execution is therefore:
-
-1. repo current reality
-2. Reed
-3. Control
-4. Audit
-5. Compression
-6. Implementation
-
-`repo current reality` is not a collaborator role.
-It is the grounding input to the workflow loop.
-
 If declared workflow state and live repo state conflict about what currently exists, live repo state wins.
 
-If a packet has not checked current repo reality for the active seam, the packet is not ready.
-
-### Reed
-
-Final authority for priority, acceptance, rejection, and promotion of scope.
-
-### Control
-
-Chooses the active seam, bounded question, and acceptance target.
-
-### Audit
-
-Reports current reality only.
-
-### Compression
-
-Determines what survives active scope.
-
-### Implementation
-
-Changes repo state only from an accepted compressed packet.
-
-No role may silently perform another role’s job.
+If a pass has not checked current repo reality for the active seam, the pass is not ready.
 
 ---
 
-## 2. Thread rule
-
-Each active thread must have one role only.
-
-Allowed thread classes:
-
-* control thread
-* audit thread
-* compression thread
-* implementation thread
-
-A thread may not mix:
-
-* architecture + implementation
-* audit + compression
-* compression + approval
-* implementation + constitutional redesign
-
-If a task needs more than one role, it must move by handoff.
-
----
-
-## 3. Workflow field
+## 3. Macro verbs
 
 All bounded work moves through four macro verbs:
 
@@ -115,16 +80,16 @@ The workflow invariant is:
 
 If a macro verb cannot emit its object lawfully, it must either:
 
-- continue inside the same macro verb,
-- recruit downward,
-- defer,
-- or abort.
+- continue inside the same macro verb
+- recruit downward
+- defer
+- or abort
 
 No step may be skipped silently.
 
 ---
 
-## 4. Macro verbs
+## 4. Macro verbs and emitted objects
 
 ### 4.1 Admit
 
@@ -310,24 +275,7 @@ Evaluate recruits to Admit only when the original source, scope, or policy was m
 
 ---
 
-## 5. Active seam rule
-
-Only one seam may be active per packet.
-
-A packet must define:
-
-- active seam
-- files in scope
-- non-goals
-- acceptance target
-
-If the seam cannot be named clearly, the packet is not ready.
-
-If the scoped change cannot be bounded clearly, the packet is too large.
-
----
-
-## 6. Role order
+## 5. Roles
 
 Roles are:
 
@@ -356,7 +304,7 @@ No role may silently perform another role’s job.
 
 ---
 
-## 7. Thread rule
+## 6. Thread rule
 
 Each active thread must have one role only.
 
@@ -374,6 +322,23 @@ A thread may not mix:
 - architecture redesign + direct implementation
 
 If a task needs more than one role, it must move by handoff.
+
+---
+
+## 7. Active seam rule
+
+Only one seam may be active per pass.
+
+A pass must define:
+
+- active seam
+- files in scope
+- non-goals
+- acceptance target
+
+If the seam cannot be named clearly, the pass is not ready.
+
+If the scoped change cannot be bounded clearly, the pass is too large.
 
 ---
 
@@ -426,15 +391,15 @@ Escalation is allowed only when:
 
 - boundary conflict appears
 - hidden dependency blocks honest completion
-- packet scope is insufficient
+- pass scope is insufficient
 - repo reality conflicts with declared procedure
 - lawful completion is not possible inside the active macro verb
 
 Escalation must stay bounded.
 
-A packet is complete only when:
+A pass is complete only when:
 
-- the active macro verb emitted its required object, or explicitly routed downward
+- the active macro verb emitted its required object, or explicitly recruited downward
 - the scoped change was made or honestly blocked
 - what is now true is stated
 - what is still not claimed is stated
@@ -446,7 +411,7 @@ If ambiguity expanded, compression failed.
 
 ## 11. Checkpoint rule
 
-After each accepted packet:
+After each accepted pass:
 
 - repo state is the new current reality
 - active scope is recomputed
@@ -467,4 +432,4 @@ Did this move conserve constraint-bearing identity by emitting the required obje
 
 ## 13. One-line summary
 
-The Workflow Contract governs how bounded work moves through four macro verbs—Admit, Form, Decide, and Evaluate—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.
+Decision Matrix governs how bounded work moves through the four macro verbs—Admit, Form, Decide, and Evaluate—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.
