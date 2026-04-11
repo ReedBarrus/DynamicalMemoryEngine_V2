@@ -1,6 +1,6 @@
-# Dynamical Memory Engine — Master Constitution
+# Dynamical Memory Engine — Constraint Matrix
 
-Live Repo State: 
+Live Repo State:
 https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
 ## Status
@@ -16,10 +16,23 @@ It governs only:
 
 It does not govern:
 
-- workflow procedure
-- repo placement
+- formation procedure
+- decision procedure
+- evaluation procedure
+- repo placement details
 - operator-local contracts
 - implementation details
+
+The live repo is the authority for current file and code reality.
+
+If this document and live repo state conflict about what currently exists, live repo state wins.
+
+This document remains the highest authority for:
+
+- boundary posture
+- active layer order
+- active scope
+- forbidden imports across layers
 
 ---
 
@@ -27,11 +40,12 @@ It does not govern:
 
 Authority resolves in this order:
 
-1. `README.MasterConstitution.md`
-2. `README.WorkflowContract.md`
-3. `README.RepoLayout.md`
-4. seam-local contracts and notes
-5. implementation files
+1. `README.ConstraintMatrix.md`
+2. `README.FormationMatrix.md`
+3. `README.DecisionMatrix.md`
+4. `README.EvaluationMatrix.md`
+5. seam-local contracts and notes
+6. implementation files
 
 If two lower surfaces conflict, the higher surface wins.
 
@@ -90,6 +104,7 @@ Runtime structures and memory structures are implementation constructs, not meta
 ### Rule 4 — Replay is lens-bound
 
 Replay must declare its lens.
+
 Replay is not raw restoration unless explicitly defined as such.
 
 ### Rule 5 — Promotion is separate
@@ -104,6 +119,10 @@ Prediction, agency, ecology, symbolic, and meta may not silently shape active co
 
 Any implementation should resolve the problem at the lowest lawful active layer.
 
+### Rule 8 — Constraint-bearing identity must not be silently inflated
+
+No step may destroy, replace, or silently inflate the active constraint-bearing identity inherited from admitted reality.
+
 ---
 
 ## 5. Scope test
@@ -114,12 +133,13 @@ Before adding or changing anything, ask:
 2. is that layer active?
 3. does this cross a boundary downward?
 4. is this trying to import deferred meaning into active scope?
+5. does this preserve the active constraint-bearing identity, or silently inflate it?
 
 If any answer is unclear, the move is not yet lawful.
 
 ---
 
-## 6. Constitutional function
+## 6. Constraint function
 
 This document exists only to:
 
@@ -127,6 +147,7 @@ This document exists only to:
 - define what is deferred
 - define what is forbidden
 - define what outranks what
+- define the minimum invariant that later matrices must preserve
 
 Nothing else belongs here.
 
@@ -134,4 +155,4 @@ Nothing else belongs here.
 
 ## 7. One-line summary
 
-DME develops upward in declared layer order, inside current active scope only, with deferred layers prevented from silently shaping lower active layers.
+DME develops upward in declared layer order, inside current active scope only, with deferred layers prevented from silently shaping lower active layers and with constraint-bearing identity preserved across all later workflow verbs.
