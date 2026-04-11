@@ -641,6 +641,63 @@ code {
     line-height: 1.5;
 }
 
+.measurement-panel {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid rgba(135, 104, 78, 0.18);
+    background: rgba(255, 255, 255, 0.76);
+}
+
+.measurement-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.measurement-panel-copy {
+    margin-top: 6px;
+    color: var(--shell-muted);
+    line-height: 1.45;
+}
+
+.measurement-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border: 1px solid rgba(135, 104, 78, 0.2);
+    background: rgba(135, 104, 78, 0.1);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--shell-ink);
+    white-space: nowrap;
+}
+
+.measurement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.measurement-card {
+    display: grid;
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid rgba(135, 104, 78, 0.16);
+    background: rgba(255, 250, 242, 0.72);
+}
+
+.measurement-value {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 15px;
+    color: var(--shell-ink);
+    line-height: 1.35;
+    word-break: break-word;
+}
+
 .failure-detail-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -741,11 +798,38 @@ code {
 }
 
 .bin-preview-card {
+    appearance: none;
     display: grid;
     gap: 4px;
+    width: 100%;
     padding: 10px;
     border: 1px solid rgba(135, 104, 78, 0.16);
     background: rgba(255, 255, 255, 0.74);
+    color: var(--shell-ink);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition:
+        border-color 140ms ease,
+        background 140ms ease,
+        transform 140ms ease;
+}
+
+.bin-preview-card:hover,
+.bin-preview-card:focus-visible {
+    border-color: var(--shell-accent);
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}
+
+.bin-preview-card:focus-visible {
+    outline: 2px solid rgba(135, 104, 78, 0.28);
+    outline-offset: 2px;
+}
+
+.bin-preview-card-active {
+    border-color: var(--shell-accent);
+    background: rgba(135, 104, 78, 0.14);
 }
 
 .bin-preview-frequency {

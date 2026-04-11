@@ -28,6 +28,7 @@ interface ShellViewStateV0 {
     activeRegimeId: RegimeIdV0;
     selectedOperatorId: OperatorIdV0;
     selectedFrameIndex: number;
+    selectedSpectralBinIndex: number | null;
     frameValidationMessage: string | null;
     selectedPlaneModeId: PlaneModeIdV0;
     planeValidationMessage: string | null;
@@ -97,6 +98,14 @@ interface SpectralSeriesViewV0 {
     path: string;
 }
 
+interface SpectralMeasurementReadoutV0 {
+    previewBinIndex: number;
+    frequencyHz: number;
+    re: number;
+    im: number;
+    emphasisLabel: string;
+}
+
 type InspectionPaneViewModelV0 =
     | {
           kind: "awaiting_run";
@@ -126,6 +135,7 @@ type InspectionPaneViewModelV0 =
           runtimePlaneClass: string;
           series: SpectralSeriesViewV0[];
           previewBins: SpectralBinPointV0[];
+          measurement: SpectralMeasurementReadoutV0;
       };
 
 const FIXED_INSPECTION_REQUEST_V0 = {
@@ -804,6 +814,46 @@ function createSeriesPathV0(values: number[]): string {
     }).join(" ");
 }
 
+function getDefaultPreviewBinIndexV0(
+    previewBins: SpectralBinPointV0[],
+    selectedModeId: PlaneModeIdV0
+): number {
+    if (previewBins.length === 0) {
+        return 0;
+    }
+
+    let strongestIndex = 0;
+    let strongestValue = Number.NEGATIVE_INFINITY;
+
+    previewBins.forEach((bin, index) => {
+        const candidateValue =
+            selectedModeId === "re"
+                ? Math.abs(bin.re)
+                : selectedModeId === "im"
+                ? Math.abs(bin.im)
+                : Math.max(Math.abs(bin.re), Math.abs(bin.im));
+
+        if (candidateValue > strongestValue) {
+            strongestValue = candidateValue;
+            strongestIndex = index;
+        }
+    });
+
+    return strongestIndex;
+}
+
+function getMeasurementEmphasisLabelV0(selectedModeId: PlaneModeIdV0): string {
+    if (selectedModeId === "re") {
+        return "re emphasis";
+    }
+
+    if (selectedModeId === "im") {
+        return "im emphasis";
+    }
+
+    return "both over Cartesian components";
+}
+
 function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
     if (state.lastRunResult === null) {
         return {
@@ -868,6 +918,16 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
         });
     }
 
+    const previewMeasurementBins = previewBins.slice(0, 8);
+    const defaultMeasurementIndex = getDefaultPreviewBinIndexV0(previewMeasurementBins, selectedMode.id);
+    const selectedMeasurementIndex =
+        state.selectedSpectralBinIndex !== null &&
+            state.selectedSpectralBinIndex >= 0 &&
+            state.selectedSpectralBinIndex < previewMeasurementBins.length
+            ? state.selectedSpectralBinIndex
+            : defaultMeasurementIndex;
+    const selectedMeasurementBin = previewMeasurementBins[selectedMeasurementIndex];
+
     return {
         kind: "spectral_supported",
         title: `${selectedMode.label} shell view over fixed P3 render`,
@@ -880,7 +940,14 @@ function getInspectionPaneViewModel(): InspectionPaneViewModelV0 {
         modeLabel: selectedMode.label,
         runtimePlaneClass: planeContext.runtimePlaneClass,
         series,
-        previewBins: previewBins.slice(0, 8),
+        previewBins: previewMeasurementBins,
+        measurement: {
+            previewBinIndex: selectedMeasurementIndex,
+            frequencyHz: selectedMeasurementBin.frequency,
+            re: selectedMeasurementBin.re,
+            im: selectedMeasurementBin.im,
+            emphasisLabel: getMeasurementEmphasisLabelV0(selectedMode.id),
+        },
     };
 }
 
@@ -956,6 +1023,7 @@ const state: ShellViewStateV0 = {
     activeRegimeId: "temporal",
     selectedOperatorId: "P3",
     selectedFrameIndex: 0,
+    selectedSpectralBinIndex: null,
     frameValidationMessage: null,
     selectedPlaneModeId: "both",
     planeValidationMessage: null,
@@ -1214,6 +1282,33 @@ function renderMainPane(): void {
                 <div class="result-value">${escapeHtml(paneView.modeLabel)}</div>
               </div>
             </div>
+            <div class="measurement-panel">
+              <div class="measurement-panel-header">
+                <div>
+                  <div class="result-key">Measurement Readout</div>
+                  <div class="measurement-panel-copy">Active preview-bin readout over the current visible P3 render only.</div>
+                </div>
+                <div class="measurement-chip">Preview Bin ${escapeHtml(String(paneView.measurement.previewBinIndex))}</div>
+              </div>
+              <div class="measurement-grid">
+                <div class="measurement-card">
+                  <div class="result-key">Frequency</div>
+                  <div class="measurement-value">${escapeHtml(paneView.measurement.frequencyHz.toFixed(2))} Hz</div>
+                </div>
+                <div class="measurement-card">
+                  <div class="result-key">re</div>
+                  <div class="measurement-value">${escapeHtml(paneView.measurement.re.toFixed(6))}</div>
+                </div>
+                <div class="measurement-card">
+                  <div class="result-key">im</div>
+                  <div class="measurement-value">${escapeHtml(paneView.measurement.im.toFixed(6))}</div>
+                </div>
+                <div class="measurement-card">
+                  <div class="result-key">Mode Emphasis</div>
+                  <div class="measurement-value">${escapeHtml(paneView.measurement.emphasisLabel)}</div>
+                </div>
+              </div>
+            </div>
             <div class="spectral-panel">
               <div class="spectral-panel-header">
                 <div class="result-key">Shell-Local P3 Preview</div>
@@ -1234,14 +1329,21 @@ function renderMainPane(): void {
               </svg>
             </div>
             <div class="result-summary">
-              <div class="result-key">Preview Bins</div>
+              <div class="result-key">Preview Bin Grid</div>
+              <p class="result-note">Select one visible preview bin to update the measurement readout. No hidden refetch or recomputation occurs.</p>
               <div class="bin-preview-grid">
-                ${paneView.previewBins.map((bin) => `
-                  <div class="bin-preview-card">
-                    <div class="bin-preview-frequency">${escapeHtml(bin.frequency.toFixed(2))} Hz</div>
+                ${paneView.previewBins.map((bin, index) => `
+                  <button
+                    type="button"
+                    class="bin-preview-card ${index === paneView.measurement.previewBinIndex ? "bin-preview-card-active" : ""}"
+                    data-preview-bin-index="${escapeHtml(String(index))}"
+                    aria-pressed="${index === paneView.measurement.previewBinIndex ? "true" : "false"}"
+                  >
+                    <div class="bin-preview-frequency">Preview Bin ${escapeHtml(String(index))}</div>
+                    <div class="bin-preview-values">${escapeHtml(bin.frequency.toFixed(2))} Hz</div>
                     <div class="bin-preview-values">re ${escapeHtml(bin.re.toFixed(4))}</div>
                     <div class="bin-preview-values">im ${escapeHtml(bin.im.toFixed(4))}</div>
-                  </div>
+                  </button>
                 `).join("")}
               </div>
             </div>
@@ -1411,6 +1513,7 @@ async function handoffFileV0(
 ): Promise<void> {
     state.isUploading = true;
     state.selectedFrameIndex = 0;
+    state.selectedSpectralBinIndex = null;
     state.frameValidationMessage = null;
     state.planeValidationMessage = null;
     state.lastRunResult = null;
@@ -1472,6 +1575,7 @@ async function runSelectedSourceV0(): Promise<void> {
 
     state.isRunning = true;
     state.frameValidationMessage = null;
+    state.selectedSpectralBinIndex = null;
     state.planeValidationMessage = null;
     state.latestFailure = null;
     state.latestFailureScope = null;
@@ -1498,6 +1602,7 @@ async function runSelectedSourceV0(): Promise<void> {
     state.isRunning = false;
     state.hasRunAttempted = true;
     state.selectedFrameIndex = result.stage_selection.frame_index ?? 0;
+    state.selectedSpectralBinIndex = null;
     state.frameValidationMessage = null;
     state.lastRunResult = result;
     state.latestFailure = null;
@@ -1514,6 +1619,7 @@ function clearShellStateV0(): void {
     state.selectedSource = null;
     state.sourceInteractionKind = null;
     state.selectedFrameIndex = 0;
+    state.selectedSpectralBinIndex = null;
     state.frameValidationMessage = null;
     state.planeValidationMessage = null;
     state.lastRunResult = null;
@@ -1686,6 +1792,29 @@ planeModeStackNode.addEventListener("click", (event) => {
 
     state.selectedPlaneModeId = planeModeId;
     state.planeValidationMessage = null;
+    renderShell();
+});
+
+mainResultNode.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+
+    const previewBinButton = target.closest<HTMLButtonElement>("[data-preview-bin-index]");
+
+    if (previewBinButton === null) {
+        return;
+    }
+
+    const previewBinIndex = Number(previewBinButton.dataset.previewBinIndex);
+
+    if (!Number.isInteger(previewBinIndex) || previewBinIndex < 0) {
+        return;
+    }
+
+    state.selectedSpectralBinIndex = previewBinIndex;
     renderShell();
 });
 

@@ -13,7 +13,8 @@
         "test:host": "node --experimental-strip-types execution/temporal_execution_surface_v0.ts",
         "test:planes": "node --experimental-strip-types planes/temporal/plane_builders_v0.ts",
         "test:render": "node --experimental-strip-types planes/temporal/plane_renderer_v0.ts",
-        "test:inspect": "node --experimental-strip-types execution/temporal_inspection_flow_v0.ts"
+        "test:inspect": "node --experimental-strip-types execution/temporal_inspection_flow_v0.ts",
+        "dev:shell": "powershell -ExecutionPolicy Bypass -File ./scripts/start_local_shell_v0.ps1"
     },
     "devDependencies": {
         "typescript": "^5.9.2",
