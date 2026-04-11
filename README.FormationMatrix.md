@@ -1,11 +1,11 @@
-# Dynamical Memory Engine — Repo Layout
+# Dynamical Memory Engine — Formation Matrix
 
 Live Repo State:
 https://github.com/ReedBarrus/DynamicalMemoryEngine_V2
 
 ## Status
 
-This document is the placement authority for DME.
+This document is the structure and placement authority for DME.
 
 It governs only:
 
@@ -13,25 +13,29 @@ It governs only:
 - root authority files
 - placement rules
 - active-vs-non-active repo structure
+- how structural objects are externalized and kept distinct
 
 It does not govern:
 
 - constitutional boundaries
-- workflow procedure
-- operator semantics
+- decision procedure
+- evaluation procedure
+- operator semantics by itself
 - artifact meaning by itself
 
 The live repo is the authority for current file and folder reality.
 
 If this document and live repo state conflict about what currently exists, live repo state wins.
 
-If repo layout and constitution conflict on boundary posture, constitution wins.
+If formation and constraint conflict on boundary posture, constraint wins.
 
-If repo layout and workflow conflict on movement procedure, workflow wins.
+If formation and decision conflict on movement procedure, decision wins.
+
+If formation and evaluation conflict on judgment or outcome routing, evaluation wins.
 
 ---
 
-## 1. Layout function
+## 1. Formation function
 
 This document exists only to answer:
 
@@ -40,6 +44,7 @@ This document exists only to answer:
 - what root files are authoritative
 - where new files should go
 - what must not cohabit
+- how identity-bearing structure is externalized in the repo
 
 Nothing else belongs here.
 
@@ -62,7 +67,7 @@ Current top-level repo zones are:
 - `types/`
 - `validators/`
 
-If a zone is not present in the live repo, it is not part of current layout reality.
+If a zone is not present in the live repo, it is not part of current formation reality.
 
 ---
 
@@ -70,9 +75,10 @@ If a zone is not present in the live repo, it is not part of current layout real
 
 Current root authority files are:
 
-- `README.MasterConstitution.md`
-- `README.WorkflowContract.md`
-- `README.RepoLayout.md`
+- `README.ConstraintMatrix.md`
+- `README.FormationMatrix.md`
+- `README.DecisionMatrix.md`
+- `README.EvaluationMatrix.md`
 
 Other root files may exist, but they are not root authority by default.
 
@@ -156,30 +162,60 @@ Local machine artifacts do not become repo authority.
 
 ---
 
-## 6. README root regime split
+## 6. Formation separation rule
+
+Formation must preserve distinction between:
+
+- runtime operators
+- read-side projections
+- shape definitions
+- validators
+- execution seams
+- helper scripts
+- documentation
+- local machine artifacts
+
+A file may not silently carry multiple structural roles merely for convenience.
+
+If a file or folder becomes mixed-role, that mixed role must be made explicit and should be split when lawful.
+
+---
+
+## 7. Root README regime split
 
 Inside `README/`, the first classification question is:
 
-- boundary
-- movement
-- placement
+- constraint
+- formation
+- decision
+- evaluation
 
-README branches should derive from one of these three root regimes unless explicitly mixed.
+README branches should derive from one of these four root regimes unless explicitly mixed.
 
 If a README is mixed, that mixed role must be explicit.
 
 ---
 
-## 7. Active reality rule
+## 8. Active reality rule
 
 This document describes current repo reality, not ideal future layout.
 
-If a folder is planned but not present, it is not active layout.
+If a folder is planned but not present, it is not active formation reality.
 
 If a file remains present but no longer carries active authority, that must be stated elsewhere and should eventually be cleaned up.
 
 ---
 
-## 8. One-line summary
+## 9. Formation invariant
 
-Repo Layout defines the current placement grammar of the live repo, with live repo state winning for what currently exists and root authority limited to boundary, movement, and placement anchors.
+Formation must externalize structure in a way that preserves identity-bearing distinction without silently importing movement, judgment, or ontology into placement.
+
+Placement may support identity clarity.
+
+Placement may not settle identity meaning by itself.
+
+---
+
+## 10. One-line summary
+
+Formation Matrix defines the current structural placement grammar of the live repo, preserves distinction between structural roles, and externalizes identity-bearing objects without letting placement silently become movement, judgment, or authority.
