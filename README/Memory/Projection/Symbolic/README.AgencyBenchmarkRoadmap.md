@@ -1,0 +1,1 @@
+# DME Agency Benchmark Roadmap\n\nThis consolidated note replaces README.AgencyBenchmarkContract.v0.md, README.AgencyPolicyCodex.md, and README.AgencyPosture.v0.md.\n\n- Benchmark contract scope\n- Agency policy and posture linkage\n- Deferred implementation posture (Door One context)\n
