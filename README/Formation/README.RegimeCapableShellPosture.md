@@ -13,11 +13,11 @@ It does **not** override:
 - `README.RepoLayout.md`
 - `README/Core/Regimes/Temporal/README.TemporalDevelopmentProjection.md`
 - `README/Core/Regimes/Temporal/Execution/README.SourceIntakeSurface.md`
-- `README/Core/Regimes/Temporal/Execution/README.MinimalOrchestratorPosture.v0.md`
-- `README/Core/Regimes/Temporal/Execution/README.TemporalExecutionSurface.v0.md`
+- `README/Formation/README.MinimalOrchestratorPosture.v0.md`
+- `README/Formation/README.TemporalExecutionSurface.v0.md`
 - `README/Core/Regimes/Temporal/Execution/Failure/README.SeamFailurePosture.v0.md`
-- `README/Core/Regimes/Temporal/Inspection/Planes/README.PlanePosture.v0.md`
-- `README/Core/Regimes/Temporal/Inspection/Rendering/README.PlaneRenderer.md`
+- `README/Formation/README.PlanePosture.v0.md`
+- `README/Formation/README.PlaneRenderer.md`
 
 Its purpose is narrower:
 

@@ -14,8 +14,8 @@ It does **not** override:
 - `README.RepoLayout.md`
 - `README/Core/Regimes/Temporal/README.TemporalDevelopmentProjection.md`
 - `README/Core/Regimes/Temporal/Validators/README.ValidatorAndReturnPosture.md`
-- `README/Core/Regimes/Temporal/Sources/README.SourceIntakeSurface.md`
-- `README/Core/Regimes/Temporal/Execution/README.TemporalExecutionSurface.v0.md`
+- `README/Formation/README.SourceIntakeSurface.md`
+- `README/Formation/README.TemporalExecutionSurface.v0.md`
 - `README/Core/Regimes/Temporal/Execution/Failure/README.SeamFailurePosture.v0.md`
 - the active TemporalRegime floor contracts
 

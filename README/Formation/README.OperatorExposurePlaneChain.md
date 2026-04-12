@@ -20,7 +20,7 @@ It does **not** override:
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`
 - `README/Constitution/Surfaces/README.OperatorExposurePlaneLaw.md`
-- `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
+- `README/Formation/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Taxonomy/README.ObservabilityAndFeedbackTaxonomy.md`
 - `README/Core/Taxonomy/README.BoundaryTaxonomy.md`
 - `README/Core/Taxonomy/README.ConstraintTaxonomy.md`
@@ -695,7 +695,7 @@ These should be treated as real evidentiary failures, not just UI taste issues.
 This note pairs most directly with:
 
 - `README/Constitution/Surfaces/README.OperatorExposurePlaneLaw.md`
-- `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
+- `README/Formation/README.OperatorPlaneContractTemplate.md`
 - `README/Constitution/Workflow/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`

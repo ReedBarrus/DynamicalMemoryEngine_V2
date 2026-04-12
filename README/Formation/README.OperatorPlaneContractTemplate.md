@@ -701,7 +701,7 @@ This note pairs most directly with:
 
 Suggested companion notes:
 
-- `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
+- `README/Formation/README.OperatorExposurePlaneChain.md`
 - `README/Constitution/Surfaces/README.OperatorSupportSurfaceLaw.md`
 - `README/Core/Regimes/Temporal/Inspection/README.OperatorPlaneBuildOrder.md`
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlanePacketContract.md`

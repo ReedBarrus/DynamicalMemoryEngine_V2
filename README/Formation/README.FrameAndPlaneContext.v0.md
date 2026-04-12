@@ -12,10 +12,10 @@ It does **not** override:
 - `README.WorkflowContract.md`
 - `README.RepoLayout.md`
 - `README/Core/Foundations/Architecture/Shell/README.RegimeCapableShellPosture.v0.md`
-- `README/Core/Foundations/Architecture/Shell/README.OperatorExposureNavigation.v0.md`
-- `README/Core/Regimes/Temporal/Execution/README.TemporalExecutionSurface.v0.md`
-- `README/Core/Regimes/Temporal/Inspection/Planes/README.PlanePosture.v0.md`
-- `README/Core/Regimes/Temporal/Inspection/Rendering/README.PlaneRenderer.md`
+- `README/Formation/README.OperatorExposureNavigation.v0.md`
+- `README/Formation/README.TemporalExecutionSurface.v0.md`
+- `README/Formation/README.PlanePosture.v0.md`
+- `README/Formation/README.PlaneRenderer.md`
 
 Its purpose is narrower:
 

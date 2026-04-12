@@ -14,7 +14,7 @@ It does **not** override:
 
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
-- `README/Core/Regimes/Temporal/Contracts/README.OperatorLanesContract.md`
+- `README/Formation/README.OperatorLanesContract.md`
 - `README/Constitution/Identity/README.StructuralIdentityLaw.md`
 - `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
 

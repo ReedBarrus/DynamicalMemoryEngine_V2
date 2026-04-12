@@ -13,7 +13,7 @@ It does **not** override:
 - `README/Constitution/Workflow/README.RebuildPosture.md`
 - `README.RepoLayout.md`
 - `README/Core/Regimes/Temporal/README.TemporalDevelopmentProjection.md`
-- `README/Core/Regimes/Temporal/Inspection/Planes/README.PlanePosture.v0.md`
+- `README/Formation/README.PlanePosture.v0.md`
 - `README/Core/Regimes/Temporal/Validators/README.ValidatorAndReturnPosture.md`
 - the active TemporalRegime floor contracts
 

@@ -17,7 +17,7 @@ It does **not** override:
 * `README/Constitution/Workflow/README.DevelopmentPressure.md`
 * `README/core/OperatorLane/README.OperatorLanesContract.md`
 * `README.PrimaryPipelineArchitecture.v0.md`
-* `README/Core/Regimes/Temporal/Contracts/README.IngestFloorContract.v0.md`
+* `README/Formation/README.IngestFloorContract.v0.md`
 
 Its purpose is narrower:
 
