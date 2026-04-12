@@ -65,8 +65,6 @@ If a pass has not checked current repo reality for the active seam, the pass is 
 
 ## 3. Macro verbs
 
-All bounded work moves through four macro verbs:
-
 All bounded work moves through five macro verbs:
 
 1. **Admit**
@@ -554,4 +552,4 @@ Did this move conserve constraint-bearing identity by emitting the required obje
 
 ## 13. One-line summary
 
-Decision Matrix governs how bounded work moves through the four macro verbs—Admit, Form, Decide, and Evaluate—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.
+Decision Matrix governs how bounded work moves through the five macro verbs—Admit, Form, Decide, and Evaluate—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.

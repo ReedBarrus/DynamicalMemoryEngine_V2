@@ -1,4 +1,4 @@
-# README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
+# README/Evaluation/README.DeclaredVsMechanizedAudit.md
 # Dynamical Memory Engine — Declared vs Mechanized Audit
 
 

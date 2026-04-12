@@ -12,7 +12,7 @@ It does **not** override:
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
 - `README.RepoLayout.md`
-- `README/Evidence/Experiments/README.DoorOneRealDeviceExperiment.md`
+- `README/Evaluation/README.DoorOneRealDeviceExperiment.md`
 
 Its purpose is narrower:
 
