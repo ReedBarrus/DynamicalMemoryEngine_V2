@@ -378,8 +378,8 @@ A thread may not mix:
 
 - audit + compression
 - compression + approval
-- implementation + constitutional redesign
-- architecture redesign + direct implementation
+- decision repo mutation + constitutional redesign
+- architecture redesign + direct repo mutation
 
 If a task needs more than one role, it must move by handoff.
 
@@ -446,7 +446,7 @@ Repo-mutation under accepted packet may not:
 - preserve mixed-role artifacts for convenience
 - treat proposal as approval
 
-Implementation follows the accepted compressed packet, not free expansion.
+Repo-mutation follows the accepted compressed packet, not free expansion.
 
 ---
 
