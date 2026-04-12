@@ -15,8 +15,8 @@ It does **not** override:
 - `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
 - `README/Constitution/Workflow/README.PacketWorkflowChain.md`
 - `README/Constitution/Workflow/README.DevelopmentPressure.md`
-- `README/Core/Taxonomy/README.MemoryTaxonomy.md`
-- `README/Core/Taxonomy/README.ObservabilityAndFeedbackTaxonomy.md`
+- `README/Memory/README.MemoryTaxonomy.md`
+- `README/Memory/README.ObservabilityAndFeedbackTaxonomy.md`
 
 Its purpose is narrower:
 

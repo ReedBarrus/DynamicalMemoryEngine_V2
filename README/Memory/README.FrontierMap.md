@@ -27,7 +27,7 @@ Constitutional authority remains with:
 
 Recommended placement:
 
-* `README/Program/CrossField/README.AdjacentFieldMap.md`
+* `README/Memory/README.AdjacentFieldMap.md`
 
 ---
 
@@ -51,7 +51,7 @@ This document should remain:
 
 Speculative, mythic, exotic, or high-ambiguity branches should be filed in:
 
-* `README/Program/CrossField/README.FrontierMap.md`
+* `README/Memory/README.FrontierMap.md`
 
 ---
 

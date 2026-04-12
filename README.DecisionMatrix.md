@@ -552,4 +552,4 @@ Did this move conserve constraint-bearing identity by emitting the required obje
 
 ## 13. One-line summary
 
-Decision Matrix governs how bounded work moves through the five macro verbs—Admit, Form, Decide, and Evaluate—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.
+Decision Matrix governs how bounded work moves through the five macro verbs—Admit, Form, Decide, Evaluate, and Memorize—using repo reality as upstream ground, emitted objects as checkpoints, and downward recruitment as the main anti-drift control.

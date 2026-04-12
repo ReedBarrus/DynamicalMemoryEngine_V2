@@ -18,8 +18,8 @@ It does **not** override:
 - `README.SemanticOverlayContract.v0.md`
 - `README/Constitution/Workflow/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
-- `README/Core/Taxonomy/README.QueryTaxonomy.md`
-- `README/Core/Taxonomy/README.ClaimTaxonomy.md`
+- `README/Memory/README.QueryTaxonomy.md`
+- `README/Memory/README.ClaimTaxonomy.md`
 
 Its purpose is narrower:
 
@@ -787,8 +787,8 @@ This note pairs most directly with:
 - `README/Constitution/Workflow/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README.SemanticOverlayContract.v0.md`
-- `README/Core/Taxonomy/README.QueryTaxonomy.md`
-- `README/Core/Taxonomy/README.ClaimTaxonomy.md`
+- `README/Memory/README.QueryTaxonomy.md`
+- `README/Memory/README.ClaimTaxonomy.md`
 
 Suggested future companion:
 
@@ -797,8 +797,8 @@ Suggested future companion:
 Suggested taxonomy append targets:
 
 - `README.DistortionTaxonomy.md`
-- `README/Core/Taxonomy/README.DriftTaxonomy.md`
-- `README/Core/Taxonomy/README.CompressionTaxonomy.md`
+- `README/Memory/README.DriftTaxonomy.md`
+- `README/Memory/README.CompressionTaxonomy.md`
 
 ---
 

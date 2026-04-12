@@ -29,7 +29,7 @@ Constitutional authority remains with:
 
 Recommended placement:
 
-* `README/Program/CrossField/README.AdjacentFieldMap.md`
+* `README/Memory/README.AdjacentFieldMap.md`
 
 ---
 

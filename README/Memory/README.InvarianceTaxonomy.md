@@ -14,10 +14,10 @@ README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
 README/Constitution/Mechanization/README.MechanizationClosureGate.md
 README/Constitution/Workflow/README.PacketWorkflowChain.md
 README/Constitution/Workflow/README.DevelopmentPressure.md
-README/Core/Taxonomy/README.ConstraintTaxonomy.md
-README/Core/Taxonomy/README.BoundaryTaxonomy.md
-README/Core/Taxonomy/README.CoherenceTaxonomy.md
-README/Core/Taxonomy/README.MemoryTaxonomy.md
+README/Memory/README.ConstraintTaxonomy.md
+README/Memory/README.BoundaryTaxonomy.md
+README/Memory/README.CoherenceTaxonomy.md
+README/Memory/README.MemoryTaxonomy.md
 README.IdentityHierarchy.md
 README/Core/Taxonomy/README.ReviewMintingConsultationMatrix.md
 
