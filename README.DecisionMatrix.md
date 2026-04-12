@@ -368,27 +368,19 @@ Role drift includes:
 
 ## 6. Thread rule
 
-Each active thread must have one role only.
+Each active thread must have exactly one primary role.
 
-Allowed thread classes:
+Allowed thread classes are the active roles defined in section 5.1.
 
-Refer to section 5.1
+A thread may not:
 
-A thread may not mix:
+- silently mix primary roles
+- silently cross macro verbs
+- perform repo mutation without accepted packet authority
+- absorb neighboring workflow responsibility for convenience
+- combine architectural redesign with direct repo mutation in one pass
 
-- audit + compression
-- compression + approval
-- decision repo mutation + constitutional redesign
-- architecture redesign + direct repo mutation
-
-If a task needs more than one role, it must move by handoff.
-
-each active thread has exactly one primary role
-each thread operates inside exactly one active macro verb
-cross-verb work requires explicit escalation or explicit handoff
-no thread may silently absorb a neighboring verb
-
----
+If a task needs more than one role or more than one macro verb, it must move by explicit handoff or explicit escalation.
 
 ## 7. Active seam rule
 
@@ -446,7 +438,7 @@ Repo-mutation under accepted packet may not:
 - preserve mixed-role artifacts for convenience
 - treat proposal as approval
 
-Repo-mutation follows the accepted compressed packet, not free expansion.
+Repo-mutation follows the accepted packet, not free expansion.
 
 ---
 
