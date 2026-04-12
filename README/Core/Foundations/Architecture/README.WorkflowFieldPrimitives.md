@@ -8,16 +8,18 @@ It is a supporting workflow-architecture note.
 
 It does **not** override:
 
-* `README.MasterConstitution.md`
-* `README.WorkflowContract.md`
-* `README.RepoLayout.md`
+* `README.ConstraintMatrix.md`
+* `README.FormationMatrix.md`
+* `README.DecisionMatrix.md`
+* `README.EvaluationMatrix.md`
+* `README.MemoryMatrix.md`
 
 Its purpose is narrower:
 
-* define the four macro verbs of the DME workflow,
+* define the five macro verbs of the DME workflow,
 * define the emitted object of each macro verb,
 * define what each macro verb is forbidden to do,
-* define downward recruitment logic,
+* define downward recruitment and forward handoff logic,
 * and provide one stable lens for mechanization, packet routing, and workflow redesign.
 
 This note governs **workflow field primitives** only.
@@ -33,12 +35,13 @@ It does **not** govern:
 
 ## 1. Core thesis
 
-DME workflow is best understood as a constrained field operating across four macro verbs:
+DME workflow is best understood as a constrained field operating across five macro verbs:
 
 1. **Admit**
 2. **Form**
 3. **Decide**
 4. **Evaluate**
+5. **Memorize**
 
 Each macro verb emits one bound object.
 
@@ -65,9 +68,9 @@ At minimum, the workflow must conserve physics-induced constraint as the ground 
 ### Internal phases
 
 * Ingest
+* Orient
 * Align
 * Parse
-* optional explicit handle: Orient
 
 ### Emitted object
 
@@ -115,7 +118,7 @@ It either:
 * Structure
 * Compress
 * Aggregate
-* optional explicit handle: Identify
+* Identify
 
 ### Emitted object
 
@@ -209,7 +212,6 @@ It recruits to Admit only when the deeper failure is actually malformed reality 
 * Review
 * Reconcile
 * Resolve
-* conditional branches: Reconstruct, Promote
 
 ### Emitted object
 
@@ -219,11 +221,11 @@ This object contains:
 
 * measured deviation/fidelity posture,
 * reintegrated active state,
-* routed workflow outcome.
+* routed immediate workflow outcome.
 
 ### Function
 
-Evaluate measures the result, interprets its significance, folds it back into continuity, and routes the final outcome.
+Evaluate measures the result, interprets its significance, folds it back into active continuity, and routes the immediate workflow outcome.
 
 ### Forbidden
 
@@ -234,7 +236,7 @@ Evaluate must not:
 * collapse coherence into truth,
 * collapse recurrence into canon,
 * silently upgrade outcome into authority,
-* treat promotion as routine runtime closure.
+* treat retention, archive, reconstruction, or promotion as routine evaluation closure.
 
 ### Downward recruitment
 
@@ -248,11 +250,79 @@ It recruits to Form when evaluation reveals unstable or false identity assumptio
 
 It recruits to Admit only when the original source/scope/policy was malformed.
 
+### Forward handoff
+
+Evaluate hands off forward to Memorize when:
+
+* immediate judgment is complete,
+* active continuity is reconciled,
+* and persistence posture must now be decided.
+
+---
+
+## 3.5 Memorize
+
+### Internal phases
+
+* Reconstruct
+* Retain
+* Archive
+* Promote
+
+### Emitted object
+
+**Memory object**
+
+This object contains:
+
+* persistence posture,
+* retention or archive state,
+* reconstruction availability,
+* trust-tier status inside memory space.
+
+### Function
+
+Memorize decides what persists, how it persists, what becomes inactive memory, what can be reconstructed back into workflow, and what may gain bounded trust inside memory space.
+
+### Forbidden
+
+Memorize must not:
+
+* silently rewrite evaluation outcome,
+* silently redefine structure,
+* collapse trusted memory into canon,
+* treat archive as deletion,
+* treat retain as proof,
+* reconstruct without declared source or lens,
+* silently widen reuse conditions.
+
+### Downward recruitment
+
+Memorize recruits first to Evaluate when:
+
+* immediate judgment is incomplete,
+* outcome significance is still unstable,
+* or evaluation closure was premature.
+
+It recruits to Decide when:
+
+* the wrong candidate was realized,
+* or persistence cannot be set because the decision object was flawed.
+
+It recruits to Form when:
+
+* the object cannot persist because identity structure is unstable,
+* malformed,
+* mixed,
+* or unresolved.
+
+It recruits to Admit only when the original source/scope/policy was malformed.
+
 ---
 
 ## 4. Optional handles
 
-The following are lawful explicit handles even if they are not required as core transform phases.
+The following are lawful explicit handles even if they are not required as separate authority layers beyond their host macro verb.
 
 ### 4.1 Orient
 
@@ -276,25 +346,35 @@ Useful when the system must expose:
 
 ---
 
-## 5. Conditional branches
+## 5. Memory distinctions
 
-### 5.1 Reconstruct
+### 5.1 Defer
 
-Conditional evaluation-side replay/comparison generator.
+Defer is **not** a memory state.
 
-Used when expected or prior-comparable state must be explicitly regenerated before audit.
+Defer is a routing posture available from any macro verb when lawful completion is not yet possible.
 
-### 5.2 Promote
+### 5.2 Reconstruct
 
-Deferred elevation branch only.
+Reconstruct is memory-side reactivation.
 
-Promotion remains:
+It is the closest thing in the workflow field to remembering.
 
-* separate from runtime closure,
-* gated,
-* and governed by higher-layer authority.
+### 5.3 Retain
 
-It is not part of the always-active workflow floor.
+Retain preserves active memory continuity.
+
+### 5.4 Archive
+
+Archive is a non-active memory state.
+
+### 5.5 Promote
+
+Promote inside memory space may raise memory trust tier.
+
+It does **not** by itself create canon.
+
+Canon promotion remains separately gated by higher boundary law.
 
 ---
 
@@ -306,10 +386,11 @@ The always-active workflow floor is:
 * Form
 * Decide
 * Evaluate
+* Memorize
 
-These four macro verbs are always active.
+These five macro verbs are always active.
 
-Handles and branches may be activated only when needed by the seam, the implementation, or the declared closure target.
+Handles may be activated only when needed by the seam, the implementation, or the declared closure target.
 
 ---
 
@@ -322,7 +403,8 @@ No pass may move forward without:
 * a bound work object,
 * an identity object,
 * a decision object,
-* or an evaluation object,
+* an evaluation object,
+* or a memory object,
 
 depending on the current verb.
 
@@ -331,10 +413,11 @@ If the object does not exist, the pass is incomplete and must either:
 * continue inside the same macro verb,
 * recruit downward,
 * defer,
+* hand off forward lawfully,
 * or abort.
 
 ---
 
 ## 8. One-line summary
 
-DME workflow conserves constraint-bearing identity through four macro verbs—Admit, Form, Decide, and Evaluate—each emitting a bound object, forbidding specific authority errors, and recruiting downward when lawful forward movement is no longer possible.
+DME workflow conserves constraint-bearing identity through five macro verbs—Admit, Form, Decide, Evaluate, and Memorize—each emitting a bound object, forbidding specific authority errors, and recruiting downward or handing forward when lawful movement requires it.

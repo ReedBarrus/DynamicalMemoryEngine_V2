@@ -79,6 +79,7 @@ Current root authority files are:
 - `README.FormationMatrix.md`
 - `README.DecisionMatrix.md`
 - `README.EvaluationMatrix.md`
+- `README.MemoryMatrix.md`
 
 Other root files may exist, but they are not root authority by default.
 
@@ -189,6 +190,7 @@ Inside `README/`, the first classification question is:
 - formation
 - decision
 - evaluation
+- memory
 
 README branches should derive from one of these four root regimes unless explicitly mixed.
 

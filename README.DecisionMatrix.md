@@ -67,10 +67,13 @@ If a pass has not checked current repo reality for the active seam, the pass is 
 
 All bounded work moves through four macro verbs:
 
+All bounded work moves through five macro verbs:
+
 1. **Admit**
 2. **Form**
 3. **Decide**
 4. **Evaluate**
+5. **Memorize**
 
 Each macro verb emits one bound object.
 
@@ -273,6 +276,61 @@ Evaluate recruits to Form when evaluation reveals unstable or false identity ass
 
 Evaluate recruits to Admit only when the original source, scope, or policy was malformed.
 
+#### Forward handoff
+
+Evaluate hands off forward to Memorize when immediate judgment is complete and persistence posture must now be decided.
+
+### 4.5 Memorize
+
+#### Internal phases
+
+- Reconstruct
+- Retain
+- Archive
+- Promote
+
+#### Emitted object
+
+**Memory object**
+
+This object contains:
+
+- persistence posture
+- retention or archive state
+- reconstruction availability
+- trust-tier status inside memory space
+
+#### Forbidden
+
+Memorize must not:
+
+- silently rewrite evaluation outcome
+- silently redefine structure
+- collapse trusted memory into canon
+- treat archive as deletion
+- treat retain as proof
+- reconstruct without declared source or lens
+- silently widen reuse conditions
+
+#### Downward recruitment
+
+Memorize recruits first to Evaluate when:
+
+- immediate judgment is incomplete
+- outcome significance is unstable
+- evaluation closure was premature
+
+Memorize recruits to Decide when:
+
+- the wrong candidate was realized
+- persistence cannot be set because the decision object was flawed
+
+Memorize recruits to Form when:
+
+- the object cannot persist because identity structure is unstable, malformed, mixed, or unresolved
+
+Memorize recruits to Admit only when the original source, scope, or policy was malformed.
+
 ---
 
 ## 5. Roles and role procedure
@@ -338,6 +396,13 @@ If the emitted object cannot be produced lawfully, the role must either:
 - recruit downward
 - defer
 - or block honestly
+
+Expected emitted object may be:
+- bound work object
+- identity object
+- decision object
+- evaluation object
+- memory object
 
 ### 5.4 Handoff rule
 

@@ -19,6 +19,7 @@ It does not govern:
 - formation procedure
 - decision procedure
 - evaluation procedure
+- memory procedure
 - repo placement details
 - operator-local contracts
 - implementation details
@@ -44,8 +45,9 @@ Authority resolves in this order:
 2. `README.FormationMatrix.md`
 3. `README.DecisionMatrix.md`
 4. `README.EvaluationMatrix.md`
-5. seam-local contracts and notes
-6. implementation files
+5. `README.MemoryMatrix.md`
+6. seam-local contracts and notes
+7. implementation files
 
 If two lower surfaces conflict, the higher surface wins.
 
@@ -155,4 +157,4 @@ Nothing else belongs here.
 
 ## 7. One-line summary
 
-DME develops upward in declared layer order, inside current active scope only, with deferred layers prevented from silently shaping lower active layers and with constraint-bearing identity preserved across all later workflow verbs.
+DME develops upward in declared layer order, inside current active scope only, with deferred layers prevented from silently shaping lower active layers and with constraint-bearing identity preserved across all later matrices and workflow verbs.
