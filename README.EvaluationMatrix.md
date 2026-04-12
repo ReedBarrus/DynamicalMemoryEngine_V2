@@ -10,6 +10,7 @@ This document is the judgment authority for DME.
 It governs only:
 
 - evaluation rules
+- audit posture
 - review posture
 - reconciliation posture
 - resolution routing
@@ -18,9 +19,10 @@ It governs only:
 It does not govern:
 
 - constitutional boundaries
-- workflow procedure by itself
-- repo placement
+- movement procedure by itself
+- structural placement
 - operator-local semantics by itself
+- implementation meaning by itself
 
 The live repo is the authority for current file and folder reality.
 
@@ -30,7 +32,7 @@ If evaluation and constraint conflict on boundary posture, constraint wins.
 
 If evaluation and decision conflict on movement procedure, decision wins.
 
-If evaluation and formation conflict on current structure, formation wins.
+If evaluation and formation conflict on structure or placement, formation wins.
 
 ---
 
@@ -38,9 +40,9 @@ If evaluation and formation conflict on current structure, formation wins.
 
 This document exists only to answer:
 
-- how results are judged
-- how review is bounded
-- how outcomes are folded back into continuity
+- how outcomes are measured
+- how results are interpreted
+- how evaluated state is folded back into continuity
 - how workflow outcomes are routed
 - how promotion remains separate
 
@@ -48,19 +50,54 @@ Nothing else belongs here.
 
 ---
 
-## 2. Core evaluation rule
+## 2. Core evaluation invariant
 
-Evaluation must not destroy, replace, or silently inflate the active constraint-bearing identity inherited from earlier workflow verbs.
+Evaluation must preserve the inherited constraint-bearing identity.
 
-Evaluation may measure, interpret, reintegrate, and route outcomes.
+Evaluation may:
+
+- measure
+- interpret
+- reintegrate
+- route outcomes
+
+Evaluation must not:
+
+- destroy
+- replace
+- or silently inflate
+
+the active constraint-bearing identity inherited from earlier workflow verbs.
 
 Evaluation may not redefine structural identity retroactively.
 
 ---
 
-## 3. Evaluation phases
+## 3. Evaluation macro verb
 
-The evaluation verb includes:
+Evaluation is one of the four macro verbs:
+
+- Admit
+- Form
+- Decide
+- **Evaluate**
+
+Evaluation emits exactly one bound object:
+
+**Evaluation object**
+
+If an evaluation object is not emitted, the pass must:
+
+- continue within Evaluate
+- recruit downward
+- defer
+- or abort
+
+---
+
+## 4. Evaluation phases
+
+Evaluation proceeds through:
 
 - Audit
 - Review
@@ -74,9 +111,10 @@ Conditional branches:
 
 ---
 
-## 4. Phase functions
+## 5. Phase functions
 
-### Audit
+### 5.1 Audit
+
 Measures:
 
 - fidelity
@@ -84,22 +122,54 @@ Measures:
 - mismatch
 - anomaly
 
-Audit does not interpret meaning.
-Audit does not settle authority.
+Audit is measurement only.
 
-### Review
-Interprets audit and outcome significance.
+Audit must not:
+
+- interpret meaning
+- assign authority
+- alter structure
+
+---
+
+### 5.2 Review
+
+Interprets:
+
+- audit signals
+- outcome significance
+- candidate viability
 
 Review may interpret.
-Review may not redefine the identity object.
 
-### Reconcile
+Review must not:
+
+- redefine identity objects
+- modify structure
+- collapse interpretation into truth
+
+---
+
+### 5.3 Reconcile
+
 Folds evaluated outcome back into active continuity.
 
-Reconcile normalizes state.
-Reconcile does not silently promote meaning into structure.
+Reconcile:
 
-### Resolve
+- normalizes state
+- integrates accepted outcomes
+- stabilizes active reality for the next pass
+
+Reconcile must not:
+
+- promote meaning into structure
+- introduce new identity definitions
+- bypass prior constraints
+
+---
+
+### 5.4 Resolve
+
 Routes outcome.
 
 Allowed outcomes:
@@ -109,70 +179,157 @@ Allowed outcomes:
 - defer
 - archive
 
-Resolve chooses the path.
-Resolve does not inflate authority.
+Resolve selects the path.
 
-### Reconstruct
-Conditional comparison branch.
+Resolve must not:
 
-Used only when replay or expected-state regeneration is needed for lawful evaluation.
-
-### Promote
-Deferred elevation branch only.
-
-Promotion remains separate from runtime evaluation and may not occur implicitly.
+- inflate authority
+- imply truth beyond measured and interpreted bounds
+- bypass promotion gating
 
 ---
 
-## 5. Forbidden moves
+### 5.5 Reconstruct (conditional)
+
+Used only when:
+
+- replay is required
+- expected state must be regenerated
+- comparison cannot be performed directly
+
+Reconstruct must declare its lens.
+
+Reconstruct does not establish truth by itself.
+
+---
+
+### 5.6 Promote (conditional, deferred)
+
+Promotion is:
+
+- separate
+- gated
+- not part of runtime closure
+
+No evaluation result becomes:
+
+- canon
+- truth
+- authority
+
+by:
+
+- recurrence
+- coherence
+- compression
+- convenience
+
+alone.
+
+---
+
+## 6. Forbidden moves
 
 Evaluation must not:
 
-- redefine structure during review
+- redefine structure during review or reconciliation
 - collapse coherence into truth
 - collapse recurrence into canon
 - collapse review into promotion
 - silently upgrade outcome into authority
-- use aesthetic or semantic force as evidence by itself
+- use aesthetic, semantic, or narrative force as evidence by itself
 
 ---
 
-## 6. Downward recruitment
+## 7. Downward recruitment
 
-Evaluation recruits to:
+Evaluation recruits downward when lawful forward closure fails.
 
-### Decide
+### To Decide
+
 When:
+
 - proposal path was wrong
 - implementation mismatched the bounded candidate
 - decision object cannot be sustained
 
-### Form
+---
+
+### To Form
+
 When:
-- evaluation reveals unstable or false identity assumptions
 
-### Admit
+- identity assumptions are unstable
+- structural invariance is violated
+- compression or aggregation was incorrect
+
+---
+
+### To Admit
+
 Only when:
-- the original source, scope, or governing policy was malformed
+
+- source reality was malformed
+- scope was invalid
+- governing policy was incorrect
 
 ---
 
-## 7. Resolution rule
+## 8. Evaluation object
 
-Every evaluation pass must leave behind exactly one evaluation object or explicitly recruit downward.
+Evaluation emits:
 
-If no lawful evaluation object exists, the pass is incomplete.
+**Evaluation object**
+
+This object contains:
+
+- measured fidelity / deviation posture
+- interpreted outcome signals
+- reconciled active state
+- resolved workflow routing
+
+This object becomes the basis for:
+
+- the next workflow pass
+- updated repo reality
+- explicit continuity
 
 ---
 
-## 8. Promotion rule
+## 9. Resolution rule
 
-Promotion is separate, gated, and deferred.
+Every evaluation pass must:
 
-No evaluation result becomes canon, truth, or authority by recurrence, coherence, compression, or convenience alone.
+- emit exactly one evaluation object
+
+or
+
+- explicitly recruit downward
+
+If neither occurs, the pass is incomplete.
 
 ---
 
-## 9. One-line summary
+## 10. Promotion rule
 
-Evaluation governs how DME measures outcomes, interprets them, folds them back into continuity, routes workflow closure, and keeps promotion separate from runtime judgment.
+Promotion is:
+
+- deferred
+- explicitly gated
+- outside runtime evaluation closure
+
+Evaluation may prepare candidates for promotion.
+
+Evaluation may not perform promotion implicitly.
+
+---
+
+## 11. One-line review question
+
+Did evaluation measure, interpret, reconcile, and route the outcome without redefining identity or inflating authority, and did it emit a valid evaluation object or explicitly recruit downward?
+
+---
+
+## 12. One-line summary
+
+Evaluation governs how outcomes are measured, interpreted, reintegrated, and resolved into the next state, while preserving constraint-bearing identity and keeping promotion strictly separate from runtime judgment.
