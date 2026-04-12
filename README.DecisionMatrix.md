@@ -275,34 +275,96 @@ Evaluate recruits to Admit only when the original source, scope, or policy was m
 
 ---
 
-## 5. Roles
+## 5. Roles and role procedure
 
 Roles are:
 
-1. Reed
-2. Audit
-3. Compression
-4. Implementation
+1. Architect Reed
+2. Admission-Advisor
+3. Formation-Constructor / Compressor
+4. Decision-Reflector
+5. Evaluation-Auditor / Reviewer
 
-### Reed
+### 5.1 Role definitions
 
-Final authority for priority, acceptance, rejection, and promotion of scope.
+#### Architect Reed
+Final authority for priority, acceptance, rejection, bounded scope approval, and escalation disposition.
 
-### Audit
+#### Admission-Advisor
+Reads live repo reality for the active seam, bounds scope, identifies governing constraint posture, and prepares the bound work object.
 
-Reads current repo reality and reports what exists.
+#### Formation-Constructor / Compressor
+Structures, compresses, classifies, separates, and externalizes identity-bearing form for the active seam without importing movement or judgment.
 
-### Compression
+#### Decision-Reflector
+Constrains the navigable decision surface, reflects on lawful paths, proposes bounded packets, and governs handoff without silently mutating repo reality.
 
-Determines what survives active scope and how the current macro verb should be reduced or routed.
-
-### Implementation
-
-Changes repo state only from an accepted compressed packet.
+#### Evaluation-Auditor / Reviewer
+Audits outcomes, reviews significance, reconciles continuity, resolves workflow posture, and detects role drift or unlawful inflation.
 
 No role may silently perform another role’s job.
 
----
+### 5.2 Thread role rule
+
+Each active thread must have exactly one primary role.
+
+Each active thread must operate inside exactly one active macro verb.
+
+Roles do not cut across macro verbs by default.
+
+Cross-verb action requires explicit escalation or explicit handoff.
+
+No thread may silently absorb a neighboring verb.
+
+### 5.3 Packet rule
+
+Every role receives a bounded packet.
+
+Every role returns a bounded packet.
+
+A packet must declare:
+
+- active seam
+- active macro verb
+- files in scope
+- non-goals
+- governing surfaces
+- expected emitted object
+- acceptance target
+
+If the emitted object cannot be produced lawfully, the role must either:
+
+- continue inside the same macro verb
+- recruit downward
+- defer
+- or block honestly
+
+### 5.4 Handoff rule
+
+Handoff is the only lawful route between primary roles.
+
+Handoff must preserve:
+
+- active seam
+- scoped files
+- governing constraint posture
+- current emitted-object status
+
+Handoff may narrow scope.
+
+Handoff may not silently widen scope.
+
+### 5.5 Drift rule
+
+Evaluation explicitly checks for role drift.
+
+Role drift includes:
+
+- admission defining structural identity
+- formation choosing action
+- decision mutating repo reality without an accepted bounded packet
+- evaluation redefining structure retroactively
+- any thread silently performing another role’s job
 
 ## 6. Thread rule
 
@@ -310,9 +372,7 @@ Each active thread must have one role only.
 
 Allowed thread classes:
 
-- audit thread
-- compression thread
-- implementation thread
+Refer to section 5.1
 
 A thread may not mix:
 
@@ -322,6 +382,11 @@ A thread may not mix:
 - architecture redesign + direct implementation
 
 If a task needs more than one role, it must move by handoff.
+
+each active thread has exactly one primary role
+each thread operates inside exactly one active macro verb
+cross-verb work requires explicit escalation or explicit handoff
+no thread may silently absorb a neighboring verb
 
 ---
 
@@ -364,16 +429,16 @@ If an artifact does not uniquely answer the active bounded need, it should not r
 
 ---
 
-## 9. Implementation rule
+## 9. Repo-mutation rule
 
-Implementation may:
+Repo-mutation under accepted packet may:
 
 - edit files in scope
 - create bounded files in scope
 - repair lawful local references in scope
 - report blocked or unresolved conditions
 
-Implementation may not:
+Repo-mutation under accepted packet may not:
 
 - widen scope silently
 - redefine architecture silently
