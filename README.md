@@ -1,131 +1,55 @@
 # Dynamical Memory Engine
 
-Dynamical Memory Engine (DME) is a provenance-bound structural memory system that develops upward from measured signal through structure through runtime memory toward recognition, canon, and later higher cognition â€” in that order, at each layerâ€™s lawful pace. :contentReference[oaicite:4]{index=4}
+Dynamical Memory Engine (DME) is a provenance-bound structural memory system that advances from measured signal through structure and runtime memory toward recognition, with canon and higher cognition explicitly deferred until the lower layers hold. The live repo tracks work on **Door One** only.
 
-## Current truth
+## Door One Snapshot
 
-The implemented center of gravity is still **Door One**.
+- deterministic structural memory runtime with lawful ingest, structural transforms, runtime memory formation, bounded replay, and provenance-bearing inspection
+- maintains recurrence / substrate organization for retention plus bounded query / recognition that stays below truth authority
+- includes retention and replay-support posture but no canon, prediction authority, agency, ecology, symbolic cognition, or meta-governance
+- baseline statement: *DME is currently a provenance-bound structural memory runtime below canon*
 
-Door One is a deterministic structural memory and bounded recognition runtime below canon.
+## Reader Routes
 
-It currently supports:
+### Constitutional entry
 
-- lawful ingest
-- structural transforms
-- runtime memory formation
-- bounded replay under declared lens
-- recurrence / substrate organization
-- bounded query / recognition below truth
-- provenance-bearing inspection surfaces
-- bounded retention and replay-support posture
+- README.MasterConstitution.md — layer law and guardrails
+- README.WorkflowContract.md — workflow authority and packet duties
+- README.RepoLayout.md — current repo placement / topology
 
-Door One does **not** yet include:
+### Door One governance + accounting
 
-- active canon as general system truth
-- prediction authority
-- agency
-- ecology
-- symbolic cognition
-- meta-governance 
+- README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
+- README/Constitution/Identity/README.DeterministicInvarianceThreshold.md
+- README/Constitution/Identity/README.StructuralMemoryClosureInvariant.md
 
-One baseline sentence should remain true throughout current documentation:
+These define runtime seam law, capability-status discipline, and read-side inspection requirements.
 
-**DME is currently a provenance-bound structural memory runtime below canon.** :contentReference[oaicite:6]{index=6}
+### Workflow + role posture
 
-## Constitutional posture
+- README/Decision/README.ThreadRolePolicy.md
+- README/Decision/README.RolePacketContract.md
+- README/Decision/README.ImplementationPacketContract.md
+- README/Operational/README.SeamAccounting.md
 
-The active constitutional order is:
+They describe how bounded packets move, who can mutate what, and how seams stay auditable.
 
-```text
-measurement â†’ structure â†’ runtime memory â†’ recognition
-â†’ canon â†’ prediction â†’ agency â†’ ecology â†’ symbolic â†’ meta
-```
-The non-negotiable boundary rules remain:
+### Active matrices
 
-runtime is not canon
-query is not truth
-substrate is not ontology
-replay is lens-bound
-consensus is promotion-only
-deferred layers stay deferred
-implement at the lowest lawful layer first
-What the repo is for
+- README.ConstraintMatrix.md — active constraints
+- README.FormationMatrix.md — formation posture
+- README.DecisionMatrix.md — decision lanes
+- README.EvaluationMatrix.md — evaluation posture
+- README.MemoryMatrix.md — memory-layer truth table
 
-The GitHub repo main branch is the authority space for:
+## Development Pressure Order
 
-current file reality
-active seam existence
-canonical code state
-current repo topology
+- development order: measurement -> structure -> runtime memory -> recognition -> canon -> prediction -> agency -> ecology -> symbolic -> meta
+- non-negotiable boundaries: runtime is not canon, query is not truth, substrate is not ontology, replay is lens-bound, consensus is promotion-only
+- pressure rule: strengthen runtime honesty, inspection honesty, provenance, replay support, and real-device usefulness before any upward semantic expansion
 
-Supporting notes explain posture and accounting, but they do not overrule current repo reality. If a compact note and current repo topology disagree about what actively exists, the repo wins for current implementation state.
+## Repo Reality
 
-How to read the project
-## 1. Constitutional authority
-
-Start here:
-
-README.MasterConstitution.md
-README.WorkflowContract.md
-README.RepoLayout.md
-
-These define:
-
-layer law
-workflow authority
-repo placement/topology
-
-## 2. Core Door One accounting and governance
-
-Then read:
-
-README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
-README/Constitution/Identity/README.DeterministicInvarianceThreshold.md
-README/Constitution/Identity/README.StructuralMemoryClosureInvariant.md
-
-These define:
-
-compact current Door One accounting
-runtime seam law
-read-side inspection law
-capability-status discipline
-memory-bearing closure posture
-
-## 5. Workflow mechanization facet
-
-For bounded development-workflow support:
-
-README/Constitution/Workflow/README.WorkflowMechanizationScope.md
-README/Constitution/Workflow/README.PacketWorkflowChain.md
-README/Constitution/Mechanization/README.MechanizationClosureGate.md
-README/Constitution/Identity/README.StructuralIdentityLaw.md
-
-These govern how DME develops.
-They do not define runtime meaning.
-
-Current Door One surface posture
-
-For current capability-status posture across active surfaces, see:
-
-README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
-
-Generated outputs are never authority surfaces.
-
-## Development posture
-
-DME should grow in grounded sequence:
-
-Door One: structural memory and bounded recognition
-Door Two: trusted temporal cognition
-Door Three: participatory intelligence ecology
-
-Current pressure rule:
-
-Prefer runtime honesty, inspection honesty, provenance, replay support, and real-device usefulness over upward semantic expansion.
-
-## Project summary
-
-DME is building a lawful memory substrate that can preserve, replay, inspect, compare, and later trust changing structure over time without collapsing runtime output into truth, display into authority, or preservation into canon.
-
-
-
+- main (or the currently checked-out branch) is the source of truth for live implementation state
+- generated outputs are never authority surfaces; current file reality wins over summaries when they disagree
+- keep packet scope narrow: implement at the lowest lawful layer first and report what changed, what stayed out of scope, and what remains unclaimed
