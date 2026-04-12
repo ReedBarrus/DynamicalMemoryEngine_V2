@@ -609,7 +609,7 @@ This note pairs most directly with:
 
 Suggested companion notes:
 
-- `README/Core/Regimes/Temporal/Contracts/README.OperatorPlanePacketContract.md`
+- `README/Decision/README.OperatorPlanePacketContract.md`
 
 Suggested seam-local follow-ons:
 

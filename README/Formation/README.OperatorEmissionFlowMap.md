@@ -19,8 +19,8 @@ It does **not** override:
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
 - `README/Constitution/Surfaces/README.OperatorSupportSurfaceLaw.md`
-- `README/Core/Regimes/Temporal/Inspection/README.OperatorPlaneBuildOrder.md`
-- `README/Core/Regimes/Temporal/Contracts/README.OperatorPlanePacketContract.md`
+- `README/Decision/README.OperatorPlaneBuildOrder.md`
+- `README/Decision/README.OperatorPlanePacketContract.md`
 - `README.OperatorRegistry.md`
 - `README.OperatorInventoryAudit.md`
 - `README.OperatorEmissionAudit.md`

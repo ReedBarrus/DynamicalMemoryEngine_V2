@@ -23,7 +23,7 @@ It does **not** override:
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
 - `README/Constitution/Surfaces/README.OperatorSupportSurfaceLaw.md`
-- `README/Core/Regimes/Temporal/Inspection/README.OperatorPlaneBuildOrder.md`
+- `README/Decision/README.OperatorPlaneBuildOrder.md`
 
 Its purpose is narrower:
 
@@ -620,7 +620,7 @@ This note pairs most directly with:
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
 - `README/Constitution/Surfaces/README.OperatorSupportSurfaceLaw.md`
-- `README/Core/Regimes/Temporal/Inspection/README.OperatorPlaneBuildOrder.md`
+- `README/Decision/README.OperatorPlaneBuildOrder.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`
 - `README/Constitution/Workflow/README.PacketWorkflowChain.md`
 - `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
