@@ -212,6 +212,124 @@ The first classification question remains matrix lineage.
 Operational exists as a live accounting and migration region.
 
 Archive posture inside README space is governed under memory-support surfaces rather than as a separate top-level README region.
+
+## 7.2 README second-layer grammar
+
+Within each active root README region, the next classification question is object class.
+
+Approved second-layer grammar is:
+
+### `README/Constraint/`
+
+- `Law/`
+- `Admission/`
+
+Where lawful and meaningful, these may subclass by regime:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+### `README/Formation/`
+
+- `Architecture/`
+- `Contracts/`
+- `Mapping/`
+
+Where lawful and meaningful, these may subclass by regime:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+### `README/Decision/`
+
+- `Roles/`
+- `Packets/`
+- `Procedure/`
+- `Implementation/`
+
+`Roles/` may remain flat or use `Shared/` if needed.
+
+`Packets/`, `Procedure/`, and `Implementation/` may subclass by regime where lawful and meaningful:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+### `README/Evaluation/`
+
+- `Review/`
+- `Diagnostics/`
+- `Experiments/`
+
+Where lawful and meaningful, these may subclass by regime:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+### `README/Memory/`
+
+- `Reference/`
+- `Projection/`
+- `Archive/`
+
+`Reference/` and `Projection/` may subclass by regime where lawful and meaningful:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+`Archive/` may additionally contain:
+
+- `Old_DME/`
+
+and may subclass by:
+
+- `Shared/`
+- `Temporal/`
+- `Support/`
+- `Symbolic/`
+
+### `README/Operational/`
+
+- `Accounting/`
+- `Lineage/`
+
+Operational does not require regime subclassing by default.
+
+Accounting surfaces, seam records, and operational registry notes should live under `Accounting/`.
+
+Packet history, lineage surfaces, and durable packet receipts should live under `Lineage/`.
+
+## 7.3 Shared subclass rule
+
+`Shared/` exists for artifacts that truthfully span more than one regime or whose governing role is cross-regime by nature.
+
+`Shared/` must not be used as a convenience dump.
+
+It should be used only when forcing `Temporal/`, `Support/`, or `Symbolic/` would be dishonest.
+
+## 7.4 Rehome rule
+
+Second-layer folders should be created only when they receive real artifacts.
+
+Planned but empty folders are not active formation reality by default.
+
+Classification should precede folder creation when lawful.
+
+## 7.5 Compression and archive rule
+
+Compression, merge, archive, and retirement work must follow object-class and regime classification rather than historical path alone.
+
+Reference repair should normally follow final rehome, compression, and archive decisions rather than precede them.
+
 ---
 
 ## 8. Active reality rule
