@@ -5,6 +5,9 @@ This document defines a supporting closure invariant for determining when a stru
 
 It is a supporting governance note.
 
+This narrowed version operates strictly as a Memory reference surface.
+Constraint enforcement and structural identity law now remain entirely with README.ConstraintMatrix.md and README.StructuralIdentityLaw.md; this note only applies those constraints when deciding memory closure.
+
 It does not override:
 
 README.MasterConstitution.md

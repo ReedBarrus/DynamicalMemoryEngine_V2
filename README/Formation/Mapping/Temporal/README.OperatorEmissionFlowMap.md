@@ -4,7 +4,7 @@
 
 This document defines the bounded posture for mapping structural operator emissions edge-by-edge and field-by-field across the DME operator chain.
 
-It is a supporting instrumentation, governance, audit, and reconstruction-planning note.
+It is a supporting formation mapping note.
 
 It does **not** override:
 
@@ -31,7 +31,6 @@ Its purpose is narrower:
 - distinguish role inventory and module emission audit from actual chain-edge flow mapping,
 - expose exact payload objects and field crossings between structural operators,
 - identify support or review leakage on structural edges,
-- support reconstruction planning from structurally pure emissions,
 - and provide one stable method for rebuilding the structural chain from exposed operator relationships rather than from interpreted architecture.
 
 This note governs **operator emission-flow mapping posture** only.
@@ -48,8 +47,6 @@ It does **not** govern:
 
 ## 1. Why this note exists
 
-The operator inventory audit can classify objects.
-The operator emission audit can classify what mixed modules emit.
 
 But a further layer is still needed before structural-chain reconstruction becomes lawful:
 
@@ -373,27 +370,6 @@ One-line summary:
 
 ---
 
-## 13. Recommended audit procedure
-
-For each structural operator, ask in order:
-
-1. What upstream edge(s) feed this operator?
-2. What exact payload object(s) arrive?
-3. What exact fields are present on those inputs?
-4. Which of those input fields are structural?
-5. Which of those input fields are support leakage?
-6. Which of those input fields are review/semantic leakage?
-7. What exact payload object(s) does the operator emit?
-8. What exact fields are present on the emission?
-9. Which of those emitted fields are structural?
-10. Which are support leakage?
-11. Which are review/semantic leakage?
-12. What downstream edge(s) consume that emission?
-13. Is the operator structurally pure enough to preserve as a rebuild basis?
-
-This procedure should remain stable.
-
----
 
 ## 14. Recommended flow-map table shapes
 
@@ -434,29 +410,6 @@ If the edge cannot yet be mapped clearly, the honest answer is unresolved.
 
 ---
 
-## 16. Relation to inventory, emission audit, and reconstruction planning
-
-### 16.1 Relation to inventory
-Inventory identifies the object cluster.
-
-### 16.2 Relation to emission audit
-Emission audit identifies mixed modules and bundle points.
-
-### 16.3 Relation to flow map
-Flow mapping identifies exact edge payloads and contamination flow.
-
-### 16.4 Relation to reconstruction planning
-Only after flow mapping is it reasonable to decide:
-- where to cut
-- what to preserve
-- what to split
-- what to rebuild
-
-One-line summary:
-
-**Inventory identifies the cluster. Emission audit identifies the bundle point. Flow mapping identifies the structural cut surface.**
-
----
 
 ## 17. Failure modes specific to flow mapping
 
