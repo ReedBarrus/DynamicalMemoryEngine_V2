@@ -14,13 +14,14 @@ It governs only:
 - review posture
 - reconciliation posture
 - resolution routing
-- promotion separation
+- evaluation-object closure
 
 It does not govern:
 
 - constitutional boundaries
 - movement procedure by itself
 - structural placement
+- memory retention by itself
 - operator-local semantics by itself
 - implementation meaning by itself
 
@@ -34,6 +35,8 @@ If evaluation and decision conflict on movement procedure, decision wins.
 
 If evaluation and formation conflict on structure or placement, formation wins.
 
+If evaluation and memory conflict on retention, archive, reconstruction, or trust-tier persistence, memory wins.
+
 ---
 
 ## 1. Evaluation function
@@ -42,9 +45,9 @@ This document exists only to answer:
 
 - how outcomes are measured
 - how results are interpreted
-- how evaluated state is folded back into continuity
-- how workflow outcomes are routed
-- how promotion remains separate
+- how evaluated state is folded back into active continuity
+- how immediate workflow outcomes are routed
+- how evaluation closes without silently becoming memory
 
 Nothing else belongs here.
 
@@ -58,8 +61,8 @@ Evaluation may:
 
 - measure
 - interpret
-- reintegrate
-- route outcomes
+- reconcile
+- route immediate workflow outcome
 
 Evaluation must not:
 
@@ -71,16 +74,19 @@ the active constraint-bearing identity inherited from earlier workflow verbs.
 
 Evaluation may not redefine structural identity retroactively.
 
+Evaluation may not silently become retention, archive, or promotion.
+
 ---
 
 ## 3. Evaluation macro verb
 
-Evaluation is one of the four macro verbs:
+Evaluation is one of the five macro verbs:
 
 - Admit
 - Form
 - Decide
-- **Evaluate**
+- Evaluate
+- Memorize
 
 Evaluation emits exactly one bound object:
 
@@ -104,10 +110,9 @@ Evaluation proceeds through:
 - Reconcile
 - Resolve
 
-Conditional branches:
+Evaluation does not retain, archive, reconstruct, or promote memory by itself.
 
-- Reconstruct
-- Promote
+Those belong to Memorize.
 
 ---
 
@@ -157,27 +162,28 @@ Folds evaluated outcome back into active continuity.
 Reconcile:
 
 - normalizes state
-- integrates accepted outcomes
-- stabilizes active reality for the next pass
+- integrates accepted outcome posture
+- stabilizes active reality for the next step
 
 Reconcile must not:
 
 - promote meaning into structure
 - introduce new identity definitions
 - bypass prior constraints
+- silently convert evaluation into memory retention
 
 ---
 
 ### 5.4 Resolve
 
-Routes outcome.
+Routes immediate workflow outcome.
 
 Allowed outcomes:
 
 - accept
 - revise
 - defer
-- archive
+- handoff to Memorize
 
 Resolve selects the path.
 
@@ -185,46 +191,8 @@ Resolve must not:
 
 - inflate authority
 - imply truth beyond measured and interpreted bounds
-- bypass promotion gating
-
----
-
-### 5.5 Reconstruct (conditional)
-
-Used only when:
-
-- replay is required
-- expected state must be regenerated
-- comparison cannot be performed directly
-
-Reconstruct must declare its lens.
-
-Reconstruct does not establish truth by itself.
-
----
-
-### 5.6 Promote (conditional, deferred)
-
-Promotion is:
-
-- separate
-- gated
-- not part of runtime closure
-
-No evaluation result becomes:
-
-- canon
-- truth
-- authority
-
-by:
-
-- recurrence
-- coherence
-- compression
-- convenience
-
-alone.
+- bypass memory gating
+- silently archive or promote anything by itself
 
 ---
 
@@ -238,12 +206,13 @@ Evaluation must not:
 - collapse review into promotion
 - silently upgrade outcome into authority
 - use aesthetic, semantic, or narrative force as evidence by itself
+- silently retain, archive, reconstruct, or promote memory
 
 ---
 
 ## 7. Downward recruitment
 
-Evaluation recruits downward when lawful forward closure fails.
+Evaluation recruits downward when lawful closure fails.
 
 ### To Decide
 
@@ -275,7 +244,19 @@ Only when:
 
 ---
 
-## 8. Evaluation object
+## 8. Forward handoff
+
+Evaluation may hand off forward to Memorize when:
+
+- immediate judgment is complete
+- active continuity is reconciled
+- retention posture must now be decided
+
+Evaluation does not decide long-term memory state by itself.
+
+---
+
+## 9. Evaluation object
 
 Evaluation emits:
 
@@ -286,17 +267,17 @@ This object contains:
 - measured fidelity / deviation posture
 - interpreted outcome signals
 - reconciled active state
-- resolved workflow routing
+- resolved immediate workflow routing
 
 This object becomes the basis for:
 
 - the next workflow pass
-- updated repo reality
-- explicit continuity
+- updated active continuity
+- lawful handoff into Memorize when needed
 
 ---
 
-## 9. Resolution rule
+## 10. Resolution rule
 
 Every evaluation pass must:
 
@@ -310,26 +291,32 @@ If neither occurs, the pass is incomplete.
 
 ---
 
-## 10. Promotion rule
+## 11. Separation rule
 
-Promotion is:
+Evaluation answers:
 
-- deferred
-- explicitly gated
-- outside runtime evaluation closure
+- what happened?
+- what did it mean?
+- how do we reconcile it?
+- what is the immediate workflow outcome?
 
-Evaluation may prepare candidates for promotion.
+Evaluation does not answer:
 
-Evaluation may not perform promotion implicitly.
+- what persists?
+- how does it persist?
+- what becomes inactive memory?
+- what becomes trusted long-term memory?
+
+Those belong to Memory.
 
 ---
 
-## 11. One-line review question
+## 12. One-line review question
 
-Did evaluation measure, interpret, reconcile, and route the outcome without redefining identity or inflating authority, and did it emit a valid evaluation object or explicitly recruit downward?
+Did evaluation measure, interpret, reconcile, and route the immediate workflow outcome without redefining identity or inflating authority, and did it emit a valid evaluation object or explicitly recruit downward?
 
 ---
 
-## 12. One-line summary
+## 13. One-line summary
 
-Evaluation governs how outcomes are measured, interpreted, reintegrated, and resolved into the next state, while preserving constraint-bearing identity and keeping promotion strictly separate from runtime judgment.
+Evaluation governs how outcomes are measured, interpreted, reconciled, and routed into immediate workflow closure while preserving constraint-bearing identity and remaining separate from memory retention, archive, reconstruction, and promotion.
