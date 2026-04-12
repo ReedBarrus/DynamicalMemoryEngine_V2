@@ -441,6 +441,47 @@ Those require later bounded packets.
 
 ---
 
-## 15. One-line operational summary
+## 15. Operator exposure navigation law
+
+Operator navigation remains the lawful way to move between emitted families. The left rail should expose the explicit operator list rather than generic “stage” labels, because the inspection question is **which bounded output family is active now?**
+
+- Active TemporalRegime set: P0 — Ingest, P1 — Clock Align, P2 — Window, P3 — Transform, D3 — Transform Diagnostics.
+- Each label should present both the code and the readable name so seam identity stays obvious.
+- Operator selection is not frame navigation and not plane-mode selection; it answers “which family,” while frame answers “which instance” and plane answers “how is it exposed.”
+- Diagnostic families (such as D3) must stay explicitly secondary even when they receive their own operator slot.
+
+If operator identity is hidden for convenience, shell drift has begun.
+
+---
+
+## 16. Frame and plane context postures
+
+Frame context and plane context must remain distinct so the shell simultaneously tells the user **where they are in the run** and **what the currently selected object contains locally.**
+
+- Frame navigation handles previous/next, numeric input, and explicit current / total counts for emitted objects. It is the only lawful way to move through long runs or multiplicity-heavy seams like P2.
+- Plane context belongs to the local exposure pane. It determines lawful axes and projection modes for the selected operator (temporal axes for P0–P2, frequency/bin axes for P3 and D3).
+- The compact header should keep source, regime, operator, plane mode, and frame indices visible so global and local context never blur.
+- Smart auto-selection, implicit “interesting frame” ranking, or forcing all plane axes into one metaphor are forbidden because they hide real run structure.
+
+One-line reminder: **Frame chooses which bounded object instance is active; plane shows how that instance is exposed.**
+
+---
+
+## 17. Temporal plane exposure modes
+
+The first runnable shell should keep plane exposure modes boring and structural:
+
+- P0–P2: direct temporal line plots (x = time/grid position, y = amplitude). No summary-only or smart-ranked windows; expose the selected frame exactly.
+- P3: direct Cartesian spectral plots with toggleable 
+e, im, or oth. Magnitude/phase belong elsewhere.
+- D3: derived diagnostic exposure with toggleable magnitude or phase, plus optional diagnostic markers such as 
+an_detected / inf_detected. It must remain secondary to P3.
+
+Each plane should display the minimal operator-local metadata (e.g., Fs, 
+, grid_t0, window_id) in the header. Derived modes must never silently replace the primary structural exposure.
+
+---
+
+## 18. One-line operational summary
 
 **Regime-Capable Shell Posture v0 defines the first local inspection shell as a regime-capable, inspection-first host with explicit navigation across source, run, regime, operator, frame, and plane mode, while remaining below semantic interpretation, review posture, and product-shell inflation.**

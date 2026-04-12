@@ -316,7 +316,92 @@ Later operators may inherit this lane model only after the primary floor is stab
 
 ---
 
-## 12. One-line operational summary
+## 12. Companion family specifics
+
+The current TemporalRegime floor already uses explicit companion shapes so lineage, accounting, diagnostics, and deferred tertiary material stay separated. The shared attachment header mirrors the lane header posture above and keeps every companion keyed to one primary artifact.
+
+```ts
+type CompanionHeader = {
+  primary_handle: string;
+  companion_handle: string;
+};
+```
+
+### 12.1 L — Lineage / provenance
+
+`L` answers **where did this primary object come from?** The v0 ingest shape preserves source and operator identity without drifting into accounting or diagnostics:
+
+```ts
+type L0_IngestLineage = {
+  lane: "L";
+  lineage_class: "L0_IngestLineage";
+  companion_handle: string;
+  primary_handle: string;
+  source_kind: "wav" | "live_stream";
+  source_ref: string;
+  channel_ref?: string;
+  modality_ref: "audio";
+  ingest_event_id: string;
+  operator_id: "IngestOp";
+  operator_version: string;
+};
+```
+
+### 12.2 A — Applied transform / accounting
+
+`A` answers **what operation was declared/applied at this boundary?** The ingest accounting object records admission mode without polluting P:
+
+```ts
+type A0_IngestAccounting = {
+  lane: "A";
+  accounting_class: "A0_IngestAccounting";
+  companion_handle: string;
+  primary_handle: string;
+  admission_mode: "file_decode" | "stream_capture";
+  value_encoding: "pcm16" | "float32" | "float64" | "unknown";
+  timestamp_mode: "source_provided" | "capture_assigned";
+  declared_mutation: "none";
+};
+```
+
+### 12.3 D — Diagnostics
+
+`D` answers **what technical facts were observed?** The ingest diagnostic object keeps measured summaries and irregularity counts separate from validation:
+
+```ts
+type D0_IngestDiagnostics = {
+  lane: "D";
+  diagnostics_class: "D0_IngestDiagnostics";
+  companion_handle: string;
+  primary_handle: string;
+  sample_count: number;
+  value_min?: number;
+  value_max?: number;
+  value_rms?: number;
+  repeated_timestamp_count?: number;
+  non_monotonic_timestamp_count?: number;
+  estimated_gap_count?: number;
+  clipping_detected?: boolean;
+};
+```
+
+### 12.4 T — Tertiary review / interpretation
+
+`T` is declared but deferred. The placeholder keeps the lane visible without silently activating interpretation:
+
+```ts
+type T0_Deferred = {
+  lane: "T";
+  tertiary_class: "T0_Deferred";
+  companion_handle: string;
+  primary_handle: string;
+  status: "declared_but_deferred";
+};
+```
+
+These shapes remain floor-local for the TemporalRegime admission case, but they keep the companion split alive while other regimes are still inactive.
+
+## 13. One-line operational summary
 
 **Each operator emission must belong to exactly one lane, and each lane must answer exactly one bounded job.**
 
