@@ -9,38 +9,67 @@ Dynamical Memory Engine (DME) is a provenance-bound structural memory system tha
 - includes retention and replay-support posture but no canon, prediction authority, agency, ecology, symbolic cognition, or meta-governance
 - baseline statement: *DME is currently a provenance-bound structural memory runtime below canon*
 
-## Reader Routes
+## How to read the project
 
-### Constitutional entry
+### 1. Root authority
 
-- README.MasterConstitution.md — layer law and guardrails
-- README.WorkflowContract.md — workflow authority and packet duties
-- README.RepoLayout.md — current repo placement / topology
+Start here:
 
-### Door One governance + accounting
+- `README.ConstraintMatrix.md`
+- `README.FormationMatrix.md`
+- `README.DecisionMatrix.md`
+- `README.EvaluationMatrix.md`
+- `README.MemoryMatrix.md`
 
-- README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md
-- README/Constitution/Identity/README.DeterministicInvarianceThreshold.md
-- README/Constitution/Identity/README.StructuralMemoryClosureInvariant.md
+These define:
 
-These define runtime seam law, capability-status discipline, and read-side inspection requirements.
+- boundary posture
+- placement law
+- movement law
+- judgment law
+- memory law
 
-### Workflow + role posture
+### 2. Workflow field
 
-- README/Decision/README.ThreadRolePolicy.md
-- README/Decision/README.RolePacketContract.md
-- README/Decision/README.ImplementationPacketContract.md
-- README/Operational/README.SeamAccounting.md
+Then read:
 
-They describe how bounded packets move, who can mutate what, and how seams stay auditable.
+- `README.WorkflowFieldPrimitives.md`
 
-### Active matrices
+This defines:
 
-- README.ConstraintMatrix.md — active constraints
-- README.FormationMatrix.md — formation posture
-- README.DecisionMatrix.md — decision lanes
-- README.EvaluationMatrix.md — evaluation posture
-- README.MemoryMatrix.md — memory-layer truth table
+- the macro-verb field
+- emitted objects
+- downward recruitment
+- forward handoff
+
+### 3. Role and packet procedure
+
+Then read:
+
+- `README/Decision/README.ThreadRolePolicy.md`
+- `README/Decision/README.RolePacketContract.md`
+- `README/Decision/README.ImplementationPacketContract.md`
+
+These define:
+
+- thread roles
+- packet law
+- repo-mutation posture
+
+### 4. Operational accounting
+
+Then read:
+
+- `README/Operational/README.SeamAccounting.md`
+
+This defines:
+
+- seam accounting
+- active seam posture
+- accounting update triggers
+
+Repo reality remains the authority for what currently exists.
+Supporting notes do not overrule live repo state.
 
 ## Development Pressure Order
 
