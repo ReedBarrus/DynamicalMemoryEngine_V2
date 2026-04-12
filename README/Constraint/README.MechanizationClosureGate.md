@@ -1,4 +1,4 @@
-# README/Constitution/Mechanization/README.MechanizationClosureGate.md
+# README/Constraint/README.MechanizationClosureGate.md
 # Dynamical Memory Engine — Mechanization Closure Gate
 
 ## Status

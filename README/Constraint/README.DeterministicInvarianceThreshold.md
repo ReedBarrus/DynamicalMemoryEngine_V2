@@ -522,11 +522,11 @@ When evaluating any retained or reconstructed surface, ask:
 
 ## Structural Identity Coupling Note
 
-This document should be read together with `README/Constitution/Identity/README.StructuralIdentityLaw.md`.
+This document should be read together with `README/Constraint/README.StructuralIdentityLaw.md`.
 
 The relationship is complementary, but not symmetrical.
 
-- `README/Constitution/Identity/README.StructuralIdentityLaw.md` defines **what structural identity is** in DME:
+- `README/Constraint/README.StructuralIdentityLaw.md` defines **what structural identity is** in DME:
   - the same bounded question,
   - under the same declared constraints,
   - with sufficient surviving support,

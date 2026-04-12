@@ -10,12 +10,12 @@ It does **not** override:
 
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
-- `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+- `README/Constraint/README.StructuralIdentityLaw.md`
 - `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
-- `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
+- `README/Constraint/README.MechanizationClosureGate.md`
 - `README/Constitution/Workflow/README.PacketWorkflowChain.md`
-- `README/Constitution/Workflow/README.DevelopmentPressure.md`
-- `README/Constitution/Workflow/README.StructuralExposureLaw.md`
+- `README/Constraint/README.DevelopmentPressure.md`
+- `README/Constraint/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`
@@ -647,7 +647,7 @@ These pair directly with structural exposure failure modes and symbolic gravity 
 
 This note pairs most directly with:
 
-- `README/Constitution/Workflow/README.StructuralExposureLaw.md`
+- `README/Constraint/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`
@@ -661,7 +661,7 @@ Suggested companion notes:
 
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
-- `README/Constitution/Surfaces/README.OperatorSupportSurfaceLaw.md`
+- `README/Constraint/README.OperatorSupportSurfaceLaw.md`
 - `README/Core/Regimes/Temporal/Inspection/README.OperatorPlaneBuildOrder.md`
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlanePacketContract.md`
 

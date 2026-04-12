@@ -10,16 +10,16 @@ It does **not** override:
 
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
-- `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+- `README/Constraint/README.StructuralIdentityLaw.md`
 - `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
-- `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
+- `README/Constraint/README.MechanizationClosureGate.md`
 - `README/Constitution/Workflow/README.PacketWorkflowChain.md`
-- `README/Constitution/Workflow/README.DevelopmentPressure.md`
-- `README/Constitution/Workflow/README.StructuralExposureLaw.md`
+- `README/Constraint/README.DevelopmentPressure.md`
+- `README/Constraint/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`
-- `README/Constitution/Surfaces/README.OperatorExposurePlaneLaw.md`
+- `README/Constraint/README.OperatorExposurePlaneLaw.md`
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
 - `README/Core/Taxonomy/README.ObservabilityAndFeedbackTaxonomy.md`
@@ -621,10 +621,10 @@ These should be treated as real seam failures, not mere presentation mistakes.
 
 This note pairs most directly with:
 
-- `README/Constitution/Surfaces/README.OperatorExposurePlaneLaw.md`
+- `README/Constraint/README.OperatorExposurePlaneLaw.md`
 - `README/Core/Regimes/Temporal/Contracts/README.OperatorPlaneContractTemplate.md`
 - `README/Core/Foundations/Architecture/README.OperatorExposurePlaneChain.md`
-- `README/Constitution/Workflow/README.StructuralExposureLaw.md`
+- `README/Constraint/README.StructuralExposureLaw.md`
 - `README/Core/Regimes/Temporal/Failure/README.StructuralExposureFailureModes.md`
 - `README/Core/Taxonomy/README.SymbolicGravityTaxonomy.md`
 - `README/Constitution/Surfaces/README.StructuralSurfacePacketContract.md`

@@ -1,4 +1,4 @@
-# README/Constitution/Identity/README.StructuralIdentityLaw.md
+# README/Constraint/README.StructuralIdentityLaw.md
 
 # Dynamical Memory Engine — Structural Identity Law
 
@@ -706,7 +706,7 @@ Threshold violation (quantitative drift) → graded downgrade based on severity
 No system component should evaluate DIT in isolation. All threshold checks must be anchored to Structural Identity preservation.
 
 ### Repo Placement Note
-Structural Identity Law now lives at `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+Structural Identity Law now lives at `README/Constraint/README.StructuralIdentityLaw.md`
 Deterministic Invariance Threshold remains in README/Core/
 
 This separation preserves:

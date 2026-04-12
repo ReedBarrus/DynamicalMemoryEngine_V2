@@ -1,4 +1,4 @@
-# README/Constitution/Workflow/README.DevelopmentPressure.md
+# README/Constraint/README.DevelopmentPressure.md
 # Dynamical Memory Engine — Development Pressure Reference
 
 ## Purpose

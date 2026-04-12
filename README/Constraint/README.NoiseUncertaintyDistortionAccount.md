@@ -13,10 +13,10 @@ It does not override:
 - `README.MasterConstitution.md`
 - `README.WorkflowContract.md`
 - `README.ActiveLawKernel.md`
-- `README/Constitution/Identity/README.StructuralIdentityLaw.md`
+- `README/Constraint/README.StructuralIdentityLaw.md`
 - `README/Constitution/Mechanization/README.DeclaredVsMechanizedAudit.md`
-- `README/Constitution/Mechanization/README.MechanizationClosureGate.md`
-- `README/Constitution/Workflow/README.DevelopmentPressure.md`
+- `README/Constraint/README.MechanizationClosureGate.md`
+- `README/Constraint/README.DevelopmentPressure.md`
 - `README.RealtimeContinuityAuditGate.md`
 
 Its purpose is narrower:
