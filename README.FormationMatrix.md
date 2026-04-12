@@ -192,10 +192,26 @@ Inside `README/`, the first classification question is:
 - evaluation
 - memory
 
-README branches should derive from one of these four root regimes unless explicitly mixed.
+README branches should derive from one of these five root regimes unless explicitly mixed.
 
 If a README is mixed, that mixed role must be explicit.
 
+## 7.1 README field layout
+
+The active `README/` field is organized by regime-support region:
+
+- `README/Constraint/`
+- `README/Formation/`
+- `README/Decision/`
+- `README/Evaluation/`
+- `README/Memory/`
+- `README/Operational/`
+
+The first classification question remains matrix lineage.
+
+Operational exists as a live accounting and migration region.
+
+Archive posture inside README space is governed under memory-support surfaces rather than as a separate top-level README region.
 ---
 
 ## 8. Active reality rule
