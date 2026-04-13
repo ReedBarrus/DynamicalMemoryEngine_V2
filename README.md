@@ -33,7 +33,7 @@ These define:
 
 Then read:
 
-- `README.WorkflowFieldPrimitives.md`
+- `README/Decision/Procedure/Shared/README.WorkflowFieldPrimitives.md`
 
 This defines:
 
