@@ -419,7 +419,58 @@ Those questions belong to runtime evidence, packet lineage, repo accounting, or 
 
 ---
 
-## 8. Update triggers
+## 8. Registry schema (imported)
+
+The V1 seam registry model required every entry to share a common schema. V2 keeps that requirement by referencing the **Address Registry** (`README/Operational/Accounting/README.AddressRegistry.md`). Each seam row must therefore link to a `SeamAddress` entry and include:
+
+- `address_id` (matches the address registry)
+- `scope` (usually `TemporalRegime` for Door One seams)
+- `owner_surface`
+- `governing_surface`
+- `status`
+- `input_class` / `output_class`
+- `explicit_non_goals`
+
+If a seam entry is missing any of these fields, treat it as unresolved and update the registry before routing packet work through that seam.
+
+---
+
+## 9. Operator registry overlay
+
+Operator registry entries are a filtered view of the seam registry focused on operator seams. For each `OP-*` seam, record the following overlay fields (in addition to the base schema above):
+
+| Field | Description |
+| --- | --- |
+| `lane_family` | Which operator lane (`P`, `L`, `A`, `D`, `T`) the operator primarily serves. |
+| `floor_contract` | Path to the formation contract that constrains the operator (usually one of the Temporal floor contracts). |
+| `packet_template` | Packet template address (if any) that spawns work against this operator. |
+| `mechanization_status` | Mirrors `status` but may include extra values such as `prototype`. |
+
+This overlay replaces the partially-carried-forward `README.OperatorRegistry.md`. Keep it compact: list only the operator seams that exist today, and extend it through packets as new seams land.
+
+Current operator registry snapshot:
+
+| seam_id | address_id | lane_family | floor_contract | packet_template | mechanization_status |
+| --- | --- | --- | --- | --- | --- |
+| OP-P0 | seam/op-p0 | P (Ingest) | README/Core/Regimes/Temporal/Contracts/README.IngestFloorContract.v0.md | packet/ingest_op | mechanized |
+| OP-P1 | seam/op-p1 | P (Clock Align) | README/Core/Regimes/Temporal/Contracts/README.ClockAlignFloorContract.v0.md | packet/clock_align_op | mechanized |
+| OP-P2 | seam/op-p2 | P (Window) | README/Core/Regimes/Temporal/Contracts/README.WindowFloorContract.v0.md | packet/window_op | mechanized |
+| OP-P3 | seam/op-p3 | P (Transform) | README/Core/Regimes/Temporal/Contracts/README.TransformFloorContract.v0.md | packet/transform_op | mechanized |
+
+---
+
+## 10. Seam-to-address linkage
+
+- Every seam entry must cite its `address_id` next to the `seam_id` line (e.g., `seam_id / address_id: OP-P2 / seam/op-p2`).
+- The Address Registry enforces uniqueness. If a seam moves or is renamed, update the address registry first, then this file, then any packet templates.
+- Repo accounting entries for seam zones should point to the same address IDs so audits can correlate the ledgers quickly.
+
+Failing to keep the address linkage synchronized is a registry failure, not merely a documentation typo.
+
+---
+
+## 11. Update triggers
+
 
 Update this registry when:
 
@@ -434,7 +485,7 @@ Do not update it for decorative churn.
 
 ---
 
-## 9. One-line operational summary
+## 12. One-line operational summary
 
 **The Seam Registry is the bounded operational surface for tracking current seam relationships across validators, operators, planes, execution surface, and renderer so implementation complexity can grow without losing ownership, boundary, and input/output clarity.**
 
