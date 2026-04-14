@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pass_request.schema.json",
+  "title": "Morphogenesis Pass Request",
+  "type": "object",
+  "required": [
+    "pass_id",
+    "role",
+    "active_subject_id",
+    "state_before",
+    "purpose",
+    "scope",
+    "inputs",
+    "required_output_keys"
+  ],
+  "properties": {
+    "pass_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "constructor",
+        "creative",
+        "reflector",
+        "auditor_gate"
+      ]
+    },
+    "active_subject_id": {
+      "type": "string"
+    },
+    "state_before": {
+      "type": "string",
+      "enum": [
+        "seeded",
+        "tension_held",
+        "compressed",
+        "gate_pending",
+        "released",
+        "hold",
+        "metastable_hold",
+        "deferred",
+        "downgraded",
+        "rebound",
+        "archived"
+      ]
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "live_surface_path",
+        "section_anchor",
+        "forbidden"
+      ],
+      "properties": {
+        "live_surface_path": {
+          "type": "string"
+        },
+        "section_anchor": {
+          "type": "string"
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "current_candidate_text",
+        "admin_transfer_note",
+        "policy_updates"
+      ],
+      "properties": {
+        "current_candidate_text": {
+          "type": "string"
+        },
+        "admin_transfer_note": {
+          "type": "string"
+        },
+        "policy_updates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "required_output_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": true
+}

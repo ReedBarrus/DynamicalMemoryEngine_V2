@@ -1,0 +1,15 @@
+{
+    "subject_id": "stream_segment_residue_contract",
+    "title": "Stream / Segment Residue Contract",
+    "layer": "L3",
+    "state": "metastable_hold",
+    "live_surface_path": "README.V2ArchitectBundleSeed.md",
+    "section_anchor": "Stream / Segment Residue Contract",
+    "parent_subject_id": "placement_residue_contract",
+    "allowed_next_subjects": [
+        "compress_up_to_placement_residue_contract"
+    ],
+    "admin_notes": [
+        "Do not descend unless structural gain exceeds wording gain."
+    ]
+}

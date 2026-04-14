@@ -1,0 +1,8 @@
+{
+    "case_id": "gate_case_001",
+    "subject_id": "stream_segment_residue_contract",
+    "candidate_summary": "Subject still distinguishes stream and segment with repo-backed control, but deeper child would buy wording only.",
+    "expected_structural_gain_judgment": "metastable_hold",
+    "expected_decision": "hold",
+    "expected_next_layer": "same"
+}

@@ -1,0 +1,13 @@
+[
+  "seeded",
+  "tension_held",
+  "compressed",
+  "gate_pending",
+  "released",
+  "hold",
+  "metastable_hold",
+  "deferred",
+  "downgraded",
+  "rebound",
+  "archived"
+]
